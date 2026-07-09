@@ -1,29 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIBBLE</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
         body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
             background: #F5F9FC;
             display: flex;
             flex-direction: column;
             align-items: center;
-
+            min-height: 100vh;
         }
 
         #toolBarTop {
-            width: 80%;
+            width: 60%;
             height: 40px;
-            background:#FFFFFF;
-            border:0.5px solid black;
-            margin-top : 40px;
+            background: #FFFFFF;
+            border: 0.5px solid #9ea7b0;
+            margin-top: 40px;
             border-radius: 10px;
         }
 
+        #mainArea {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            padding: 20px;
+            gap: 20px
+        }
+
+        #toolBarLeft {
+            background: #FFFFFF;
+            height: 100%;
+            width: 250px;
+            border: 0.5px solid #9ea7b0;
+            border-radius: 10px;
+        }
+
+        #canvasArea {
+            flex: 1;
+            height: 100%;
+            border: 0.5px solid #9ea7b0;
+            border-radius: 10px;
+            background: white;
+        }
     </style>
 </head>
+
 <body>
     <div id="toolBarTop"></div>
     <div id="mainArea">
@@ -36,6 +72,7 @@
             </canvas>
         </div>
     </div>
-    
+
 </body>
+
 </html>
