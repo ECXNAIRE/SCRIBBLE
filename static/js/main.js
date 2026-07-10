@@ -8,7 +8,7 @@ let startX
 let startY
 let currentX
 let currentY
-let currentRectangle
+let currentShape
 
 
 ctx.lineWidth = 2;
@@ -25,8 +25,8 @@ function render() {
 
     objects.forEach(drawRectangle)
 
-    if(currentRectangle) {
-        drawRectangle(currentRectangle)
+    if (currentShape && tool === "rectangle") {
+        drawRectangle(currentShape)
     }
 }
 
@@ -68,18 +68,36 @@ canvas.addEventListener("mouseup", mouseUp)
 canvas.addEventListener("mousemove", mouseMove)
 
 function mouseDown(e) {
-    if(tool === "rectangle") {
+
+    if (tool === "pointer") {
+        const clickedShape = getClickedShape(e.offsetX, e.offsetY)
+
+        objects.forEach(shape => shape.selected = false);
+
+        if (clickedShape) {
+            clickedShape.selected = true;
+        }
+
+        render();
+        return;
+    }
+
+
+
+
+    if (tool === "rectangle") {
         isDrawing = true
 
         startX = e.offsetX
         startY = e.offsetY
 
-        currentRectangle = {
+        currentShape = {
             type: "rectangle",
             x: startX,
             y: startY,
             width: 0,
-            height: 0
+            height: 0,
+            selected: false
         }
     }
 }
@@ -87,10 +105,14 @@ function mouseDown(e) {
 
 
 function mouseMove(e) {
-    if(!isDrawing) return
+    if (!isDrawing) return
 
-    currentRectangle.width = e.offsetX - startX
-    currentRectangle.height = e.offsetY - startY
+    if (tool === "rectangle") {
+        currentShape.width = e.offsetX - startX
+        currentShape.height = e.offsetY - startY
+    }
+
+
 
     render()
 }
@@ -98,14 +120,14 @@ function mouseMove(e) {
 
 
 function mouseUp(e) {
-    if(!isDrawing) return
+    if (!isDrawing) return
 
     isDrawing = false
 
 
-    objects.push(currentRectangle)
+    objects.push(currentShape)
 
-    currentRectangle = null
+    currentShape = null
 
     render()
 }
@@ -116,13 +138,52 @@ function mouseUp(e) {
 
 
 //HELPER FUNCTION TO DRAW RECTANGLE
-function drawRectangle(rectangle) {
+function drawRectangle(rect) {
+    ctx.beginPath();
 
-    ctx.strokeRect(
-        rectangle.x,
-        rectangle.y,
-        rectangle.width,
-        rectangle.height
+    ctx.rect(
+        rect.x,
+        rect.y,
+        rect.width,
+        rect.height
     );
 
+
+    if (rect.selected) {
+        ctx.strokeStyle = "#2563EB"
+    } else {
+        ctx.strokeStyle = "#000"
+    }
+
+    ctx.stroke();
+}
+
+
+
+
+function getClickedShape(mouseX, mouseY) {
+    for (let i = objects.length - 1; i >= 0; i++) {
+        const shape = objects[i]
+        const left = Math.min(shape.x, shape.x + shape.width);
+        const right = Math.max(shape.x, shape.x + shape.width);
+
+        const top = Math.min(shape.y, shape.y + shape.height);
+        const bottom = Math.max(shape.y, shape.y + shape.height);
+
+
+
+
+        switch (shape.type) {
+            case "rectangle":
+                if (
+                    mouseX >= left &&
+                    mouseX <= right &&
+                    mouseY >= top &&
+                    mouseY <= bottom
+                ) {
+                    return shape;
+                }
+                break;
+        }
+    }
 }
