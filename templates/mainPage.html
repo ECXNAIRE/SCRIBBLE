@@ -10,9 +10,12 @@
             box-sizing: border-box;
         }
 
+
         html,
         body {
             height: 100%;
+            box-shadow:
+                0 2px 8px rgba(15, 23, 42, .04);
         }
 
         body {
@@ -26,11 +29,15 @@
 
         #toolBarTop {
             width: 60%;
-            height: 40px;
+            height: 45px;
             background: #FFFFFF;
-            border: 0.5px solid #9ea7b0;
-            margin-top: 40px;
+            border: 0.5px solid #D9E6F2;
+            margin-top: 20px;
             border-radius: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
         }
 
         #mainArea {
@@ -46,22 +53,93 @@
             background: #FFFFFF;
             height: 100%;
             width: 250px;
-            border: 0.5px solid #9ea7b0;
+            border: 0.5px solid #D9E6F2;
             border-radius: 10px;
         }
 
         #canvasArea {
             flex: 1;
             height: 100%;
-            border: 0.5px solid #9ea7b0;
+            border: 0.5px solid #D9E6F2;
             border-radius: 10px;
             background: white;
+        }
+
+        #toolBarTop button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #64748B;
         }
     </style>
 </head>
 
 <body>
-    <div id="toolBarTop"></div>
+    <div id="toolBarTop">
+        <div class="toolGroup">
+            <button>
+                <img src="../static/assets/mouse-pointer-2.svg">
+            </button>
+            <button>
+                <img src="../static/assets/hand.svg">
+            </button>
+        </div>
+
+
+        <div class="toolGroup">
+            <button>
+                <img src="../static/assets/pencil.svg">
+            </button>
+            <button>
+                <img src="../static/assets/minus.svg">
+            </button>
+            <button>
+                <img src="../static/assets/move-right.svg">
+            </button>
+            <button>
+                <img src="../static/assets/rectangle-horizontal.svg">
+            </button>
+            <button>
+                <img src="../static/assets/triangle.svg">
+            </button>
+            <button>
+                <img src="../static/assets/diamond.svg">
+            </button>
+            <button>
+                <img src="../static/assets/circle.svg">
+            </button>
+        </div>
+
+        <div class="toolGroup">
+            <button>
+                <img src="../static/assets/type.svg">
+            </button>
+            <button>
+                <img src="../static/assets/image.svg">
+            </button>
+        </div>
+
+
+        <div>
+            <button>
+                <img src="../static/assets/undo.svg">
+            </button>
+            <button>
+                <img src="../static/assets/redo.svg">
+            </button>
+        </div>
+
+        <div class="toolGroup">
+            <button>
+                <img src="../static/assets/arrow-down-to-line.svg">
+            </button>
+            <button>
+                <img src="../static/assets/settings.svg">
+            </button>
+        </div>
+
+
+    </div>
     <div id="mainArea">
         <div id="toolBarLeft">
 
