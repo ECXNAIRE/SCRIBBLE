@@ -3,11 +3,12 @@ const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
 const canvasArea = document.getElementById("canvasArea")
 let objects = []
-let isMouseDrawing = false
+let isDrawing = false
 let startX
 let startY
 let currentX
 let currentY
+let currentRectangle
 
 
 ctx.lineWidth = 2;
@@ -21,6 +22,12 @@ ctx.fillStyle = "#000";
 //RENDER FUNCTION FOR DRAWING 
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    objects.forEach(drawRectangle)
+
+    if(currentRectangle) {
+        drawRectangle(currentRectangle)
+    }
 }
 
 
@@ -56,11 +63,66 @@ document.querySelectorAll("#toolBarTop button").forEach(button => {
 
 
 //MOUSE HANDLING HERE
-canvas.addEventListener("mousedown", handleMouse)
-canvas.addEventListener("mouseup", handleMouse)
-canvas.addEventListener("mousemove", handleMouse)
+canvas.addEventListener("mousedown", mouseDown)
+canvas.addEventListener("mouseup", mouseUp)
+canvas.addEventListener("mousemove", mouseMove)
+
+function mouseDown(e) {
+    if(tool === "rectangle") {
+        isDrawing = true
+
+        startX = e.offsetX
+        startY = e.offsetY
+
+        currentRectangle = {
+            type: "rectangle",
+            x: startX,
+            y: startY,
+            width: 0,
+            height: 0
+        }
+    }
+}
 
 
-function handleMouse(e){
-    console.log(e.offsetX, e.offsetY)
+
+function mouseMove(e) {
+    if(!isDrawing) return
+
+    currentRectangle.width = e.offsetX - startX
+    currentRectangle.height = e.offsetY - startY
+
+    render()
+}
+
+
+
+function mouseUp(e) {
+    if(!isDrawing) return
+
+    isDrawing = false
+
+
+    objects.push(currentRectangle)
+
+    currentRectangle = null
+
+    render()
+}
+
+
+
+
+
+
+//HELPER FUNCTION TO DRAW RECTANGLE
+function drawRectangle(rectangle) {
+
+    ctx.strokeRect(
+        rectangle.x,
+        rectangle.y,
+        rectangle.width,
+        rectangle.height
+    );
+
 }
