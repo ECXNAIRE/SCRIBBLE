@@ -70,70 +70,80 @@
             border: none;
             cursor: pointer;
             color: #64748B;
+            border-radius: 5px;
         }
+
+        #toolBarTop button:hover {
+            background: #EFF6FF;
+        }
+
+        #toolBarTop button.active {
+            background: #DBEAFE;
+        }
+
     </style>
 </head>
 
 <body>
     <div id="toolBarTop">
         <div class="toolGroup">
-            <button>
+            <button class="active" data-tool="pointer">
                 <img src="../static/assets/mouse-pointer-2.svg">
             </button>
-            <button>
+            <button data-tool="hand">
                 <img src="../static/assets/hand.svg">
             </button>
         </div>
 
 
         <div class="toolGroup">
-            <button>
+            <button data-tool="pencil">
                 <img src="../static/assets/pencil.svg">
             </button>
-            <button>
+            <button data-tool="line">
                 <img src="../static/assets/minus.svg">
             </button>
-            <button>
+            <button data-tool="arrow">
                 <img src="../static/assets/move-right.svg">
             </button>
-            <button>
+            <button data-tool="rectangle">
                 <img src="../static/assets/rectangle-horizontal.svg">
             </button>
-            <button>
+            <button data-tool="triangle">
                 <img src="../static/assets/triangle.svg">
             </button>
-            <button>
+            <button data-tool="diamond">
                 <img src="../static/assets/diamond.svg">
             </button>
-            <button>
+            <button data-tool="circle">
                 <img src="../static/assets/circle.svg">
             </button>
         </div>
 
         <div class="toolGroup">
-            <button>
+            <button data-tool="text">
                 <img src="../static/assets/type.svg">
             </button>
-            <button>
+            <button data-tool="image">
                 <img src="../static/assets/image.svg">
             </button>
         </div>
 
 
         <div>
-            <button>
+            <button data-tool="undo">
                 <img src="../static/assets/undo.svg">
             </button>
-            <button>
+            <button data-tool="redo">
                 <img src="../static/assets/redo.svg">
             </button>
         </div>
 
         <div class="toolGroup">
-            <button>
+            <button data-tool="download">
                 <img src="../static/assets/arrow-down-to-line.svg">
             </button>
-            <button>
+            <button data-tool="settings">
                 <img src="../static/assets/settings.svg">
             </button>
         </div>
@@ -150,6 +160,9 @@
             </canvas>
         </div>
     </div>
+
+
+    <script src="../static/js/main.js"></script>
 
 </body>
 
