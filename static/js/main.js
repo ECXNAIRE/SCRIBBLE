@@ -23,10 +23,10 @@ ctx.fillStyle = "#000";
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    objects.forEach(drawRectangle)
+    objects.forEach(drawShape)
 
     if (currentShape && tool === "rectangle") {
-        drawRectangle(currentShape)
+        drawShape(currentShape)
     }
 }
 
@@ -148,11 +148,13 @@ function drawRectangle(rect) {
         rect.height
     );
 
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
 
     if (rect.selected) {
-        ctx.strokeStyle = "#2563EB"
-    } else {
-        ctx.strokeStyle = "#000"
+        selectionBox(rect)
     }
 
     ctx.stroke();
@@ -162,7 +164,7 @@ function drawRectangle(rect) {
 
 
 function getClickedShape(mouseX, mouseY) {
-    for (let i = objects.length - 1; i >= 0; i++) {
+    for (let i = objects.length - 1; i >= 0; i--) {
         const shape = objects[i]
         const left = Math.min(shape.x, shape.x + shape.width);
         const right = Math.max(shape.x, shape.x + shape.width);
@@ -186,4 +188,58 @@ function getClickedShape(mouseX, mouseY) {
                 break;
         }
     }
+}
+
+
+
+
+//gneeric function to draw shape 
+function drawShape(shape) {
+    switch (shape.type) {
+        case "rectangle":
+            drawRectangle(shape)
+    }
+}
+
+
+
+
+
+//selection Box
+function selectionBox(rect) {
+    const padding = 6
+    const handleSize = 8
+
+    const left = Math.min(rect.x, rect.x + rect.width) - padding
+    const top = Math.min(rect.y, rect.y + rect.height) - padding
+    const width = Math.abs(rect.width) + padding * 2
+    const height = Math.abs(rect.height) + padding * 2
+
+    ctx.strokeStyle = "#3B82F6";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(left, top, width, height);
+
+
+    ctx.fillStyle = "#FFFFFF"
+    ctx.strokeStyle = "#3B82F6"
+
+    drawHandle(left, top, handleSize)
+    drawHandle(left + width, top, handleSize)
+    drawHandle(left, top + height, handleSize)
+    drawHandle(left + width, top + height, handleSize)
+}
+
+
+
+function drawHandle(x, y, size) {
+    ctx.beginPath();
+    ctx.rect(
+        x- size / 2,
+        y - size / 2,
+        size,
+        size
+    )
+
+    ctx.fill();
+    ctx.stroke()
 }
