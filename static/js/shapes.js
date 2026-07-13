@@ -27,7 +27,7 @@ export function drawRectangle(shape, ctx) {
 
 
 //ELLIPSE
-export function drawEllipse (shape,ctx) {
+export function drawEllipse(shape, ctx) {
     ctx.beginPath();
 
     ctx.ellipse(
@@ -46,10 +46,37 @@ export function drawEllipse (shape,ctx) {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    if(shape.selected && shape.editMode) {
+    if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
 
+
+    ctx.stroke()
+}
+
+
+
+
+//line
+export function drawLine(shape, ctx) {
+    ctx.beginPath();
+
+
+    ctx.moveTo(shape.x1, shape.y1)
+    ctx.lineTo(shape.x2, shape.y2)
+
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    if (shape.selected && shape.editMode) {
+        selectionBox({
+            x: Math.min(shape.x1, shape.x2),
+            y: Math.min(shape.y1, shape.y2),
+            width: Math.abs(shape.x2 - shape.x1),
+            height: Math.abs(shape.y2 - shape.y1)
+        }, ctx)
+    }
 
     ctx.stroke()
 }

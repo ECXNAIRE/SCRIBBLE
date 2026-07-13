@@ -1,4 +1,4 @@
-import { drawEllipse, drawRectangle } from "./shapes.js"
+import { drawEllipse, drawRectangle, drawLine } from "./shapes.js"
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
@@ -171,6 +171,22 @@ function mouseDown(e) {
         }
     }
 
+    if (tool === "line") {
+        isDrawing = true
+
+        startX = e.offsetX
+        startY = e.offsetY
+        currentShape = {
+            type: "line",
+            x1: e.offsetX,
+            y1: e.offsetY,
+            x2: e.offsetX,
+            y2: e.offsetY,
+            selected: false,
+            editMode: false
+        }
+    }
+
 
 }
 
@@ -222,6 +238,11 @@ function mouseMove(e) {
     if (tool === "rectangle" || tool === "circle") {
         currentShape.width = e.offsetX - startX
         currentShape.height = e.offsetY - startY
+    }
+
+    if (tool === "line") {
+        currentShape.x2 = e.offsetX
+        currentShape.y2 = e.offsetY
     }
 
 
@@ -301,6 +322,20 @@ function getClickedShape(mouseX, mouseY) {
                     return shape;
                 }
                 break;
+
+            case "line":
+                if (
+                    distanceToLine(
+                        mouseX,
+                        mouseY,
+                        shape.x1,
+                        shape.y1,
+                        shape.x2,
+                        shape.y2
+                    ) <= 8
+                ) {
+                    return shape;
+                }
         }
     }
 }
@@ -319,6 +354,9 @@ function drawShape(shape) {
             drawEllipse(shape, ctx)
             break
 
+        case "line":
+            drawLine(shape, ctx)
+
     }
 
 
@@ -336,6 +374,11 @@ function getClickedHandle(shape, mouseX, mouseY) {
 
     const midX = (left + right) / 2;
     const midY = (top + bottom) / 2;
+
+
+    if (shape.type === "line") {
+        return null;
+    }
 
     const handles = [
         { name: "nw", x: left, y: top },
@@ -471,4 +514,33 @@ function mouseDoubleClick(e) {
 
 
     render()
+}
+
+
+
+
+
+function distanceToLine(px, py, x1, y1, x2, y2) {
+    const a = px - x1
+    const b = py - y1
+    const c = x2 - x1
+    const d = y2 - y1
+
+
+    const dot = a * c + b * d
+    const lenSq = c * c + d * d
+
+    let t = dot / lenSq
+
+
+    t = Math.max(0, Math.min(1, t))
+
+
+    const closestX = x1 + t * c
+    const closestY = y2 + t * d
+
+    const dx = px - closestX
+    const dy = py - closestY
+
+    return Math.sqrt(dx * dx + dy * dy)
 }
