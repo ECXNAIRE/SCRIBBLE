@@ -1,4 +1,5 @@
 import { selectionBox } from "./handle&selectionbox.js";
+import { distanceToLine, lineSelectionBox } from "./lineTools.js";
 
 //RECTANGLE
 export function drawRectangle(shape, ctx) {
@@ -70,12 +71,7 @@ export function drawLine(shape, ctx) {
     ctx.stroke();
 
     if (shape.selected && shape.editMode) {
-        selectionBox({
-            x: Math.min(shape.x1, shape.x2),
-            y: Math.min(shape.y1, shape.y2),
-            width: Math.abs(shape.x2 - shape.x1),
-            height: Math.abs(shape.y2 - shape.y1)
-        }, ctx)
+        lineSelectionBox(shape, ctx)
     }
 
     ctx.stroke()

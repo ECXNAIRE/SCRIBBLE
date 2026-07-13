@@ -28,7 +28,7 @@ export function selectionBox(rect, ctx) {
 
 
 
-function drawHandle(x, y, size, ctx) {
+export function drawHandle(x, y, size, ctx) {
     ctx.beginPath();
     ctx.rect(
         x - size / 2,
