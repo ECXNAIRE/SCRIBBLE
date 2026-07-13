@@ -1,3 +1,4 @@
+import { drawEllipse, drawRectangle } from "./shapes.js"
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
@@ -32,7 +33,7 @@ function render() {
 
     objects.forEach(drawShape)
 
-    if (currentShape && tool === "rectangle") {
+    if (currentShape) {
         drawShape(currentShape)
     }
 }
@@ -154,6 +155,22 @@ function mouseDown(e) {
         }
     }
 
+    if (tool === "circle") {
+        isDrawing = true
+
+        startX = e.offsetX
+        startY = e.offsetY
+        currentShape = {
+            type: "ellipse",
+            x: startX,
+            y: startY,
+            width: 0,
+            height: 0,
+            selected: false,
+            editMode: false
+        }
+    }
+
 
 }
 
@@ -202,7 +219,7 @@ function mouseMove(e) {
 
     if (!isDrawing) return
 
-    if (tool === "rectangle") {
+    if (tool === "rectangle" || tool === "circle") {
         currentShape.width = e.offsetX - startX
         currentShape.height = e.offsetY - startY
     }
@@ -245,28 +262,6 @@ function mouseUp(e) {
 
 
 
-//HELPER FUNCTION TO DRAW RECTANGLE
-function drawRectangle(rect) {
-    ctx.beginPath();
-
-    ctx.rect(
-        rect.x,
-        rect.y,
-        rect.width,
-        rect.height
-    );
-
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-
-    if (rect.selected && rect.editMode) {
-        selectionBox(rect)
-    }
-
-    ctx.stroke();
-}
 
 
 
@@ -294,6 +289,18 @@ function getClickedShape(mouseX, mouseY) {
                     return shape;
                 }
                 break;
+
+
+            case "ellipse":
+                if (
+                    mouseX >= left - hitPadding &&
+                    mouseX <= right + hitPadding &&
+                    mouseY >= top - hitPadding &&
+                    mouseY <= bottom + hitPadding
+                ) {
+                    return shape;
+                }
+                break;
         }
     }
 }
@@ -305,59 +312,17 @@ function getClickedShape(mouseX, mouseY) {
 function drawShape(shape) {
     switch (shape.type) {
         case "rectangle":
-            drawRectangle(shape)
+            drawRectangle(shape, ctx)
+            break
+
+        case "ellipse":
+            drawEllipse(shape, ctx)
+            break
+
     }
+
+
 }
-
-
-
-
-
-//selection Box
-function selectionBox(rect) {
-    const padding = 6
-    const handleSize = 8
-
-    const left = Math.min(rect.x, rect.x + rect.width) - padding
-    const top = Math.min(rect.y, rect.y + rect.height) - padding
-
-    const width = Math.abs(rect.width) + padding * 2
-    const height = Math.abs(rect.height) + padding * 2
-
-    ctx.strokeStyle = "#3B82F6";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(left, top, width, height);
-
-
-    ctx.fillStyle = "#FFFFFF"
-    ctx.strokeStyle = "#3B82F6"
-
-    drawHandle(left, top, handleSize)
-    drawHandle(left + width, top, handleSize)
-    drawHandle(left, top + height, handleSize)
-    drawHandle(left + width, top + height, handleSize)
-    drawHandle(left + width / 2, top, handleSize)
-    drawHandle(left, top + height / 2, handleSize)
-    drawHandle(left + width, top + height / 2, handleSize)
-    drawHandle(left + width / 2, top + height, handleSize)
-}
-
-
-
-function drawHandle(x, y, size) {
-    ctx.beginPath();
-    ctx.rect(
-        x - size / 2,
-        y - size / 2,
-        size,
-        size
-    )
-
-    ctx.fill();
-    ctx.stroke()
-}
-
-
 
 function getClickedHandle(shape, mouseX, mouseY) {
     const padding = 8
