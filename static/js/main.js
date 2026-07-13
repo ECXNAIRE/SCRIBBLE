@@ -13,6 +13,10 @@ let isResizing = false
 let resizeHandle
 let selectedShape
 let editMode = false
+let isDragging = false
+let dragOffsetX = 0
+let dragOffsetY = 0
+let dragShape = null
 
 ctx.lineWidth = 2;
 ctx.lineCap = "round";
@@ -97,6 +101,15 @@ function mouseDown(e) {
 
         const clickedShape = getClickedShape(e.offsetX, e.offsetY)
 
+        if (clickedShape && !isResizing) {
+            isDragging = true
+
+            dragShape = clickedShape
+
+            dragOffsetX = e.offsetX - dragShape.x
+            dragOffsetY = e.offsetY - dragShape.y
+        }
+
 
 
         if (clickedShape) {
@@ -148,10 +161,42 @@ function mouseDown(e) {
 
 function mouseMove(e) {
 
+    if (tool === "pointer") {
+        const hoveredShape = getClickedShape(e.offsetX, e.offsetY)
+        const hoveredHandle = hoveredShape
+            ? getClickedHandle(hoveredShape, e.offsetX, e.offsetY)
+            : null
+
+        if (hoveredHandle) {
+            canvas.style.cursor = "crosshair"
+        } else if (hoveredShape) {
+            canvas.style.cursor = "grab"
+        } else (
+            canvas.style.cursor = "default"
+        )
+    }
+
+
+    if (isResizing || isDrawing) {
+        canvas.style.cursor = "crosshair";
+    }
+
     if (isResizing) {
         resizeShape(selectedShape, resizeHandle, e.offsetX, e.offsetY);
         render();
         return;
+    }
+
+    if (isDragging) {
+        canvas.style.cursor = "grabbing"
+        dragShape.x = e.offsetX - dragOffsetX
+        dragShape.y = e.offsetY - dragOffsetY
+        render()
+        return
+    }
+
+    if (tool !== "pointer" && tool !== "pencil" && tool !== "text" && tool !== "undo" && tool !== "redo" && tool !== "download" && tool !== "setting") {
+        canvas.style.cursor = "crosshair"
     }
 
 
@@ -174,6 +219,12 @@ function mouseUp(e) {
     if (isResizing) {
         isResizing = false;
         resizeHandle = null;
+        canvas.style.cursor = "default";
+    }
+
+    if (isDragging) {
+        isDragging = false;
+        dragShape = null
     }
 
 
@@ -309,7 +360,7 @@ function drawHandle(x, y, size) {
 
 
 function getClickedHandle(shape, mouseX, mouseY) {
-    const padding = 6
+    const padding = 8
 
 
     const left = Math.min(shape.x, shape.x + shape.width) - padding;
@@ -364,6 +415,75 @@ function resizeShape(shape, handle, mouseX, mouseY) {
         case "se":
             shape.width = mouseX - shape.x;
             shape.height = mouseY - shape.y
+            break
+
+        case "e":
+            shape.width = mouseX - shape.x
+            break
+
+        case "s":
+            shape.height = mouseY - shape.y
+            break
+
+        case "nw":
+            shape.width += shape.x - mouseX
+            shape.height += shape.y - mouseY
+
+            shape.x = mouseX
+            shape.y = mouseY
+            break
+
+        case "n":
+            shape.height += shape.y - mouseY
+            shape.y = mouseY
+            break
+
+        case "w":
+            shape.width += shape.x - mouseX
+            shape.x = mouseX
+            break
+
+        case "ne":
+            shape.width = mouseX - shape.x
+            shape.height += shape.y - mouseY
+            shape.y = mouseY
+            break
+
+        case "sw":
+            shape.width += shape.x - mouseX;
+            shape.x = mouseX;
+
+            shape.height = mouseY - shape.y;
+            break;
+    }
+
+
+    if (shape.width < 0) {
+        shape.x += shape.width;
+        shape.width = Math.abs(shape.width)
+
+        switch (resizeHandle) {
+            case "e": resizeHandle = "w"; break
+            case "w": resizeHandle = "e"; break
+            case "ne": resizeHandle = "nw"; break
+            case "nw": resizeHandle = "ne"; break
+            case "se": resizeHandle = "sw"; break
+            case "sw": resizeHandle = "se"; break
+        }
+    }
+
+    if (shape.height < 0) {
+        shape.y += shape.height
+        shape.height = Math.abs(shape.height)
+
+        switch (resizeHandle) {
+            case "n": resizeHandle = "s"; break
+            case "s": resizeHandle = "n"; break
+            case "ne": resizeHandle = "se"; break
+            case "se": resizeHandle = "ne"; break
+            case "nw": resizeHandle = "sw"; break
+            case "sw": resizeHandle = "nw"; break
+        }
     }
 }
 
