@@ -224,7 +224,20 @@ function mouseMove(e) {
     }
 
     if (isResizing) {
-        resizeShape(selectedShape, resizeHandle, e.offsetX, e.offsetY);
+        if (selectedShape.type === "line") {
+            if (resizeHandle === "start") {
+                selectedShape.x1 = e.offsetX;
+                selectedShape.y1 = e.offsetY;
+            }
+
+            if (resizeHandle === "end") {
+                selectedShape.x2 = e.offsetX;
+                selectedShape.y2 = e.offsetY;
+            }
+        } else {
+            resizeShape(selectedShape, resizeHandle, e.offsetX, e.offsetY);
+        }
+
         render();
         return;
     }
@@ -282,11 +295,13 @@ function mouseUp(e) {
         isResizing = false;
         resizeHandle = null;
         canvas.style.cursor = "default";
+        return
     }
 
     if (isDragging) {
         isDragging = false;
         dragShape = null
+        return
     }
 
 
@@ -400,10 +415,6 @@ function getClickedHandle(shape, mouseX, mouseY) {
     const midY = (top + bottom) / 2;
 
 
-    if (shape.type === "line") {
-        return null;
-    }
-
     const handles = [
         { name: "nw", x: left, y: top },
         { name: "n", x: midX, y: top },
@@ -419,19 +430,24 @@ function getClickedHandle(shape, mouseX, mouseY) {
 
 
 
-    const handleSize = 8;
-    const half = handleSize / 2
+    const half = 10;
 
-
-    for (const handle of handles) {
-        if (
-            mouseX >= handle.x - half &&
-            mouseX <= handle.x + half &&
-            mouseY >= handle.y - half &&
-            mouseY <= handle.y + half
-        ) {
-            return handle.name
-        }
+    switch (shape.type) {
+        case "rectangle":
+        case "ellipse":
+            for (const handle of handles) {
+                if (
+                    mouseX >= handle.x - half &&
+                    mouseX <= handle.x + half &&
+                    mouseY >= handle.y - half &&
+                    mouseY <= handle.y + half
+                ) {
+                    return handle.name
+                }
+            }
+        case "line":
+            return getClickedLineHandle(shape, mouseX, mouseY)
+            break
     }
 
     return null
@@ -538,4 +554,30 @@ function mouseDoubleClick(e) {
 
 
     render()
+}
+
+
+
+function getClickedLineHandle(shape, mouseX, mouseY) {
+    const size = 10
+
+    if (
+        mouseX >= shape.x1 - size &&
+        mouseX <= shape.x1 + size &&
+        mouseY >= shape.y1 - size &&
+        mouseY <= shape.y1 + size
+    ) {
+        return "start"
+    }
+
+
+    if (
+        mouseX >= shape.x2 - size &&
+        mouseX <= shape.x2 + size &&
+        mouseY >= shape.y2 - size &&
+        mouseY <= shape.y2 + size
+    ) {
+        return "end"
+    }
+
 }
