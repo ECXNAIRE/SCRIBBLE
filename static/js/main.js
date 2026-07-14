@@ -1,4 +1,4 @@
-import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle } from "./shapes.js"
+import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow } from "./shapes.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 
@@ -212,7 +212,7 @@ function mouseDown(e) {
         }
     }
 
-    if(tool === "triangle") {
+    if (tool === "triangle") {
         isDrawing = true
 
         startX = e.offsetX
@@ -224,6 +224,22 @@ function mouseDown(e) {
             y: startY,
             width: 0,
             height: 0,
+            selected: true,
+            editMode: true
+        }
+    }
+
+    if (tool === "arrow") {
+        isDrawing = true
+
+        startX = e.offsetX
+        startY = e.offsetY
+        currentShape = {
+            type: "arrow",
+            x1: e.offsetX,
+            y1: e.offsetY,
+            x2: e.offsetX,
+            y2: e.offsetY,
             selected: true,
             editMode: true
         }
@@ -256,7 +272,7 @@ function mouseMove(e) {
     }
 
     if (isResizing) {
-        if (selectedShape.type === "line") {
+        if (selectedShape.type === "line" || selectedShape.type === "arrow") {
             if (resizeHandle === "start") {
                 selectedShape.x1 = e.offsetX;
                 selectedShape.y1 = e.offsetY;
@@ -276,7 +292,7 @@ function mouseMove(e) {
 
     if (isDragging) {
         canvas.style.cursor = "grabbing"
-        if (dragShape.type === "line") {
+        if (dragShape.type === "line" || dragShape === "arrow") {
             const dx = e.offsetX - dragOffsetX
             const dy = e.offsetY - dragOffsetY
 
@@ -309,7 +325,7 @@ function mouseMove(e) {
         currentShape.height = e.offsetY - startY
     }
 
-    if (tool === "line") {
+    if (tool === "line" || tool === "arrow") {
         currentShape.x2 = e.offsetX
         currentShape.y2 = e.offsetY
     }
@@ -386,6 +402,7 @@ function getClickedShape(mouseX, mouseY) {
                 break;
 
             case "line":
+            case "arrow":
                 if (
                     distanceToLine(
                         mouseX,
@@ -427,6 +444,10 @@ function drawShape(shape) {
 
         case "triangle":
             drawTriangle(shape, ctx)
+            break
+
+        case "arrow":
+            drawArrow(shape, ctx)
             break
 
     }
@@ -483,6 +504,7 @@ function getClickedHandle(shape, mouseX, mouseY) {
 
             break
         case "line":
+        case "arrow":
             return getClickedLineHandle(shape, mouseX, mouseY)
             break
     }

@@ -135,3 +135,46 @@ export function drawTriangle(shape, ctx) {
         selectionBox(shape, ctx)
     }
 }
+
+
+
+
+
+
+export function drawArrow(shape, ctx) {
+    const { x1, y1, x2, y2 } = shape
+
+    const headLength = 15
+
+    const angle = Math.atan2(y2 - y1, x2 - x1)
+
+    ctx.beginPath()
+
+
+    ctx.moveTo(x1, y1)
+    ctx.lineTo(x2, y2)
+
+
+    ctx.moveTo(x2, y2)
+    ctx.lineTo(
+        x2 - headLength * Math.cos(angle - Math.PI / 6),
+        y2 - headLength * Math.sin(angle - Math.PI / 6)
+    )
+
+
+
+    ctx.moveTo(x2, y2)
+    ctx.lineTo(
+        x2 - headLength * Math.cos(angle + Math.PI / 6),
+        y2 - headLength * Math.sin(angle + Math.PI / 6)
+    )
+
+    ctx.strokeStyle = "#000"
+    ctx.lineWidth = 2
+    ctx.stroke();
+
+
+    if(shape.selected && shape.editMode) {
+        lineSelectionBox(shape, ctx)
+    }
+}
