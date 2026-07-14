@@ -214,7 +214,9 @@ function mouseDown(e) {
             width: 0,
             height: 0,
             selected: false,
-            editMode: false
+            editMode: false,
+            selectedStroke: selectedStroke,
+            seed: Math.random() * 100000
         }
     }
 
@@ -485,7 +487,13 @@ function drawShape(shape) {
             break
 
         case "ellipse":
-            drawEllipse(shape, ctx)
+            if(shape.selectedStroke === "stroke1") {
+                drawEllipse(shape, ctx, 0)
+            } else if(shape.selectedStroke === "stroke2") {
+                drawEllipse(shape, ctx, 1.5)
+            } else if(shape.selectedStroke === "stroke3") {
+                drawEllipse(shape, ctx, 3)
+            }
             break
 
         case "line":

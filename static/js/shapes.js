@@ -1,6 +1,6 @@
 import { selectionBox } from "./handle&selectionbox.js";
 import { distanceToLine, lineSelectionBox } from "./lineTools.js";
-import { roughLine } from "./roughness.js";
+import { roughEllipse, roughLine } from "./roughness.js";
 
 //RECTANGLE
 
@@ -67,31 +67,31 @@ export function drawRectangle(shape, ctx, sloppiness) {
 
 
 //ELLIPSE
-export function drawEllipse(shape, ctx) {
-    ctx.beginPath();
+export function drawEllipse(shape, ctx, sloppiness) {
 
-    ctx.ellipse(
-        shape.x + shape.width / 2,
-        shape.y + shape.height / 2,
+    if (sloppiness === 0) {
+        ctx.beginPath();
 
-        Math.abs(shape.width / 2),
-        Math.abs(shape.height / 2),
+        ctx.ellipse(
+            shape.x + shape.width / 2,
+            shape.y + shape.height / 2,
 
-        0,
-        0,
-        Math.PI * 2
-    );
+            Math.abs(shape.width / 2),
+            Math.abs(shape.height / 2),
 
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+            0,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.stroke()
+    } else roughEllipse(ctx, shape, sloppiness)
 
     if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
 
 
-    ctx.stroke()
 }
 
 
@@ -151,7 +151,7 @@ export function drawDiamond(shape, ctx, sloppiness) {
     )
 
     roughLine(
-        ctx, 
+        ctx,
         right.x,
         right.y,
         bottom.x,
@@ -161,7 +161,7 @@ export function drawDiamond(shape, ctx, sloppiness) {
     )
 
     roughLine(
-        ctx, 
+        ctx,
         bottom.x,
         bottom.y,
         left.x,
@@ -194,14 +194,14 @@ export function drawTriangle(shape, ctx, sloppiness) {
     ctx.beginPath()
 
 
-    const top = {x: shape.x + shape.width / 2, y: shape.y}
-    const right = {x: shape.x + shape.width, y: shape.y + shape.height}
-    const left = {x: shape.x, y: shape.y + shape.height}
+    const top = { x: shape.x + shape.width / 2, y: shape.y }
+    const right = { x: shape.x + shape.width, y: shape.y + shape.height }
+    const left = { x: shape.x, y: shape.y + shape.height }
 
 
 
     roughLine(
-        ctx, 
+        ctx,
         top.x,
         top.y,
         right.x,
@@ -229,7 +229,7 @@ export function drawTriangle(shape, ctx, sloppiness) {
         shape,
         sloppiness
     )
-    
+
 
 
     if (shape.selected && shape.editMode) {

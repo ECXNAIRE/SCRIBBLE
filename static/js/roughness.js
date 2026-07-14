@@ -43,3 +43,42 @@ export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
         ctx.stroke();
     }
 }
+
+
+
+export function roughEllipse(ctx, shape, sloppiness) {
+
+    const cx = shape.x + shape.width / 2
+    const cy = shape.y + shape.height/ 2
+
+
+    const rx = Math.abs(shape.width / 2)
+    const ry = Math.abs(shape.height / 2)
+
+
+    const segments = Math.max(32, Math.floor(Math.max(rx, ry) / 2))
+
+    for(let pass = 0; pass < 2; pass ++) {
+        ctx.beginPath()
+
+        for(let i= 0 ; i< segments; i++) {
+            const angle = (i / segments) * Math.PI * 2
+
+            const x =
+                cx +
+                rx * Math.cos(angle) +
+                randomOffset(shape.seed + pass * 1000 + i * 2, sloppiness);
+
+            const y =
+                cy +
+                ry * Math.sin(angle) +
+                randomOffset(shape.seed + pass * 1000 + i * 2 + 1, sloppiness);
+
+            if(i === 0) ctx.moveTo(x, y)
+            else ctx.lineTo(x, y)
+        }
+
+        ctx.closePath()
+        ctx.stroke()
+    }
+}
