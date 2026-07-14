@@ -229,8 +229,10 @@ function mouseDown(e) {
             y1: e.offsetY,
             x2: e.offsetX,
             y2: e.offsetY,
-            selected: true,
-            editMode: true
+            selected: false,
+            editMode: false,
+            selectedStroke: selectedStroke,
+            seed: Math.random() * 100000
         }
     }
 
@@ -279,7 +281,9 @@ function mouseDown(e) {
             x2: e.offsetX,
             y2: e.offsetY,
             selected: false,
-            editMode: false
+            editMode: false,
+            selectedStroke: selectedStroke,
+            seed: Math.random() * 100000
         }
     }
 
@@ -481,7 +485,13 @@ function drawShape(shape) {
             break
 
         case "line":
-            drawLine(shape, ctx)
+            if (shape.selectedStroke === "stroke1") {
+                drawLine(shape, ctx, 0)
+            } else if (shape.selectedStroke === "stroke2") {
+                drawLine(shape, ctx, 1.5)
+            } else if (shape.selectedStroke === "stroke3") {
+                drawLine(shape, ctx, 3)
+            }
             break
 
         case "diamond":
@@ -493,7 +503,13 @@ function drawShape(shape) {
             break
 
         case "arrow":
-            drawArrow(shape, ctx)
+            if(shape.selectedStroke === "stroke1") {
+                drawArrow(shape, ctx, 0)
+            } else if(shape.selectedStroke === "stroke2") {
+                drawArrow(shape, ctx, 1.5)
+            } else if(shape.selectedStroke === "stroke3") {
+                drawArrow(shape, ctx, 3)
+            }
             break
 
     }

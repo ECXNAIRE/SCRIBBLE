@@ -98,12 +98,19 @@ export function drawEllipse(shape, ctx) {
 
 
 //line
-export function drawLine(shape, ctx) {
+export function drawLine(shape, ctx, sloppiness) {
     ctx.beginPath();
 
 
-    ctx.moveTo(shape.x1, shape.y1)
-    ctx.lineTo(shape.x2, shape.y2)
+    roughLine(
+        ctx,
+        shape.x1,
+        shape.y1,
+        shape.x2,
+        shape.y2,
+        shape,
+        sloppiness
+    );
 
     ctx.strokeStyle = "#000";
     ctx.lineWidth = 2;
@@ -120,12 +127,12 @@ export function drawLine(shape, ctx) {
 
 //DIAMOND
 
-export function drawDiamond(shape, ctx){
+export function drawDiamond(shape, ctx) {
     ctx.beginPath();
 
     const cx = shape.x + shape.width / 2
     const cy = shape.y + shape.height / 2
-    
+
 
     ctx.moveTo(cx, shape.y)
     ctx.lineTo(shape.x + shape.width, cy)
@@ -139,7 +146,7 @@ export function drawDiamond(shape, ctx){
     ctx.stroke();
 
 
-    if(shape.selected && shape.editMode) {
+    if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
 
@@ -170,7 +177,7 @@ export function drawTriangle(shape, ctx) {
     ctx.stroke()
 
 
-    if(shape.selected && shape.editMode) {
+    if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
 }
@@ -180,40 +187,58 @@ export function drawTriangle(shape, ctx) {
 
 
 
-export function drawArrow(shape, ctx) {
+export function drawArrow(shape, ctx, sloppiness) {
     const { x1, y1, x2, y2 } = shape
 
     const headLength = 15
 
     const angle = Math.atan2(y2 - y1, x2 - x1)
 
-    ctx.beginPath()
+
+    roughLine(
+        ctx,
+        x1,
+        y1,
+        x2,
+        y2,
+        shape,
+        sloppiness
+    );
 
 
-    ctx.moveTo(x1, y1)
-    ctx.lineTo(x2, y2)
+    const leftX = x2 - headLength * Math.cos(angle - Math.PI / 6)
+    const leftY = y2 - headLength * Math.sin(angle - Math.PI / 6)
 
+    const rightX = x2 - headLength * Math.cos(angle + Math.PI / 6)
+    const rightY = y2 - headLength * Math.sin(angle + Math.PI / 6)
 
-    ctx.moveTo(x2, y2)
-    ctx.lineTo(
-        x2 - headLength * Math.cos(angle - Math.PI / 6),
-        y2 - headLength * Math.sin(angle - Math.PI / 6)
-    )
+    roughLine(
+        ctx,
+        x2,
+        y2,
+        leftX,
+        leftY,
+        shape,
+        sloppiness
+    );
 
+    roughLine(
+        ctx,
+        x2,
+        y2,
+        rightX,
+        rightY,
+        shape,
+        sloppiness
+    );
 
-
-    ctx.moveTo(x2, y2)
-    ctx.lineTo(
-        x2 - headLength * Math.cos(angle + Math.PI / 6),
-        y2 - headLength * Math.sin(angle + Math.PI / 6)
-    )
 
     ctx.strokeStyle = "#000"
     ctx.lineWidth = 2
     ctx.stroke();
 
 
-    if(shape.selected && shape.editMode) {
+    if (shape.selected && shape.editMode) {
         lineSelectionBox(shape, ctx)
     }
 }
