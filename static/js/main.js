@@ -1,4 +1,6 @@
 import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow } from "./shapes.js"
+import { drawRectangle2 } from "./stroke2shapes.js"
+
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 
@@ -23,6 +25,12 @@ let dragOffsetY = 0
 let dragShape = null
 let undoStack = []
 let redoStack = []
+let selectedStroke = "stroke1"
+
+
+
+
+
 
 ctx.lineWidth = 2;
 ctx.lineCap = "round";
@@ -57,6 +65,18 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
+document.querySelectorAll(".strokeBtn").forEach(button => {
+    button.addEventListener("click", () => {
+        selectedStroke = button.dataset.stroke
+
+        console.log(selectedStroke)
+
+        document.querySelector(".strokeBtn.active")
+            ?.classList.remove("active")
+
+        button.classList.add('active')
+    })
+})
 
 
 
@@ -177,7 +197,8 @@ function mouseDown(e) {
             width: 0,
             height: 0,
             selected: false,
-            editMode: false
+            editMode: false,
+            selectedStroke: selectedStroke
         }
     }
 
@@ -446,7 +467,13 @@ function getClickedShape(mouseX, mouseY) {
 function drawShape(shape) {
     switch (shape.type) {
         case "rectangle":
-            drawRectangle(shape, ctx)
+            if(shape.selectedStroke === "stroke1"){
+                drawRectangle(shape, ctx)
+            } else if(shape.selectedStroke === "stroke2"){
+                drawRectangle2(shape, ctx)
+            } else if(shape.selectedStroke === "stoke3"){
+                drawRectangle3(shape, ctx)
+            }
             break
 
         case "ellipse":
