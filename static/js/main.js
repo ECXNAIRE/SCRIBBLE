@@ -106,12 +106,18 @@ function mouseDown(e) {
         const clickedShape = getClickedShape(e.offsetX, e.offsetY)
 
         if (clickedShape && !isResizing) {
-            isDragging = true
 
+            isDragging = true
             dragShape = clickedShape
 
-            dragOffsetX = e.offsetX - dragShape.x
-            dragOffsetY = e.offsetY - dragShape.y
+            if (clickedShape.type === "line") {
+                dragOffsetX = e.offsetX
+                dragOffsetY = e.offsetY
+            } else {
+                dragOffsetX = e.offsetX - dragShape.x
+                dragOffsetY = e.offsetY - dragShape.y
+            }
+
         }
 
 
@@ -225,8 +231,23 @@ function mouseMove(e) {
 
     if (isDragging) {
         canvas.style.cursor = "grabbing"
-        dragShape.x = e.offsetX - dragOffsetX
-        dragShape.y = e.offsetY - dragOffsetY
+        if (dragShape.type === "line") {
+            const dx = e.offsetX - dragOffsetX
+            const dy = e.offsetY - dragOffsetY
+
+            dragShape.x1 += dx
+            dragShape.y1 += dy
+            dragShape.x2 += dx
+            dragShape.y2 += dy
+
+
+            dragOffsetX = e.offsetX
+            dragOffsetY = e.offsetY
+        } else {
+            dragShape.x = e.offsetX - dragOffsetX
+            dragShape.y = e.offsetY - dragOffsetY
+        }
+
         render()
         return
     }
