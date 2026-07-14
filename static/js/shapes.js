@@ -105,3 +105,33 @@ export function drawDiamond(shape, ctx){
     }
 
 }
+
+
+
+///TRIANGLE
+
+export function drawTriangle(shape, ctx) {
+    ctx.beginPath()
+
+
+    const cx = shape.x + shape.width / 2
+
+    ctx.moveTo(cx, shape.y)
+
+    ctx.lineTo(shape.x + shape.width, shape.y + shape.height)
+
+    ctx.lineTo(shape.x, shape.y + shape.height)
+
+
+    ctx.closePath()
+
+
+    ctx.strokeStyle = "#000"
+    ctx.lineWidth = 2
+    ctx.stroke()
+
+
+    if(shape.selected && shape.editMode) {
+        selectionBox(shape, ctx)
+    }
+}

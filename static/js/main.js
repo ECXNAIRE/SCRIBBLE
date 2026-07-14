@@ -1,4 +1,4 @@
-import { drawEllipse, drawRectangle, drawLine, drawDiamond } from "./shapes.js"
+import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle } from "./shapes.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 
@@ -159,8 +159,8 @@ function mouseDown(e) {
             y: startY,
             width: 0,
             height: 0,
-            selected: false,
-            editMode: false
+            selected: true,
+            editMode: true
         }
     }
 
@@ -175,8 +175,8 @@ function mouseDown(e) {
             y: startY,
             width: 0,
             height: 0,
-            selected: false,
-            editMode: false
+            selected: true,
+            editMode: true
         }
     }
 
@@ -191,8 +191,8 @@ function mouseDown(e) {
             y1: e.offsetY,
             x2: e.offsetX,
             y2: e.offsetY,
-            selected: false,
-            editMode: false
+            selected: true,
+            editMode: true
         }
     }
 
@@ -207,11 +207,27 @@ function mouseDown(e) {
             y: startY,
             width: 0,
             height: 0,
-            selected: false,
-            editMode: false
+            selected: true,
+            editMode: true
         }
     }
 
+    if(tool === "triangle") {
+        isDrawing = true
+
+        startX = e.offsetX
+        startY = e.offsetY
+
+        currentShape = {
+            type: "triangle",
+            x: startX,
+            y: startY,
+            width: 0,
+            height: 0,
+            selected: true,
+            editMode: true
+        }
+    }
 
 }
 
@@ -288,7 +304,7 @@ function mouseMove(e) {
 
     if (!isDrawing) return
 
-    if (tool === "rectangle" || tool === "circle" || tool === "diamond") {
+    if (tool === "rectangle" || tool === "circle" || tool === "diamond" || tool === "triangle") {
         currentShape.width = e.offsetX - startX
         currentShape.height = e.offsetY - startY
     }
@@ -358,6 +374,7 @@ function getClickedShape(mouseX, mouseY) {
             case "rectangle":
             case "ellipse":
             case "diamond":
+            case "triangle":
                 if (
                     mouseX >= left - hitPadding &&
                     mouseX <= right + hitPadding &&
@@ -408,6 +425,10 @@ function drawShape(shape) {
             drawDiamond(shape, ctx)
             break
 
+        case "triangle":
+            drawTriangle(shape, ctx)
+            break
+
     }
 
 
@@ -448,6 +469,7 @@ function getClickedHandle(shape, mouseX, mouseY) {
         case "rectangle":
         case "ellipse":
         case "diamond":
+        case "triangle":
             for (const handle of handles) {
                 if (
                     mouseX >= handle.x - half &&
