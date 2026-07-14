@@ -13,6 +13,7 @@
             -moz-user-select: none;
             -ms-user-select: none;
             -webkit-user-drag: none;
+            font-family: sans-serif;
         }
 
 
@@ -55,11 +56,13 @@
         }
 
         #toolBarLeft {
-            background: #FFFFFF;
-            height: 100%;
             width: 250px;
-            border: 0.5px solid #D9E6F2;
-            border-radius: 10px;
+            background: #FFFFFF;
+            border: 1px solid #D9E6F2;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         #canvasArea {
@@ -74,7 +77,6 @@
             background: transparent;
             border: none;
             cursor: pointer;
-            color: #64748B;
             border-radius: 5px;
         }
 
@@ -84,6 +86,40 @@
 
         #toolBarTop button.active {
             background: #DBEAFE;
+        }
+
+        #strokeArea {
+            display: flex;
+            gap: 10px;
+        }
+
+        .strokeBtn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            background: #FFFFFF;
+            border:none;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        #toolBarLeft button:hover {
+            background: #EFF6FF;
+        }
+
+        #toolBarLeft button.active {
+            background: #DBEAFE;
+        }
+
+        .title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748B;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -157,6 +193,18 @@
     <div id="mainArea">
         <div id="toolBarLeft">
 
+            <div class="title">SLOPPINESS</div>
+            <div id="strokeArea">
+                <button class="strokeBtn" data-stoke="1">
+                    <img src="../static/assets/image.svg">
+                </button>
+                <button class="strokeBtn" data-stroke2="">
+                    <img src="../static/assets/image.svg">
+                </button>
+                <button class="strokeBtn" data-stoke="stroke3">
+                    <img src="../static/assets/image.svg">
+                </button>
+            </div>
         </div>
         <div id="canvasArea">
             <canvas id="canvas">
