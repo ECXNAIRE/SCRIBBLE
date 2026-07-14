@@ -1,15 +1,50 @@
 import { selectionBox } from "./handle&selectionbox.js";
 import { distanceToLine, lineSelectionBox } from "./lineTools.js";
+import { roughLine } from "./roughness.js";
 
 //RECTANGLE
-export function drawRectangle(shape, ctx) {
+
+export function drawRectangle(shape, ctx, sloppiness) {
     ctx.beginPath();
 
-    ctx.rect(
+    roughLine(
+        ctx,
         shape.x,
         shape.y,
-        shape.width,
-        shape.height
+        shape.x + shape.width,
+        shape.y,
+        shape,
+        sloppiness
+    );
+
+    roughLine(
+        ctx,
+        shape.x + shape.width,
+        shape.y,
+        shape.x + shape.width,
+        shape.y + shape.height,
+        shape,
+        sloppiness
+    );
+
+    roughLine(
+        ctx,
+        shape.x + shape.width,
+        shape.y + shape.height,
+        shape.x,
+        shape.y + shape.height,
+        shape,
+        sloppiness
+    );
+
+    roughLine(
+        ctx,
+        shape.x,
+        shape.y + shape.height,
+        shape.x,
+        shape.y,
+        shape,
+        sloppiness
     );
 
     ctx.strokeStyle = "#000";
@@ -23,6 +58,10 @@ export function drawRectangle(shape, ctx) {
 
     ctx.stroke();
 }
+
+
+
+
 
 
 

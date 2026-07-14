@@ -1,5 +1,4 @@
 import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow } from "./shapes.js"
-import { drawRectangle2 } from "./stroke2shapes.js"
 
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
@@ -198,7 +197,8 @@ function mouseDown(e) {
             height: 0,
             selected: false,
             editMode: false,
-            selectedStroke: selectedStroke
+            selectedStroke: selectedStroke,
+            seed: Math.random() * 100000
         }
     }
 
@@ -467,12 +467,12 @@ function getClickedShape(mouseX, mouseY) {
 function drawShape(shape) {
     switch (shape.type) {
         case "rectangle":
-            if(shape.selectedStroke === "stroke1"){
-                drawRectangle(shape, ctx)
-            } else if(shape.selectedStroke === "stroke2"){
-                drawRectangle2(shape, ctx)
-            } else if(shape.selectedStroke === "stoke3"){
-                drawRectangle3(shape, ctx)
+            if (shape.selectedStroke === "stroke1") {
+                drawRectangle(shape, ctx, 0)
+            } else if (shape.selectedStroke === "stroke2") {
+                drawRectangle(shape, ctx, 1.5)
+            } else if (shape.selectedStroke === "stroke3") {
+                drawRectangle(shape, ctx, 3)
             }
             break
 
