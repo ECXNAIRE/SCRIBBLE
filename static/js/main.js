@@ -1,4 +1,4 @@
-import { drawEllipse, drawRectangle, drawLine } from "./shapes.js"
+import { drawEllipse, drawRectangle, drawLine, drawDiamond } from "./shapes.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 
@@ -196,6 +196,22 @@ function mouseDown(e) {
         }
     }
 
+    if (tool === "diamond") {
+        isDrawing = true
+
+        startX = e.offsetX
+        startY = e.offsetY
+        currentShape = {
+            type: "diamond",
+            x: startX,
+            y: startY,
+            width: 0,
+            height: 0,
+            selected: false,
+            editMode: false
+        }
+    }
+
 
 }
 
@@ -272,7 +288,7 @@ function mouseMove(e) {
 
     if (!isDrawing) return
 
-    if (tool === "rectangle" || tool === "circle") {
+    if (tool === "rectangle" || tool === "circle" || tool === "diamond") {
         currentShape.width = e.offsetX - startX
         currentShape.height = e.offsetY - startY
     }
@@ -340,18 +356,8 @@ function getClickedShape(mouseX, mouseY) {
 
         switch (shape.type) {
             case "rectangle":
-                if (
-                    mouseX >= left - hitPadding &&
-                    mouseX <= right + hitPadding &&
-                    mouseY >= top - hitPadding &&
-                    mouseY <= bottom + hitPadding
-                ) {
-                    return shape;
-                }
-                break;
-
-
             case "ellipse":
+            case "diamond":
                 if (
                     mouseX >= left - hitPadding &&
                     mouseX <= right + hitPadding &&
@@ -376,6 +382,7 @@ function getClickedShape(mouseX, mouseY) {
                     return shape;
                 }
         }
+
     }
 }
 
@@ -395,6 +402,11 @@ function drawShape(shape) {
 
         case "line":
             drawLine(shape, ctx)
+            break
+
+        case "diamond":
+            drawDiamond(shape, ctx)
+            break
 
     }
 
@@ -435,6 +447,7 @@ function getClickedHandle(shape, mouseX, mouseY) {
     switch (shape.type) {
         case "rectangle":
         case "ellipse":
+        case "diamond":
             for (const handle of handles) {
                 if (
                     mouseX >= handle.x - half &&
@@ -445,6 +458,8 @@ function getClickedHandle(shape, mouseX, mouseY) {
                     return handle.name
                 }
             }
+
+            break
         case "line":
             return getClickedLineHandle(shape, mouseX, mouseY)
             break

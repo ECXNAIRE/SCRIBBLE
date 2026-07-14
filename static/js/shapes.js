@@ -76,3 +76,32 @@ export function drawLine(shape, ctx) {
 
     ctx.stroke()
 }
+
+
+
+//DIAMOND
+
+export function drawDiamond(shape, ctx){
+    ctx.beginPath();
+
+    const cx = shape.x + shape.width / 2
+    const cy = shape.y + shape.height / 2
+    
+
+    ctx.moveTo(cx, shape.y)
+    ctx.lineTo(shape.x + shape.width, cy)
+    ctx.lineTo(cx, shape.y + shape.height)
+    ctx.lineTo(shape.x, cy)
+
+
+    ctx.closePath()
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+
+    if(shape.selected && shape.editMode) {
+        selectionBox(shape, ctx)
+    }
+
+}
