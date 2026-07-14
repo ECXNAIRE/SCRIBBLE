@@ -127,24 +127,58 @@ export function drawLine(shape, ctx, sloppiness) {
 
 //DIAMOND
 
-export function drawDiamond(shape, ctx) {
+export function drawDiamond(shape, ctx, sloppiness) {
     ctx.beginPath();
 
     const cx = shape.x + shape.width / 2
     const cy = shape.y + shape.height / 2
 
 
-    ctx.moveTo(cx, shape.y)
-    ctx.lineTo(shape.x + shape.width, cy)
-    ctx.lineTo(cx, shape.y + shape.height)
-    ctx.lineTo(shape.x, cy)
+    const top = { x: cx, y: shape.y }
+    const right = { x: shape.x + shape.width, y: cy }
+    const bottom = { x: cx, y: shape.y + shape.height }
+    const left = { x: shape.x, y: cy }
 
 
-    ctx.closePath()
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    roughLine(
+        ctx,
+        top.x,
+        top.y,
+        right.x,
+        right.y,
+        shape,
+        sloppiness
+    )
 
+    roughLine(
+        ctx, 
+        right.x,
+        right.y,
+        bottom.x,
+        bottom.y,
+        shape,
+        sloppiness
+    )
+
+    roughLine(
+        ctx, 
+        bottom.x,
+        bottom.y,
+        left.x,
+        left.y,
+        shape,
+        sloppiness
+    )
+
+    roughLine(
+        ctx,
+        left.x,
+        left.y,
+        top.x,
+        top.y,
+        shape,
+        sloppiness
+    )
 
     if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
@@ -156,25 +190,46 @@ export function drawDiamond(shape, ctx) {
 
 ///TRIANGLE
 
-export function drawTriangle(shape, ctx) {
+export function drawTriangle(shape, ctx, sloppiness) {
     ctx.beginPath()
 
 
-    const cx = shape.x + shape.width / 2
-
-    ctx.moveTo(cx, shape.y)
-
-    ctx.lineTo(shape.x + shape.width, shape.y + shape.height)
-
-    ctx.lineTo(shape.x, shape.y + shape.height)
+    const top = {x: shape.x + shape.width / 2, y: shape.y}
+    const right = {x: shape.x + shape.width, y: shape.y + shape.height}
+    const left = {x: shape.x, y: shape.y + shape.height}
 
 
-    ctx.closePath()
 
+    roughLine(
+        ctx, 
+        top.x,
+        top.y,
+        right.x,
+        right.y,
+        shape,
+        sloppiness
+    )
 
-    ctx.strokeStyle = "#000"
-    ctx.lineWidth = 2
-    ctx.stroke()
+    roughLine(
+        ctx,
+        right.x,
+        right.y,
+        left.x,
+        left.y,
+        shape,
+        sloppiness
+    )
+
+    roughLine(
+        ctx,
+        left.x,
+        left.y,
+        top.x,
+        top.y,
+        shape,
+        sloppiness
+    )
+    
 
 
     if (shape.selected && shape.editMode) {
