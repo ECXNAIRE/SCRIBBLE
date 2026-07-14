@@ -178,3 +178,4 @@ export function drawArrow(shape, ctx) {
         lineSelectionBox(shape, ctx)
     }
 }
+

@@ -1,6 +1,7 @@
 import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow } from "./shapes.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
+import { createTextInput } from "./text.js"
 
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
@@ -244,6 +245,7 @@ function mouseDown(e) {
             editMode: false
         }
     }
+
 
 }
 
