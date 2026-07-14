@@ -110,7 +110,7 @@ function mouseDown(e) {
             isDragging = true
             dragShape = clickedShape
 
-            if (clickedShape.type === "line") {
+            if (clickedShape.type === "line" || clickedShape.type === "arrow") {
                 dragOffsetX = e.offsetX
                 dragOffsetY = e.offsetY
             } else {
@@ -159,8 +159,8 @@ function mouseDown(e) {
             y: startY,
             width: 0,
             height: 0,
-            selected: true,
-            editMode: true
+            selected: false,
+            editMode: false
         }
     }
 
@@ -175,8 +175,8 @@ function mouseDown(e) {
             y: startY,
             width: 0,
             height: 0,
-            selected: true,
-            editMode: true
+            selected: false,
+            editMode: false
         }
     }
 
@@ -207,8 +207,8 @@ function mouseDown(e) {
             y: startY,
             width: 0,
             height: 0,
-            selected: true,
-            editMode: true
+            selected: false,
+            editMode: false
         }
     }
 
@@ -224,8 +224,8 @@ function mouseDown(e) {
             y: startY,
             width: 0,
             height: 0,
-            selected: true,
-            editMode: true
+            selected: false,
+            editMode: false
         }
     }
 
@@ -240,8 +240,8 @@ function mouseDown(e) {
             y1: e.offsetY,
             x2: e.offsetX,
             y2: e.offsetY,
-            selected: true,
-            editMode: true
+            selected: false,
+            editMode: false
         }
     }
 
@@ -292,7 +292,7 @@ function mouseMove(e) {
 
     if (isDragging) {
         canvas.style.cursor = "grabbing"
-        if (dragShape.type === "line" || dragShape === "arrow") {
+        if (dragShape.type === "line" || dragShape.type === "arrow") {
             const dx = e.offsetX - dragOffsetX
             const dy = e.offsetY - dragOffsetY
 
