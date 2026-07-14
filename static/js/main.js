@@ -1,7 +1,6 @@
 import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow } from "./shapes.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
-import { createTextInput } from "./text.js"
 
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
@@ -22,12 +21,15 @@ let isDragging = false
 let dragOffsetX = 0
 let dragOffsetY = 0
 let dragShape = null
+let undoStack = []
+let redoStack = []
 
 ctx.lineWidth = 2;
 ctx.lineCap = "round";
 ctx.lineJoin = "round";
 ctx.strokeStyle = "#000";
 ctx.fillStyle = "#000";
+
 
 
 
@@ -61,12 +63,25 @@ window.addEventListener("resize", resizeCanvas);
 //BUTTON CLICK HANDLER
 document.querySelectorAll("#toolBarTop button").forEach(button => {
     button.addEventListener("click", () => {
+
+        const selectedTool = button.dataset.tool
+        if (selectedTool === "undo") {
+            undo();
+            return;
+        }
+
+        if (selectedTool === "redo") {
+            redo();
+            return;
+        }
+
+        tool = selectedTool
+
         document
             .querySelector("#toolBarTop button.active")
             ?.classList.remove("active");
 
         button.classList.add("active");
-        tool = button.dataset.tool
         console.log(tool)
     })
 
@@ -92,8 +107,9 @@ function mouseDown(e) {
         if (selectedShape?.editMode) {
             const handle = getClickedHandle(selectedShape, e.offsetX, e.offsetY)
             if (handle) {
-
+                saveState()
                 isResizing = true
+
                 resizeHandle = handle
                 startX = e.offsetX;
                 startY = e.offsetY;
@@ -107,7 +123,7 @@ function mouseDown(e) {
         const clickedShape = getClickedShape(e.offsetX, e.offsetY)
 
         if (clickedShape && !isResizing) {
-
+            saveState()
             isDragging = true
             dragShape = clickedShape
 
@@ -246,7 +262,6 @@ function mouseDown(e) {
         }
     }
 
-
 }
 
 
@@ -357,6 +372,8 @@ function mouseUp(e) {
 
 
     if (!isDrawing) return
+
+    saveState()
 
     isDrawing = false
 
@@ -642,3 +659,52 @@ function getClickedLineHandle(shape, mouseX, mouseY) {
     }
 
 }
+
+
+
+
+
+function saveState() {
+    undoStack.push(structuredClone(objects))
+
+    if (undoStack.length > 100) {
+        undoStack.shift()
+    }
+
+    redoStack = []
+}
+
+
+function undo() {
+    if (undoStack.length === 0) return
+
+    redoStack.push(structuredClone(objects))
+
+    objects = undoStack.pop()
+
+    render()
+}
+
+
+function redo() {
+    if (redoStack.length === 0) return
+    undoStack.push(structuredClone(objects))
+
+    objects = redoStack.pop()
+
+    render()
+}
+
+
+document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === "z") {
+        e.preventDefault();
+        undo();
+    }
+
+    if ((e.ctrlKey && e.key.toLowerCase() === "y") ||
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "z")) {
+        e.preventDefault();
+        redo();
+    }
+})
