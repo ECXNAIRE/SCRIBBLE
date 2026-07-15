@@ -24,6 +24,8 @@ export function selectionBox(rect, ctx) {
     drawHandle(left, top + height / 2, handleSize, ctx)
     drawHandle(left + width, top + height / 2, handleSize, ctx)
     drawHandle(left + width / 2, top + height, handleSize, ctx)
+
+    ctx.restore()
 }
 
 

@@ -47,16 +47,12 @@ export function drawRectangle(shape, ctx, sloppiness) {
         sloppiness
     );
 
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
 
     if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
 
-    ctx.stroke();
+    ctx.restore()
 }
 
 
@@ -84,6 +80,7 @@ export function drawEllipse(shape, ctx, sloppiness) {
             Math.PI * 2
         );
 
+        ctx.strokeStyle = shape.strokeColor
         ctx.stroke()
     } else roughEllipse(ctx, shape, sloppiness)
 
@@ -91,7 +88,7 @@ export function drawEllipse(shape, ctx, sloppiness) {
         selectionBox(shape, ctx)
     }
 
-
+    ctx.restore()
 }
 
 
@@ -112,15 +109,11 @@ export function drawLine(shape, ctx, sloppiness) {
         sloppiness
     );
 
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
     if (shape.selected && shape.editMode) {
         lineSelectionBox(shape, ctx)
     }
 
-    ctx.stroke()
+    ctx.restore()
 }
 
 
@@ -183,7 +176,7 @@ export function drawDiamond(shape, ctx, sloppiness) {
     if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
-
+    ctx.restore()
 }
 
 
@@ -235,6 +228,8 @@ export function drawTriangle(shape, ctx, sloppiness) {
     if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
+
+    ctx.restore()
 }
 
 
@@ -288,13 +283,10 @@ export function drawArrow(shape, ctx, sloppiness) {
     );
 
 
-    ctx.strokeStyle = "#000"
-    ctx.lineWidth = 2
-    ctx.stroke();
-
-
     if (shape.selected && shape.editMode) {
         lineSelectionBox(shape, ctx)
     }
+
+    ctx.restore()
 }
 

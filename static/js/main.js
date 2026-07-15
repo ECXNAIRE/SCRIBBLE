@@ -80,16 +80,6 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
 
 
-
-ctx.lineWidth = 2;
-ctx.lineCap = "round";
-ctx.lineJoin = "round";
-ctx.strokeStyle = "#000";
-ctx.fillStyle = "#000";
-
-
-
-
 //RENDER FUNCTION FOR DRAWING 
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -248,7 +238,9 @@ function mouseDown(e) {
             selected: false,
             editMode: false,
             selectedStroke: selectedStroke,
-            seed: Math.random() * 100000
+            seed: Math.random() * 100000,
+            strokeColor: strokeColor,
+            fillColor: fillColor
         }
     }
 
@@ -266,7 +258,9 @@ function mouseDown(e) {
             selected: false,
             editMode: false,
             selectedStroke: selectedStroke,
-            seed: Math.random() * 100000
+            seed: Math.random() * 100000,
+            strokeColor: strokeColor,
+            fillColor: fillColor
         }
     }
 
@@ -284,7 +278,9 @@ function mouseDown(e) {
             selected: false,
             editMode: false,
             selectedStroke: selectedStroke,
-            seed: Math.random() * 100000
+            seed: Math.random() * 100000,
+            strokeColor: strokeColor,
+            fillColor: fillColor
         }
     }
 
@@ -302,7 +298,9 @@ function mouseDown(e) {
             selected: false,
             editMode: false,
             selectedStroke: selectedStroke,
-            seed: Math.random() * 100000
+            seed: Math.random() * 100000,
+            strokeColor: strokeColor,
+            fillColor: fillColor
         }
     }
 
@@ -321,7 +319,9 @@ function mouseDown(e) {
             selected: false,
             editMode: false,
             selectedStroke: selectedStroke,
-            seed: Math.random() * 100000
+            seed: Math.random() * 100000,
+            strokeColor: strokeColor,
+            fillColor: fillColor
         }
     }
 
@@ -339,7 +339,9 @@ function mouseDown(e) {
             selected: false,
             editMode: false,
             selectedStroke: selectedStroke,
-            seed: Math.random() * 100000
+            seed: Math.random() * 100000,
+            strokeColor: strokeColor,
+            fillColor: fillColor
         }
     }
 

@@ -13,6 +13,7 @@ function seededRandom(seed) {
 }
 
 export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
+    ctx.strokeStyle = shape.strokeColor
 
     for (let pass = 0; pass < 2; pass++) {
 
@@ -40,7 +41,8 @@ export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
             ctx.lineTo(x, y);
         }
 
-        ctx.stroke();
+        ctx.closePath()
+        ctx.stroke()
     }
 }
 
@@ -48,8 +50,11 @@ export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
 
 export function roughEllipse(ctx, shape, sloppiness) {
 
+    ctx.strokeStyle = shape.strokeColor
+
+
     const cx = shape.x + shape.width / 2
-    const cy = shape.y + shape.height/ 2
+    const cy = shape.y + shape.height / 2
 
 
     const rx = Math.abs(shape.width / 2)
@@ -58,10 +63,10 @@ export function roughEllipse(ctx, shape, sloppiness) {
 
     const segments = Math.max(32, Math.floor(Math.max(rx, ry) / 2))
 
-    for(let pass = 0; pass < 2; pass ++) {
+    for (let pass = 0; pass < 2; pass++) {
         ctx.beginPath()
 
-        for(let i= 0 ; i< segments; i++) {
+        for (let i = 0; i < segments; i++) {
             const angle = (i / segments) * Math.PI * 2
 
             const x =
@@ -74,7 +79,7 @@ export function roughEllipse(ctx, shape, sloppiness) {
                 ry * Math.sin(angle) +
                 randomOffset(shape.seed + pass * 1000 + i * 2 + 1, sloppiness);
 
-            if(i === 0) ctx.moveTo(x, y)
+            if (i === 0) ctx.moveTo(x, y)
             else ctx.lineTo(x, y)
         }
 
