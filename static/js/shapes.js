@@ -83,7 +83,7 @@ export function drawEllipse(shape, ctx, sloppiness) {
             0,
             Math.PI * 2
         );
-        
+
         if (shape.fill) {
             ctx.fillStyle = shape.fillColor;
             ctx.fill();
@@ -322,3 +322,20 @@ export function drawArrow(shape, ctx, sloppiness) {
     ctx.restore()
 }
 
+
+
+
+export function drawPencil(shape, ctx, sloppiness) {
+
+    for (let i = 1; i < shape.points.length; i++) {
+        roughLine(
+            ctx,
+            shape.points[i - 1].x,
+            shape.points[i - 1].y,
+            shape.points[i].x,
+            shape.points[i].y,
+            shape,
+            sloppiness
+        );
+    }
+}

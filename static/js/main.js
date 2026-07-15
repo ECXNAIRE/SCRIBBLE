@@ -1,4 +1,4 @@
-import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow } from "./shapes.js"
+import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow, drawPencil } from "./shapes.js"
 
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
@@ -35,16 +35,16 @@ let fillColor = fillPicker.value;
 strokePicker.addEventListener("input", () => {
     strokeColor = strokePicker.value
     document
-            .querySelector(".strokeColorBtn.active")
-            ?.classList.remove("active");
+        .querySelector(".strokeColorBtn.active")
+        ?.classList.remove("active");
 })
 
 
 fillPicker.addEventListener("input", () => {
     fillColor = fillPicker.value
     document
-            .querySelector(".fillColorBtn.active")
-            ?.classList.remove("active");
+        .querySelector(".fillColorBtn.active")
+        ?.classList.remove("active");
 })
 
 
@@ -149,12 +149,14 @@ document.querySelectorAll("#toolBarTop button").forEach(button => {
 
 
 //MOUSE HANDLING HERE
-canvas.addEventListener("mousedown", mouseDown)
-canvas.addEventListener("mouseup", mouseUp)
-canvas.addEventListener("mousemove", mouseMove)
+canvas.addEventListener("pointerdown", mouseDown)
+canvas.addEventListener("pointerup", mouseUp)
+canvas.addEventListener("pointermove", mouseMove)
 canvas.addEventListener("dblclick", mouseDoubleClick)
+canvas.addEventListener("pointercancel", mouseUp);
 
 function mouseDown(e) {
+    canvas.setPointerCapture(e.pointerId);
 
     if (tool === "pointer") {
 
@@ -241,7 +243,7 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
-            fill:true
+            fill: true
         }
     }
 
@@ -326,7 +328,7 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
-            fill:true
+            fill: true
         }
     }
 
@@ -347,7 +349,19 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
-            fill:true
+            fill: true
+        }
+    }
+
+    if (tool === "pencil") {
+        isDrawing = true
+
+        currentShape = {
+            type: "pencil",
+            points: [{ x: e.offsetX, y: e.offsetY }],
+            strokeColor: strokeColor,
+            selectedStroke: selectedStroke,
+            seed: Math.random() * 100000
         }
     }
 
@@ -436,6 +450,16 @@ function mouseMove(e) {
         currentShape.y2 = e.offsetY
     }
 
+    if (tool === "pencil") {
+        currentShape.points.push({
+            x: e.offsetX,
+            y: e.offsetY
+        })
+
+        render()
+        return
+    }
+
 
 
     render()
@@ -444,6 +468,7 @@ function mouseMove(e) {
 
 
 function mouseUp(e) {
+    canvas.releasePointerCapture(e.pointerId);
 
     if (isResizing) {
         isResizing = false;
@@ -467,7 +492,6 @@ function mouseUp(e) {
     isDrawing = false
 
     objects.push(currentShape)
-
     currentShape = null
 
     render()
@@ -594,6 +618,15 @@ function drawShape(shape) {
             }
             break
 
+        case "pencil":
+            if (shape.selectedStroke === "stroke1") {
+                drawPencil(shape, ctx, 0)
+            } else if (shape.selectedStroke === "stroke2") {
+                drawPencil(shape, ctx, 1.5)
+            } else if (shape.selectedStroke === "stroke3") {
+                drawPencil(shape, ctx, 3)
+            }
+            break
     }
 
 
