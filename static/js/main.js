@@ -26,6 +26,27 @@ let undoStack = []
 let redoStack = []
 let selectedStroke = "stroke1"
 let selectedStrokeWidth = 2
+let selectedFillType = "solid"
+
+document.querySelectorAll(".fillTypeBtn").forEach(button => {
+    button.addEventListener("click", () => {
+
+        selectedFillType = button.dataset.filltype
+        document
+            .querySelector(".fillTypeBtn.active")
+            ?.classList.remove("active")
+
+        button.classList.add("active")
+
+        if(selectedShape){
+            selectedShape.fillType === selectedFillType
+            render()
+        }
+
+
+        console.log(selectedFillType)
+    })
+})
 
 const strokePicker = document.getElementById("strokeColorPicker")
 const fillPicker = document.getElementById("fillColorPicker")
@@ -59,7 +80,7 @@ document.querySelectorAll(".strokeColorBtn").forEach(button => {
 
         strokeColor = button.dataset.color
 
-        if(selectedShape) {
+        if (selectedShape) {
             selectedShape.strokeColor = strokeColor;
             render()
         }
@@ -78,7 +99,7 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
         fillColor = button.dataset.color
 
-        if(selectedShape) {
+        if (selectedShape) {
             selectedShape.fillColor = fillColor;
             render()
         }
@@ -119,7 +140,7 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
     button.addEventListener("click", () => {
         selectedStroke = button.dataset.stroke
 
-        if(selectedShape){
+        if (selectedShape) {
             selectedShape.selectedStroke = selectedStroke
             render()
         }
@@ -135,9 +156,9 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
 
 document.querySelectorAll(".strokeWidthBtn").forEach(button => {
     button.addEventListener("click", () => {
-        selectedStrokeWidth = Number(button.dataset.stroke)
+        selectedStrokeWidth = Number(button.dataset.strokewidth)
 
-        if(selectedShape){
+        if (selectedShape) {
             selectedShape.strokeWidth = selectedStrokeWidth
             render()
         }
@@ -278,7 +299,8 @@ function mouseDown(e) {
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth
+            strokeWidth: selectedStrokeWidth,
+            fillType: selectedFillType
         }
     }
 
@@ -300,7 +322,8 @@ function mouseDown(e) {
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth
+            strokeWidth: selectedStrokeWidth,
+            fillType: selectedFillType
         }
     }
 
@@ -322,7 +345,8 @@ function mouseDown(e) {
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth
+            strokeWidth: selectedStrokeWidth,
+            fillType: selectedFillType
         }
     }
 
@@ -344,7 +368,8 @@ function mouseDown(e) {
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth
+            strokeWidth: selectedStrokeWidth,
+            fillType: selectedFillType
         }
     }
 
@@ -367,7 +392,8 @@ function mouseDown(e) {
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth
+            strokeWidth: selectedStrokeWidth,
+            fillType: selectedFillType
         }
     }
 
@@ -389,7 +415,8 @@ function mouseDown(e) {
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth
+            strokeWidth: selectedStrokeWidth,
+            fillType: fillType
         }
     }
 
@@ -402,7 +429,8 @@ function mouseDown(e) {
             strokeColor: strokeColor,
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
-            strokeWidth: selectedStrokeWidth
+            strokeWidth: selectedStrokeWidth,
+            fillType: fillType
         }
     }
 

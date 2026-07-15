@@ -96,14 +96,16 @@
         }
 
         #strokeArea,
-        #strokeWidthArea {
+        #strokeWidthArea,
+        #fillTypeArea {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
 
         .strokeBtn,
-        .strokeWidthBtn {
+        .strokeWidthBtn,
+        .fillTypeBtn {
             width: 32px;
             height: 32px;
             display: flex;
@@ -120,12 +122,14 @@
         }
 
         .strokeBtn:hover,
-        .strokeWidthBtn:hover {
+        .strokeWidthBtn:hover,
+        .fillTypeBtn:hover {
             background: #cfe4ff;
         }
 
         .strokeBtn.active,
-        .strokeWidthBtn.active {
+        .strokeWidthBtn.active,
+        .fillTypeBtn.active {
             background: #bedaff;
         }
 
@@ -320,13 +324,13 @@
 
             <div class="title">Stroke Width</div>
             <div id="strokeWidthArea">
-                <button class="strokeWidthBtn active" data-stroke="2">
+                <button class="strokeWidthBtn active" data-strokewidth="2">
                     2
                 </button>
-                <button class="strokeWidthBtn" data-stroke="4">
+                <button class="strokeWidthBtn" data-strokewidth="4">
                     4
                 </button>
-                <button class="strokeWidthBtn" data-stroke="6">
+                <button class="strokeWidthBtn" data-strokewidth="6">
                     6
                 </button>
             </div>
@@ -340,6 +344,20 @@
                     <img src="../static/assets/minus.svg">
                 </button>
                 <button class="strokeBtn" data-stroke="stroke3">
+                    <img src="../static/assets/minus.svg">
+                </button>
+            </div>
+
+
+            <div class="title">Fill Type</div>
+            <div id="fillTypeArea">
+                <button class="fillTypeBtn active" data-filltype="solid">
+                    <img src="../static/assets/minus.svg">
+                </button>
+                <button class="fillTypeBtn" data-filltype="hachure">
+                    <img src="../static/assets/minus.svg">
+                </button>
+                <button class="fillTypeBtn" data-filltype="hatch">
                     <img src="../static/assets/minus.svg">
                 </button>
             </div>

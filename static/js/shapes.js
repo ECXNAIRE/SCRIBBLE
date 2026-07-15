@@ -7,8 +7,10 @@ import { roughEllipse, roughLine } from "./roughness.js";
 export function drawRectangle(shape, ctx, sloppiness) {
 
     if (shape.fill) {
-        ctx.fillStyle = shape.fillColor;
-        ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
+        if (shape.fillType === "solid") {
+            ctx.fillStyle = shape.fillColor;
+            ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
+        }
     }
     ctx.beginPath();
 
@@ -88,8 +90,10 @@ export function drawEllipse(shape, ctx, sloppiness) {
         );
 
         if (shape.fill) {
-            ctx.fillStyle = shape.fillColor;
-            ctx.fill();
+            if (shape.fillType === "solid") {
+                ctx.fillStyle = shape.fillColor;
+                ctx.fill();
+            }
         }
 
         ctx.strokeStyle = shape.strokeColor
@@ -154,8 +158,10 @@ export function drawDiamond(shape, ctx, sloppiness) {
     ctx.closePath();
 
     if (shape.fill) {
-        ctx.fillStyle = shape.fillColor;
-        ctx.fill();
+        if (shape.fillType === "solid") {
+            ctx.fillStyle = shape.fillColor;
+            ctx.fill();
+        }
     }
 
 
@@ -224,8 +230,10 @@ export function drawTriangle(shape, ctx, sloppiness) {
     ctx.closePath()
 
     if (shape.fill) {
-        ctx.fillStyle = shape.fillColor;
-        ctx.fill();
+        if (shape.fillType === "solid") {
+            ctx.fillStyle = shape.fillColor;
+            ctx.fill();
+        }
     }
 
 
