@@ -95,13 +95,15 @@
             background: #bedaff;
         }
 
-        #strokeArea {
+        #strokeArea,
+        #strokeWidthArea {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
 
-        .strokeBtn {
+        .strokeBtn,
+        .strokeWidthBtn {
             width: 32px;
             height: 32px;
             display: flex;
@@ -113,13 +115,17 @@
             cursor: pointer;
             transition: .15s;
             margin-bottom: 25px;
+            font-size: 15px;
+            font-weight: 500;
         }
 
-        #toolBarLeft button:hover {
+        .strokeBtn:hover,
+        .strokeWidthBtn:hover {
             background: #cfe4ff;
         }
 
-        #toolBarLeft button.active {
+        .strokeBtn.active,
+        .strokeWidthBtn.active {
             background: #bedaff;
         }
 
@@ -196,6 +202,7 @@
         canvas {
             touch-action: none;
         }
+
     </style>
 </head>
 
@@ -308,6 +315,19 @@
                 </button>
                 <button class="fillColorBtn" data-color="#FACC15">
                     <div style="background:#FDE68A;"></div>
+                </button>
+            </div>
+
+            <div class="title">Stroke Width</div>
+            <div id="strokeWidthArea">
+                <button class="strokeWidthBtn active" data-stroke="2">
+                    2
+                </button>
+                <button class="strokeWidthBtn" data-stroke="4">
+                    4
+                </button>
+                <button class="strokeWidthBtn" data-stroke="6">
+                    6
                 </button>
             </div>
 

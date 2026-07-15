@@ -25,6 +25,7 @@ let dragShape = null
 let undoStack = []
 let redoStack = []
 let selectedStroke = "stroke1"
+let selectedStrokeWidth = 2
 
 const strokePicker = document.getElementById("strokeColorPicker")
 const fillPicker = document.getElementById("fillColorPicker")
@@ -114,6 +115,19 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
             ?.classList.remove("active")
 
         button.classList.add('active')
+    })
+})
+
+document.querySelectorAll(".strokeWidthBtn").forEach(button => {
+    button.addEventListener("click", () => {
+        selectedStrokeWidth = Number(button.dataset.stroke)
+
+        console.log(selectedStrokeWidth)
+
+        document.querySelector(".strokeWidthBtn.active")
+            ?.classList.remove("active")
+
+        button.classList.add("active")
     })
 })
 
@@ -243,7 +257,8 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
-            fill: true
+            fill: true,
+            strokeWidth: selectedStrokeWidth
         }
     }
 
@@ -264,7 +279,8 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
-            fill: true
+            fill: true,
+            strokeWidth: selectedStrokeWidth
         }
     }
 
@@ -285,7 +301,8 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
-            fill: true
+            fill: true,
+            strokeWidth: selectedStrokeWidth
         }
     }
 
@@ -306,7 +323,8 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
-            fill: true
+            fill: true,
+            strokeWidth: selectedStrokeWidth
         }
     }
 
@@ -328,7 +346,8 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
-            fill: true
+            fill: true,
+            strokeWidth: selectedStrokeWidth
         }
     }
 
@@ -349,7 +368,8 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
-            fill: true
+            fill: true,
+            strokeWidth: selectedStrokeWidth
         }
     }
 
@@ -361,7 +381,8 @@ function mouseDown(e) {
             points: [{ x: e.offsetX, y: e.offsetY }],
             strokeColor: strokeColor,
             selectedStroke: selectedStroke,
-            seed: Math.random() * 100000
+            seed: Math.random() * 100000,
+            strokeWidth: selectedStrokeWidth
         }
     }
 

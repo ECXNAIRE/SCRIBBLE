@@ -11,6 +11,8 @@ export function drawRectangle(shape, ctx, sloppiness) {
         ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
     }
     ctx.beginPath();
+
+
     roughLine(
         ctx,
         shape.x,
@@ -50,14 +52,15 @@ export function drawRectangle(shape, ctx, sloppiness) {
         shape,
         sloppiness
     );
-
 
     if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
 
     ctx.restore()
+
 }
+
 
 
 
@@ -90,6 +93,7 @@ export function drawEllipse(shape, ctx, sloppiness) {
         }
 
         ctx.strokeStyle = shape.strokeColor
+        ctx.lineWidth = shape.strokeWidth
         ctx.stroke()
     } else roughEllipse(ctx, shape, sloppiness)
 

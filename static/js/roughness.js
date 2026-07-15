@@ -14,6 +14,9 @@ function seededRandom(seed) {
 
 export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
     ctx.strokeStyle = shape.strokeColor
+    ctx.lineWidth = shape.strokeWidth
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
 
     for (let pass = 0; pass < 2; pass++) {
 
@@ -70,6 +73,7 @@ export function roughEllipse(ctx, shape, sloppiness) {
     }
 
     ctx.strokeStyle = shape.strokeColor
+    ctx.lineWidth = shape.strokeWidth
 
 
     const cx = shape.x + shape.width / 2
