@@ -1,6 +1,7 @@
 import { selectionBox } from "./handle&selectionbox.js";
 import { distanceToLine, lineSelectionBox } from "./lineTools.js";
 import { roughEllipse, roughLine } from "./roughness.js";
+import { drawHachure } from "./fillType.js";
 
 //RECTANGLE
 
@@ -10,6 +11,11 @@ export function drawRectangle(shape, ctx, sloppiness) {
         if (shape.fillType === "solid") {
             ctx.fillStyle = shape.fillColor;
             ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
+        } else if(shape.fillType === "hachure") {
+            drawHachure(ctx, ()=> {
+                ctx.beginPath();
+                ctx.rect(shape.x, shape.y, shape.width, shape.height)
+            }, shape)
         }
     }
     ctx.beginPath();

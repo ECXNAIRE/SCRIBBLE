@@ -28,7 +28,7 @@ export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
             y1 + randomOffset(shape.seed + pass * 1000 + 1, sloppiness)
         );
 
-        const steps = 8;
+        const steps = 50;
 
         for (let i = 1; i <= steps; i++) {
 
