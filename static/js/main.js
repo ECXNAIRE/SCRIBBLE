@@ -25,17 +25,16 @@ let dragShape = null
 let undoStack = []
 let redoStack = []
 let selectedStroke = "stroke1"
-
-
-
-
-
+let strokeColor = "#000000"
+let fillColor = "#ffffff"
 
 ctx.lineWidth = 2;
 ctx.lineCap = "round";
 ctx.lineJoin = "round";
 ctx.strokeStyle = "#000";
 ctx.fillStyle = "#000";
+
+
 
 
 

@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIBBLE</title>
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+    <script type="module" src="../static/js/main.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -60,9 +62,10 @@
             background: #FFFFFF;
             border: 1px solid #D9E6F2;
             border-radius: 12px;
-            padding: 20px;
+            padding-left: 10px;
             display: flex;
             flex-direction: column;
+            padding-top: 30px;
         }
 
         #canvasArea {
@@ -91,6 +94,7 @@
         #strokeArea {
             display: flex;
             gap: 10px;
+            margin-bottom: 20px;
         }
 
         .strokeBtn {
@@ -101,9 +105,10 @@
             align-items: center;
             border-radius: 10px;
             background: #F3F4F6;
-            border:none;
+            border: none;
             cursor: pointer;
             transition: .15s;
+            margin-bottom: 25px;
         }
 
         #toolBarLeft button:hover {
@@ -119,6 +124,53 @@
             color: #000000;
             letter-spacing: 0.5px;
             margin-bottom: 10px;
+        }
+
+        .styleGroup {
+            width: 90%;
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .styleGroup input[type="color"] {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: white;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 10px;
+            border: 0.5px solid black
+        }
+
+        .colorBtn {
+            width: 25px;
+            height: 25px;
+            border: 0.5px solid black;
+            border-radius: 10px;
+            transition: all 0.5s ease;
+        }
+
+        .colorBtn:hover {
+            cursor: pointer;
+            transform: scale(1.08);
+        }
+
+        .divider {
+            width: 1.5px;
+            height: 29px;
+            background: #000000;
         }
     </style>
 </head>
@@ -204,6 +256,29 @@
                     <img src="../static/assets/minus.svg">
                 </button>
             </div>
+
+            <div class="title">Stroke</div>
+            <div class="styleGroup">
+                <input type="color" id="strokeColorPicker" value="#000000">
+                <div class="divider"></div>
+                <button class="colorBtn" data-color="#2563EB" style="background:#2563EB;"></button>
+                <button class="colorBtn" data-color="#DC2626" style="background:#DC2626;"></button>
+                <button class="colorBtn" data-color="#16A34A" style="background:#16A34A;"></button>
+                <button class="colorBtn" data-color="#7C3AED" style="background:#7C3AED;"></button>
+            </div>
+
+
+            <div class="title">Fill</div>
+            <div class="styleGroup">
+                <input type="color" id="fillColorPicker" value="#ffffff">
+                <div class="divider"></div>
+                <button class="colorBtn" data-color="#FF6B6B" style="background:#FF6B6B;"></button>
+                <button class="colorBtn" data-color="#81C784" style="background:#81C784;"></button>
+                <button class="colorBtn" data-color="#F48FB1" style="background:#F48FB1;"></button>
+                <button class="colorBtn" data-color="#A1887F" style="background:#A1887F;"></button>
+            </div>
+
+
         </div>
         <div id="canvasArea">
             <canvas id="canvas">
