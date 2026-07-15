@@ -34,18 +34,29 @@ let fillColor = fillPicker.value;
 
 strokePicker.addEventListener("input", () => {
     strokeColor = strokePicker.value
+    document
+            .querySelector(".strokeColorBtn.active")
+            ?.classList.remove("active");
 })
 
 
 fillPicker.addEventListener("input", () => {
-    strokeColor = fillPicker.value
+    fillColor = fillPicker.value
+    document
+            .querySelector(".fillColorBtn.active")
+            ?.classList.remove("active");
 })
 
 
 document.querySelectorAll(".strokeColorBtn").forEach(button => {
     button.addEventListener("click", () => {
-        strokeColor = button.dataset.color
+        document
+            .querySelector(".strokeColorBtn.active")
+            ?.classList.remove("active");
 
+        button.classList.add("active");
+
+        strokeColor = button.dataset.color
         strokePicker.value = strokeColor
     })
 })
@@ -53,8 +64,13 @@ document.querySelectorAll(".strokeColorBtn").forEach(button => {
 
 document.querySelectorAll(".fillColorBtn").forEach(button => {
     button.addEventListener("click", () => {
-        fillColor = button.dataset.color
+        document
+            .querySelector(".fillColorBtn.active")
+            ?.classList.remove("active");
 
+        button.classList.add("active");
+
+        fillColor = button.dataset.color
         fillPicker.value = fillColor
     })
 })

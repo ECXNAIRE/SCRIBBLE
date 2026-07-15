@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIBBLE</title>
-    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
-    <script type="module" src="../static/js/main.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -21,7 +19,10 @@
 
         html,
         body {
+            width: 100%;
             height: 100%;
+            margin: 0;
+            overflow: hidden;
             box-shadow:
                 0 2px 8px rgba(15, 23, 42, .04);
         }
@@ -32,7 +33,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
         }
 
         #toolBarTop {
@@ -46,6 +48,7 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-evenly;
+            flex-shrink: 0;
         }
 
         #mainArea {
@@ -54,7 +57,8 @@
             display: flex;
             flex-direction: row;
             padding: 20px;
-            gap: 20px
+            gap: 20px;
+            overflow: hidden;
         }
 
         #toolBarLeft {
@@ -130,7 +134,7 @@
             width: 90%;
             display: flex;
             flex-direction: row;
-            gap: 10px;
+            gap: 3px;
             align-items: center;
             margin-bottom: 25px;
         }
@@ -156,11 +160,13 @@
 
         .strokeColorBtn,
         .fillColorBtn {
-            width: 25px;
-            height: 25px;
-            border: 0.5px solid black;
+            width: 28px;
+            height: 28px;
+            padding: 1.5px;
+            background: white;
+            border: none;
             border-radius: 10px;
-            transition: all 0.5s ease;
+            cursor: pointer;
         }
 
         .strokeColorBtn:hover,
@@ -169,10 +175,22 @@
             transform: scale(1.08);
         }
 
+        .strokeColorBtn.active,
+        .fillColorBtn.active {
+            border: 0.5px solid #2563EB;
+        }
+
         .divider {
             width: 1.5px;
             height: 29px;
             background: #000000;
+        }
+
+        .strokeColorBtn div,
+        .fillColorBtn div {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -246,6 +264,49 @@
     <div id="mainArea">
         <div id="toolBarLeft">
 
+            <div class="title">Stroke</div>
+            <div class="styleGroup">
+                <input type="color" id="strokeColorPicker" value="#000000">
+                <div class="divider"></div>
+                <button class="strokeColorBtn" data-color="#2563EB">
+                    <div style="background:#2563EB;"></div>
+                </button>
+                <button class="strokeColorBtn" data-color="#DC2626">
+                    <div style="background:#DC2626;"></div>
+                </button>
+                <button class="strokeColorBtn" data-color="#16A34A">
+                    <div style="background:#16A34A;"></div>
+                </button>
+                <button class="strokeColorBtn" data-color="#7C3AED">
+                    <div style="background:#7C3AED;"></div>
+                </button>
+                <button class="strokeColorBtn" data-color="#000000">
+                    <div style="background:#000000;"></div>
+                </button>
+            </div>
+
+
+            <div class="title">Fill</div>
+            <div class="styleGroup">
+                <input type="color" id="fillColorPicker" value="#ffffff">
+                <div class="divider"></div>
+                <button class="fillColorBtn" data-color="#FF6B6B">
+                    <div style="background:#FF6B6B;"></div>
+                </button>
+                <button class="fillColorBtn" data-color="#81C784">
+                    <div style="background:#81C784;"></div>
+                </button>
+                <button class="fillColorBtn" data-color="#F48FB1">
+                    <div style="background:#F48FB1;"></div>
+                </button>
+                <button class="fillColorBtn" data-color="#A1887F">
+                    <div style="background:#A1887F;"></div>
+                </button>
+                <button class="fillColorBtn" data-color="#FACC15">
+                    <div style="background:#FDE68A;"></div>
+                </button>
+            </div>
+
             <div class="title">Sloppiness</div>
             <div id="strokeArea">
                 <button class="strokeBtn active" data-stroke="stroke1">
@@ -257,27 +318,6 @@
                 <button class="strokeBtn" data-stroke="stroke3">
                     <img src="../static/assets/minus.svg">
                 </button>
-            </div>
-
-            <div class="title">Stroke</div>
-            <div class="styleGroup">
-                <input type="color" id="strokeColorPicker" value="#000000">
-                <div class="divider"></div>
-                <button class="strokeColorBtn" data-color="#2563EB" style="background:#2563EB;"></button>
-                <button class="strokeColorBtn" data-color="#DC2626" style="background:#DC2626;"></button>
-                <button class="strokeColorBtn" data-color="#16A34A" style="background:#16A34A;"></button>
-                <button class="strokeColorBtn" data-color="#7C3AED" style="background:#7C3AED;"></button>
-            </div>
-
-
-            <div class="title">Fill</div>
-            <div class="styleGroup">
-                <input type="color" id="fillColorPicker" value="#ffffff">
-                <div class="divider"></div>
-                <button class="fillColorBtn" data-color="#FF6B6B" style="background:#FF6B6B;"></button>
-                <button class="fillColorBtn" data-color="#81C784" style="background:#81C784;"></button>
-                <button class="fillColorBtn" data-color="#F48FB1" style="background:#F48FB1;"></button>
-                <button class="fillColorBtn" data-color="#A1887F" style="background:#A1887F;"></button>
             </div>
 
 
