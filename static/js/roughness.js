@@ -17,6 +17,7 @@ export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
     ctx.lineWidth = shape.strokeWidth
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
+    ctx.lineDashOffset = 0;
 
     for (let pass = 0; pass < 2; pass++) {
 

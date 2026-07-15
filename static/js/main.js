@@ -58,6 +58,11 @@ document.querySelectorAll(".strokeColorBtn").forEach(button => {
         button.classList.add("active");
 
         strokeColor = button.dataset.color
+
+        if(selectedShape) {
+            selectedShape.strokeColor = strokeColor;
+            render()
+        }
         strokePicker.value = strokeColor
     })
 })
@@ -72,6 +77,11 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
         button.classList.add("active");
 
         fillColor = button.dataset.color
+
+        if(selectedShape) {
+            selectedShape.fillColor = fillColor;
+            render()
+        }
         fillPicker.value = fillColor
     })
 })
@@ -109,6 +119,11 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
     button.addEventListener("click", () => {
         selectedStroke = button.dataset.stroke
 
+        if(selectedShape){
+            selectedShape.selectedStroke = selectedStroke
+            render()
+        }
+
         console.log(selectedStroke)
 
         document.querySelector(".strokeBtn.active")
@@ -121,6 +136,11 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
 document.querySelectorAll(".strokeWidthBtn").forEach(button => {
     button.addEventListener("click", () => {
         selectedStrokeWidth = Number(button.dataset.stroke)
+
+        if(selectedShape){
+            selectedShape.strokeWidth = selectedStrokeWidth
+            render()
+        }
 
         console.log(selectedStrokeWidth)
 
