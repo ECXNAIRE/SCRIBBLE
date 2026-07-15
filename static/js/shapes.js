@@ -5,8 +5,12 @@ import { roughEllipse, roughLine } from "./roughness.js";
 //RECTANGLE
 
 export function drawRectangle(shape, ctx, sloppiness) {
-    ctx.beginPath();
 
+    if (shape.fill) {
+        ctx.fillStyle = shape.fillColor;
+        ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
+    }
+    ctx.beginPath();
     roughLine(
         ctx,
         shape.x,
@@ -79,6 +83,11 @@ export function drawEllipse(shape, ctx, sloppiness) {
             0,
             Math.PI * 2
         );
+        
+        if (shape.fill) {
+            ctx.fillStyle = shape.fillColor;
+            ctx.fill();
+        }
 
         ctx.strokeStyle = shape.strokeColor
         ctx.stroke()
@@ -96,6 +105,8 @@ export function drawEllipse(shape, ctx, sloppiness) {
 
 //line
 export function drawLine(shape, ctx, sloppiness) {
+
+
     ctx.beginPath();
 
 
@@ -131,6 +142,17 @@ export function drawDiamond(shape, ctx, sloppiness) {
     const right = { x: shape.x + shape.width, y: cy }
     const bottom = { x: cx, y: shape.y + shape.height }
     const left = { x: shape.x, y: cy }
+
+    ctx.moveTo(top.x, top.y);
+    ctx.lineTo(right.x, right.y);
+    ctx.lineTo(bottom.x, bottom.y);
+    ctx.lineTo(left.x, left.y);
+    ctx.closePath();
+
+    if (shape.fill) {
+        ctx.fillStyle = shape.fillColor;
+        ctx.fill();
+    }
 
 
     roughLine(
@@ -184,6 +206,7 @@ export function drawDiamond(shape, ctx, sloppiness) {
 ///TRIANGLE
 
 export function drawTriangle(shape, ctx, sloppiness) {
+
     ctx.beginPath()
 
 
@@ -191,6 +214,15 @@ export function drawTriangle(shape, ctx, sloppiness) {
     const right = { x: shape.x + shape.width, y: shape.y + shape.height }
     const left = { x: shape.x, y: shape.y + shape.height }
 
+    ctx.moveTo(top.x, top.y);
+    ctx.lineTo(right.x, right.y);
+    ctx.lineTo(left.x, left.y);
+    ctx.closePath()
+
+    if (shape.fill) {
+        ctx.fillStyle = shape.fillColor;
+        ctx.fill();
+    }
 
 
     roughLine(

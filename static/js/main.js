@@ -240,7 +240,8 @@ function mouseDown(e) {
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
-            fillColor: fillColor
+            fillColor: fillColor,
+            fill:true
         }
     }
 
@@ -260,7 +261,8 @@ function mouseDown(e) {
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
-            fillColor: fillColor
+            fillColor: fillColor,
+            fill: true
         }
     }
 
@@ -280,7 +282,8 @@ function mouseDown(e) {
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
-            fillColor: fillColor
+            fillColor: fillColor,
+            fill: true
         }
     }
 
@@ -300,7 +303,8 @@ function mouseDown(e) {
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
-            fillColor: fillColor
+            fillColor: fillColor,
+            fill: true
         }
     }
 
@@ -321,7 +325,8 @@ function mouseDown(e) {
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
-            fillColor: fillColor
+            fillColor: fillColor,
+            fill:true
         }
     }
 
@@ -341,7 +346,8 @@ function mouseDown(e) {
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
-            fillColor: fillColor
+            fillColor: fillColor,
+            fill:true
         }
     }
 

@@ -50,6 +50,25 @@ export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
 
 export function roughEllipse(ctx, shape, sloppiness) {
 
+    if (shape.fill) {
+        ctx.ellipse(
+            shape.x + shape.width / 2,
+            shape.y + shape.height / 2,
+
+            Math.abs(shape.width / 2),
+            Math.abs(shape.height / 2),
+
+            0,
+            0,
+            Math.PI * 2
+        );
+
+        if (shape.fill) {
+            ctx.fillStyle = shape.fillColor;
+            ctx.fill();
+        }
+    }
+
     ctx.strokeStyle = shape.strokeColor
 
 
