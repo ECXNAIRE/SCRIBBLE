@@ -11,13 +11,25 @@ export function drawRectangle(shape, ctx, sloppiness) {
         if (shape.fillType === "solid") {
             ctx.fillStyle = shape.fillColor;
             ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
-        } else if(shape.fillType === "hachure") {
-            drawHachure(ctx, ()=> {
-                ctx.beginPath();
-                ctx.rect(shape.x, shape.y, shape.width, shape.height)
-            }, shape)
+        } else if (shape.fillType === "hachure") {
+            drawHachure(ctx,
+                () => {
+                    ctx.beginPath();
+                    ctx.rect(shape.x, shape.y, shape.width, shape.height)
+                },
+                {
+                    left: Math.min(shape.x, shape.x + shape.width),
+                    right: Math.max(shape.x, shape.x + shape.width),
+                    top: Math.min(shape.y, shape.y + shape.height),
+                    bottom: Math.max(shape.y, shape.y + shape.height)
+                }, shape, sloppiness)
         }
     }
+
+
+
+
+
     ctx.beginPath();
 
 
@@ -79,28 +91,72 @@ export function drawRectangle(shape, ctx, sloppiness) {
 
 //ELLIPSE
 export function drawEllipse(shape, ctx, sloppiness) {
+    const cx = shape.x + shape.width / 2;
+    const cy = shape.y + shape.height / 2;
+
+    const rx = Math.abs(shape.width / 2);
+    const ry = Math.abs(shape.height / 2);
+
+
+    if (shape.fill) {
+
+        if (shape.fillType === "solid") {
+
+            ctx.beginPath();
+            ctx.ellipse(
+                cx,
+                cy,
+                rx,
+                ry,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fillStyle = shape.fillColor;
+            ctx.fill();
+        }
+
+        else if (shape.fillType === "hachure") {
+            drawHachure(
+                ctx,
+                () => {
+                    ctx.beginPath();
+
+                    ctx.ellipse(
+                        cx,
+                        cy,
+                        rx,
+                        ry,
+                        0,
+                        0,
+                        Math.PI * 2
+                    );
+                },
+                {
+                    left: Math.min(shape.x, shape.x + shape.width),
+                    right: Math.max(shape.x, shape.x + shape.width),
+                    top: Math.min(shape.y, shape.y + shape.height),
+                    bottom: Math.max(shape.y, shape.y + shape.height)
+                },
+                shape,
+                sloppiness
+            );
+        }
+    }
 
     if (sloppiness === 0) {
         ctx.beginPath();
 
         ctx.ellipse(
-            shape.x + shape.width / 2,
-            shape.y + shape.height / 2,
-
-            Math.abs(shape.width / 2),
-            Math.abs(shape.height / 2),
-
+            cx,
+            cy,
+            rx,
+            ry,
             0,
             0,
             Math.PI * 2
         );
-
-        if (shape.fill) {
-            if (shape.fillType === "solid") {
-                ctx.fillStyle = shape.fillColor;
-                ctx.fill();
-            }
-        }
 
         ctx.strokeStyle = shape.strokeColor
         ctx.lineWidth = shape.strokeWidth
@@ -167,6 +223,26 @@ export function drawDiamond(shape, ctx, sloppiness) {
         if (shape.fillType === "solid") {
             ctx.fillStyle = shape.fillColor;
             ctx.fill();
+        } else if (shape.fillType === "hachure") {
+            drawHachure(
+                ctx,
+                () => {
+                    ctx.beginPath();
+                    ctx.moveTo(top.x, top.y);
+                    ctx.lineTo(right.x, right.y);
+                    ctx.lineTo(bottom.x, bottom.y);
+                    ctx.lineTo(left.x, left.y);
+                    ctx.closePath();
+                },
+                {
+                    left: Math.min(shape.x, shape.x + shape.width),
+                    right: Math.max(shape.x, shape.x + shape.width),
+                    top: Math.min(shape.y, shape.y + shape.height),
+                    bottom: Math.max(shape.y, shape.y + shape.height)
+                },
+                shape,
+                sloppiness
+            );
         }
     }
 
@@ -239,6 +315,27 @@ export function drawTriangle(shape, ctx, sloppiness) {
         if (shape.fillType === "solid") {
             ctx.fillStyle = shape.fillColor;
             ctx.fill();
+        } else if (shape.fillType === "hachure") {
+
+            drawHachure(
+                ctx,
+                () => {
+                    ctx.beginPath();
+                    ctx.moveTo(top.x, top.y);
+                    ctx.lineTo(right.x, right.y);
+                    ctx.lineTo(left.x, left.y);
+                    ctx.closePath();
+                },
+                {
+                    left: Math.min(shape.x, shape.x + shape.width),
+                    right: Math.max(shape.x, shape.x + shape.width),
+                    top: Math.min(shape.y, shape.y + shape.height),
+                    bottom: Math.max(shape.y, shape.y + shape.height)
+                },
+                shape,
+                sloppiness
+            );
+
         }
     }
 

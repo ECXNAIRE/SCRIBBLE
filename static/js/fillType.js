@@ -1,7 +1,7 @@
-import { roughLine } from "./roughness.js";
+import { roughLine, randomOffset } from "./roughness.js";
 
 
-export function drawHachure(ctx, pathFunction, shape, sloppiness) {
+export function drawHachure(ctx, pathFunction, bounds, shape, sloppiness) {
     const spacing = 20
 
     ctx.save()
@@ -9,9 +9,6 @@ export function drawHachure(ctx, pathFunction, shape, sloppiness) {
     pathFunction();
 
     ctx.clip()
-
-    ctx.beginPath()
-
     ctx.strokeStyle = shape.fillColor
 
 
@@ -20,11 +17,29 @@ export function drawHachure(ctx, pathFunction, shape, sloppiness) {
     const top = Math.min(shape.y, shape.y + shape.height)
     const bottom = Math.max(shape.y, shape.y + shape.height)
 
-    const diagonal = Math.max(right - left, bottom - top) * 2
+    const diagonal = Math.max(right - left, bottom - top)
 
-    for (let y = shape.y - shape.height; y < shape.y + shape.height; y += spacing) {
-        ctx.moveTo(left - diagonal, y)
-        ctx.lineTo(left + diagonal, y + diagonal)
+    for (let i = 0, y = top - diagonal; y < bottom + diagonal; y += spacing, i++) {
+
+        const lineSeed = shape.seed + Math.floor(y / spacing) * 1000;
+
+        const angleFactor = 1.3;
+
+
+        roughLine(
+            ctx,
+            left - diagonal,
+            y,
+            right + diagonal,
+            y + diagonal * angleFactor,
+            {
+                ...shape,
+                seed: lineSeed,
+                strokeColor: shape.fillColor,
+                strokeWidth: shape.strokeWidth
+            },
+            sloppiness
+        );
     }
 
     ctx.stroke()

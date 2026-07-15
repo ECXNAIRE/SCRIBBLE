@@ -1,7 +1,7 @@
 
 
 //HELPER FUNCTION 
-function randomOffset(seed, amount) {
+export function randomOffset(seed, amount) {
     const r = seededRandom(seed);
     return (r - 0.5) * amount * 2;;
 }
@@ -28,7 +28,7 @@ export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
             y1 + randomOffset(shape.seed + pass * 1000 + 1, sloppiness)
         );
 
-        const steps = 50;
+        const steps = 8;
 
         for (let i = 1; i <= steps; i++) {
 
@@ -45,7 +45,6 @@ export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
             ctx.lineTo(x, y);
         }
 
-        ctx.closePath()
         ctx.stroke()
     }
 }
@@ -66,11 +65,6 @@ export function roughEllipse(ctx, shape, sloppiness) {
             0,
             Math.PI * 2
         );
-
-        if (shape.fill) {
-            ctx.fillStyle = shape.fillColor;
-            ctx.fill();
-        }
     }
 
     ctx.strokeStyle = shape.strokeColor
