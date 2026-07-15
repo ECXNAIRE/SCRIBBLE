@@ -154,7 +154,8 @@
             border: 0.5px solid black
         }
 
-        .colorBtn {
+        .strokeColorBtn,
+        .fillColorBtn {
             width: 25px;
             height: 25px;
             border: 0.5px solid black;
@@ -162,7 +163,8 @@
             transition: all 0.5s ease;
         }
 
-        .colorBtn:hover {
+        .strokeColorBtn:hover,
+        .fillColorBtn:hover {
             cursor: pointer;
             transform: scale(1.08);
         }
@@ -261,10 +263,10 @@
             <div class="styleGroup">
                 <input type="color" id="strokeColorPicker" value="#000000">
                 <div class="divider"></div>
-                <button class="colorBtn" data-color="#2563EB" style="background:#2563EB;"></button>
-                <button class="colorBtn" data-color="#DC2626" style="background:#DC2626;"></button>
-                <button class="colorBtn" data-color="#16A34A" style="background:#16A34A;"></button>
-                <button class="colorBtn" data-color="#7C3AED" style="background:#7C3AED;"></button>
+                <button class="strokeColorBtn" data-color="#2563EB" style="background:#2563EB;"></button>
+                <button class="strokeColorBtn" data-color="#DC2626" style="background:#DC2626;"></button>
+                <button class="strokeColorBtn" data-color="#16A34A" style="background:#16A34A;"></button>
+                <button class="strokeColorBtn" data-color="#7C3AED" style="background:#7C3AED;"></button>
             </div>
 
 
@@ -272,10 +274,10 @@
             <div class="styleGroup">
                 <input type="color" id="fillColorPicker" value="#ffffff">
                 <div class="divider"></div>
-                <button class="colorBtn" data-color="#FF6B6B" style="background:#FF6B6B;"></button>
-                <button class="colorBtn" data-color="#81C784" style="background:#81C784;"></button>
-                <button class="colorBtn" data-color="#F48FB1" style="background:#F48FB1;"></button>
-                <button class="colorBtn" data-color="#A1887F" style="background:#A1887F;"></button>
+                <button class="fillColorBtn" data-color="#FF6B6B" style="background:#FF6B6B;"></button>
+                <button class="fillColorBtn" data-color="#81C784" style="background:#81C784;"></button>
+                <button class="fillColorBtn" data-color="#F48FB1" style="background:#F48FB1;"></button>
+                <button class="fillColorBtn" data-color="#A1887F" style="background:#A1887F;"></button>
             </div>
 
 

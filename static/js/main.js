@@ -25,16 +25,51 @@ let dragShape = null
 let undoStack = []
 let redoStack = []
 let selectedStroke = "stroke1"
-let strokeColor = "#000000"
-let fillColor = "#ffffff"
+
+const strokePicker = document.getElementById("strokeColorPicker")
+const fillPicker = document.getElementById("fillColorPicker")
+
+let strokeColor = strokePicker.value;
+let fillColor = fillPicker.value;
+
+strokePicker.addEventListener("input", () => {
+    strokeColor = strokePicker.value
+})
+
+
+fillPicker.addEventListener("input", () => {
+    strokeColor = fillPicker.value
+})
+
+
+document.querySelectorAll(".strokeColorBtn").forEach(button => {
+    button.addEventListener("click", () => {
+        strokeColor = button.dataset.color
+
+        strokePicker.value = strokeColor
+    })
+})
+
+
+document.querySelectorAll(".fillColorBtn").forEach(button => {
+    button.addEventListener("click", () => {
+        fillColor = button.dataset.color
+
+        fillPicker.value = fillColor
+    })
+})
+
+
+
+
+
+
 
 ctx.lineWidth = 2;
 ctx.lineCap = "round";
 ctx.lineJoin = "round";
 ctx.strokeStyle = "#000";
 ctx.fillStyle = "#000";
-
-
 
 
 
@@ -486,11 +521,11 @@ function drawShape(shape) {
             break
 
         case "ellipse":
-            if(shape.selectedStroke === "stroke1") {
+            if (shape.selectedStroke === "stroke1") {
                 drawEllipse(shape, ctx, 0)
-            } else if(shape.selectedStroke === "stroke2") {
+            } else if (shape.selectedStroke === "stroke2") {
                 drawEllipse(shape, ctx, 1.5)
-            } else if(shape.selectedStroke === "stroke3") {
+            } else if (shape.selectedStroke === "stroke3") {
                 drawEllipse(shape, ctx, 3)
             }
             break
@@ -526,11 +561,11 @@ function drawShape(shape) {
             break
 
         case "arrow":
-            if(shape.selectedStroke === "stroke1") {
+            if (shape.selectedStroke === "stroke1") {
                 drawArrow(shape, ctx, 0)
-            } else if(shape.selectedStroke === "stroke2") {
+            } else if (shape.selectedStroke === "stroke2") {
                 drawArrow(shape, ctx, 1.5)
-            } else if(shape.selectedStroke === "stroke3") {
+            } else if (shape.selectedStroke === "stroke3") {
                 drawArrow(shape, ctx, 3)
             }
             break
