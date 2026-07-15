@@ -27,6 +27,19 @@ let redoStack = []
 let selectedStroke = "stroke1"
 let selectedStrokeWidth = 2
 let selectedFillType = "solid"
+let shiftPressed = false
+
+window.addEventListener("keydown", (e) => {
+    if (e.key === "Shift") {
+        shiftPressed = true
+    }
+})
+
+window.addEventListener("keyup", (e) => {
+    if (e.key === "Shift") {
+        shiftPressed = false
+    }
+})
 
 document.querySelectorAll(".fillTypeBtn").forEach(button => {
     button.addEventListener("click", () => {
@@ -38,7 +51,7 @@ document.querySelectorAll(".fillTypeBtn").forEach(button => {
 
         button.classList.add("active")
 
-        if(selectedShape){
+        if (selectedShape) {
             selectedShape.fillType === selectedFillType
             render()
         }
@@ -510,8 +523,19 @@ function mouseMove(e) {
     if (!isDrawing) return
 
     if (tool === "rectangle" || tool === "circle" || tool === "diamond" || tool === "triangle") {
-        currentShape.width = e.offsetX - startX
-        currentShape.height = e.offsetY - startY
+
+        let width = e.offsetX - startX
+        let height = e.offsetY - startY
+
+        if (shiftPressed) {
+            let size = Math.max(Math.abs(width), Math.abs(height))
+
+            width = width < 0 ? -size : size
+            height = height < 0 ? -size : size
+        }
+
+        currentShape.width = width
+        currentShape.height = height
     }
 
     if (tool === "line" || tool === "arrow") {
