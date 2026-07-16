@@ -41,6 +41,7 @@ let edgeStyle = 0
 let layerOptionShow = false
 let gridToggle = false
 
+
 let gridToggleBtn = document.getElementById("gridToggleBtn")
 
 gridToggleBtn.addEventListener("click", () => {
@@ -1146,4 +1147,28 @@ function updateToolBar(tool) {
             break
 
     }
+}
+
+
+
+window.addEventListener("keydown", (e) => {
+    if((e.key === "Delete" || e.key === "Backspace") && selectedShape) {
+        deleteSelectedShape()
+    }
+})
+
+function deleteSelectedShape() {
+    const index = objects.indexOf(selectedShape)
+
+    if (index < 0) return
+
+    saveState()
+
+    objects.splice(index, 1)
+
+    selectedShape.editMode = false
+    selectedShape = null
+    
+
+    render()
 }
