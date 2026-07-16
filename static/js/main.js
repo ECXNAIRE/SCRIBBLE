@@ -2,6 +2,7 @@ import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawAr
 import { Path, drawPath } from "./testnewArch.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
+import { drawGrid } from "./grid.js"
 
 
 const fillSection = document.getElementById("fillSection")
@@ -38,7 +39,21 @@ let shiftPressed = false
 let isErasing = false
 let edgeStyle = 0
 let layerOptionShow = false
+let gridToggle = false
 
+let gridToggleBtn = document.getElementById("gridToggleBtn")
+
+gridToggleBtn.addEventListener("click", () => {
+    gridToggle = !gridToggle;
+
+    if (gridToggle) {
+        gridToggleBtn.classList.add("active");
+    } else {
+        gridToggleBtn.classList.remove("active");
+    }
+
+    render();
+});
 
 document.querySelectorAll(".layerToggleBtn").forEach(button => {
     button.addEventListener("click", () => {
@@ -193,10 +208,16 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+
+
     objects.forEach(drawShape)
 
     if (currentShape) {
         drawShape(currentShape)
+    }
+
+    if (gridToggle) {
+        drawGrid(ctx, canvas)
     }
 }
 
@@ -252,7 +273,7 @@ document.querySelectorAll(".strokeWidthBtn").forEach(button => {
 
 
 //BUTTON CLICK HANDLER
-document.querySelectorAll("#toolBarTop button").forEach(button => {
+document.querySelectorAll(".toolBarTopBtn").forEach(button => {
     button.addEventListener("click", () => {
 
         const selectedTool = button.dataset.tool
@@ -270,7 +291,7 @@ document.querySelectorAll("#toolBarTop button").forEach(button => {
         tool = selectedTool
 
         document
-            .querySelector("#toolBarTop button.active")
+            .querySelector(".toolBarTopBtn.active")
             ?.classList.remove("active");
 
         button.classList.add("active");

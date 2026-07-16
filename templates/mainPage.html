@@ -78,6 +78,7 @@
             display: flex;
             flex-direction: column;
             padding-top: 30px;
+            padding-left: 10px;
         }
 
         #canvasArea {
@@ -92,6 +93,7 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            border: 1.5px solid rgba(0, 0, 0, 0)
         }
 
         #toolBarTop button:hover {
@@ -100,6 +102,7 @@
 
         #toolBarTop button.active {
             background: #bedaff;
+            border: 1.5px solid #3B82F6;
         }
 
         #strokeArea,
@@ -145,6 +148,7 @@
         .fillTypeBtn.active,
         .edgeStyleBtn.active {
             background: #bedaff;
+            border: 1.5px solid #3B82F6;
         }
 
         .title {
@@ -247,64 +251,67 @@
 <body>
     <div id="toolBarTop">
         <div class="toolGroup">
-            <button class="active" data-tool="pointer">
+            <button class="toolBarTopBtn active" data-tool="pointer">
                 <img src="../static/assets/mouse-pointer-2.svg">
             </button>
-            <button data-tool="hand">
+            <button class="toolBarTopBtn" data-tool="hand">
                 <img src="../static/assets/hand.svg">
+            </button>
+            <button id="gridToggleBtn">
+                <img src="../static/assets/grid-3x3.svg">
             </button>
         </div>
         <div class="divider"></div>
         <div class="toolGroup">
-            <button data-tool="pencil">
+            <button class="toolBarTopBtn" data-tool="pencil">
                 <img src="../static/assets/pencil.svg">
             </button>
-            <button data-tool="line">
+            <button class="toolBarTopBtn" data-tool="line">
                 <img src="../static/assets/minus.svg">
             </button>
-            <button data-tool="arrow">
+            <button class="toolBarTopBtn" data-tool="arrow">
                 <img src="../static/assets/move-right.svg">
             </button>
-            <button data-tool="rectangle">
+            <button class="toolBarTopBtn" data-tool="rectangle">
                 <img src="../static/assets/rectangle-horizontal.svg">
             </button>
-            <button data-tool="triangle">
+            <button class="toolBarTopBtn" data-tool="triangle">
                 <img src="../static/assets/triangle.svg">
             </button>
-            <button data-tool="diamond">
+            <button class="toolBarTopBtn" data-tool="diamond">
                 <img src="../static/assets/diamond.svg">
             </button>
-            <button data-tool="circle">
+            <button class="toolBarTopBtn" data-tool="circle">
                 <img src="../static/assets/circle.svg">
             </button>
-            <button data-tool="eraser">
+            <button class="toolBarTopBtn" data-tool="eraser">
                 <img src="../static/assets/eraser.svg">
             </button>
         </div>
         <div class="divider"></div>
         <div class="toolGroup">
-            <button data-tool="text">
+            <button class="toolBarTopBtn"  data-tool="text">
                 <img src="../static/assets/type.svg">
             </button>
-            <button data-tool="image">
+            <button class="toolBarTopBtn" data-tool="image">
                 <img src="../static/assets/image.svg">
             </button>
         </div>
         <div class="divider"></div>
         <div>
-            <button data-tool="undo">
+            <button class="toolBarTopBtn" data-tool="undo">
                 <img src="../static/assets/undo.svg">
             </button>
-            <button data-tool="redo">
+            <button class="toolBarTopBtn" data-tool="redo">
                 <img src="../static/assets/redo.svg">
             </button>
         </div>
         <div class="divider"></div>
         <div class="toolGroup">
-            <button data-tool="download">
+            <button class="toolBarTopBtn" data-tool="download">
                 <img src="../static/assets/arrow-down-to-line.svg">
             </button>
-            <button data-tool="settings">
+            <button class="toolBarTopBtn" data-tool="settings">
                 <img src="../static/assets/settings.svg">
             </button>
         </div>
