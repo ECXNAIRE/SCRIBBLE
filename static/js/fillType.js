@@ -36,7 +36,7 @@ export function drawHachure(ctx, pathFunction, bounds, shape, sloppiness) {
                 ...shape,
                 seed: lineSeed,
                 strokeColor: shape.fillColor,
-                strokeWidth: shape.strokeWidth
+                strokeWidth: shape.strokeWidth - (( shape.strokeWidth * 50) / 100)
             },
             sloppiness
         );
