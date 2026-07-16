@@ -53,20 +53,6 @@ export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
 
 export function roughEllipse(ctx, shape, sloppiness) {
 
-    if (shape.fill) {
-        ctx.ellipse(
-            shape.x + shape.width / 2,
-            shape.y + shape.height / 2,
-
-            Math.abs(shape.width / 2),
-            Math.abs(shape.height / 2),
-
-            0,
-            0,
-            Math.PI * 2
-        );
-    }
-
     ctx.strokeStyle = shape.strokeColor
     ctx.lineWidth = shape.strokeWidth
 
@@ -102,6 +88,40 @@ export function roughEllipse(ctx, shape, sloppiness) {
         }
 
         ctx.closePath()
+        ctx.stroke()
+    }
+}
+
+
+
+export function roughArc(ctx, cx, cy, radius, startAngle, endAngle, shape, sloppiness) {
+    ctx.strokeStyle = shape.strokeColor
+    ctx.lineWidth = shape.strokeWidth
+    ctx.lineJoin = "round"
+    ctx.lineCap = "round"
+
+    for(let pass = 0; pass < 2; pass ++) {
+        ctx.beginPath()
+
+        const steps = 10
+
+        for(let i= 0; i <= steps; i++) {
+            const t = i / steps
+
+            const angle = startAngle + (endAngle - startAngle) * t
+
+            const x = cx + Math.cos(angle) * radius + randomOffset(shape.seed + pass * 1000 + i *2, sloppiness)
+
+            const y = cy + Math.sin(angle) * radius + randomOffset(shape.seed + pass * 1000 + i * 2 + 1, sloppiness)
+
+
+            if(i === 0) {
+                ctx.moveTo(x, y)
+            }else {
+                ctx.lineTo(x, y)
+            }
+        }
+
         ctx.stroke()
     }
 }

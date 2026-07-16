@@ -1,6 +1,6 @@
 import { selectionBox } from "./handle&selectionbox.js";
 import { distanceToLine, lineSelectionBox } from "./lineTools.js";
-import { roughEllipse, roughLine } from "./roughness.js";
+import { roughEllipse, roughLine, roughArc } from "./roughness.js";
 import { drawHachure } from "./fillType.js";
 import { Path, drawPath } from "./testnewArch.js";
 
@@ -36,16 +36,25 @@ export function drawRectangle(shape, ctx, sloppiness) {
 
 
     const path = new Path()
-    const r = 0
+    const r = 25
+    path.moveTo(x1 + r, y1);
 
-    path.roughLine(x1 + r, y1, x2 - r, y1, shape, sloppiness);
-    path.roughLine(x2, y1 + r, x2, y2 - r, shape, sloppiness);
-    path.roughLine(x2 - r, y2, x1 + r, y2, shape, sloppiness);
-    path.roughLine(x1, y2 - r, x1, y1 + r, shape, sloppiness);
+    path.lineTo(x2 - r, y1);
+    path.arc(x2 - r, y1 + r, r, -Math.PI / 2, 0);
 
+    path.lineTo(x2, y2 - r);
+    path.arc(x2 - r, y2 - r, r, 0, Math.PI / 2);
 
+    path.lineTo(x1 + r, y2);
+    path.arc(x1 + r, y2 - r, r, Math.PI / 2, Math.PI);
 
-    drawPath(ctx, path);
+    path.lineTo(x1, y1 + r);
+    path.arc(x1 + r, y1 + r, r, Math.PI, Math.PI * 1.5);
+
+    path.close();
+
+    drawPath(ctx, path, shape, sloppiness);
+    console.log(path.commands);
 
 }
 

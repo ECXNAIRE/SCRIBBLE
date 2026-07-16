@@ -1,4 +1,4 @@
-import { roughLine } from "./roughness.js";
+import { roughLine, roughArc } from "./roughness.js";
 
 export class Path {
     constructor() {
@@ -6,17 +6,31 @@ export class Path {
     }
 
 
-    //STARTING COORDS
-    roughLine(x1, y1, x2, y2, shape, sloppiness){
+    moveTo(x, y) {
         this.commands.push({
-            type: "roughLine",
-            x1,
-            y1,
-            x2,
-            y2,
-            shape,
-            sloppiness
-        })
+            type: "moveTo",
+            x,
+            y
+        });
+    }
+
+    lineTo(x, y) {
+        this.commands.push({
+            type: "lineTo",
+            x,
+            y
+        });
+    }
+
+    arc(cx, cy, radius, startAngle, endAngle) {
+        this.commands.push({
+            type: "arc",
+            cx,
+            cy,
+            radius,
+            startAngle,
+            endAngle
+        });
     }
 
     close() {
@@ -29,37 +43,61 @@ export class Path {
 
 
 
-//HARCODED RECT FOR TESTING
 
+export function drawPath(ctx, path, shape, sloppiness) {
 
+    let currentX = 0;
+    let currentY = 0;
 
+    for (const cmd of path.commands) {
 
-export function drawPath(ctx, path) {
-    ctx.beginPath()
+        switch (cmd.type) {
 
-    for(const cmd of path.commands) {
-        switch(cmd.type) {
-            case "roughLine":
+            case "moveTo":
+                currentX = cmd.x;
+                currentY = cmd.y;
+                break;
+
+            case "lineTo":
+
                 roughLine(
                     ctx,
-                    cmd.x1,
-                    cmd.y1,
-                    cmd.x2,
-                    cmd.y2,
-                    cmd.shape,
-                    cmd.sloppiness
-                )
+                    currentX,
+                    currentY,
+                    cmd.x,
+                    cmd.y,
+                    shape,
+                    sloppiness
+                );
 
-                break
+                currentX = cmd.x;
+                currentY = cmd.y;
+
+                break;
+
+            case "arc":
+
+                roughArc(
+                    ctx,
+                    cmd.cx,
+                    cmd.cy,
+                    cmd.radius,
+                    cmd.startAngle,
+                    cmd.endAngle,
+                    shape,
+                    sloppiness
+                );
+
+                currentX =
+                    cmd.cx + Math.cos(cmd.endAngle) * cmd.radius;
+
+                currentY =
+                    cmd.cy + Math.sin(cmd.endAngle) * cmd.radius;
+
+                break;
 
             case "close":
-                ctx.closePath()
-                break
+                break;
         }
-
-        
     }
-
-
-    ctx.stroke()
 }
