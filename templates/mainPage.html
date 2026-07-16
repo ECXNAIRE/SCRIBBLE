@@ -56,6 +56,7 @@
             width: 100%;
             display: flex;
             flex-direction: row;
+            align-items: flex-start;
             padding: 20px;
             gap: 20px;
             overflow: hidden;
@@ -63,6 +64,7 @@
 
         #toolBarLeft {
             width: 250px;
+            height: auto;
             background: #FFFFFF;
             border: 1px solid #D9E6F2;
             border-radius: 12px;
@@ -98,7 +100,8 @@
         #strokeArea,
         #strokeWidthArea,
         #fillTypeArea,
-        #edgeStyleArea {
+        #edgeStyleArea,
+        #layerToggleArea {
             display: flex;
             gap: 10px;
             margin-bottom: 14px;
@@ -107,7 +110,8 @@
         .strokeBtn,
         .strokeWidthBtn,
         .fillTypeBtn,
-        .edgeStyleBtn {
+        .edgeStyleBtn,
+        .layerToggleBtn {
             width: 32px;
             height: 32px;
             display: flex;
@@ -126,7 +130,8 @@
         .strokeBtn:hover,
         .strokeWidthBtn:hover,
         .fillTypeBtn:hover,
-        .edgeStyleBtn:hover {
+        .edgeStyleBtn:hover,
+        .layerToggleBtn:hover {
             background: #cfe4ff;
         }
 
@@ -387,6 +392,25 @@
                     </button>
                     <button class="edgeStyleBtn" data-edgestyle="25">
                         <img src="../static/assets/minus.svg">
+                    </button>
+                </div>
+            </div>
+
+
+            <div id="layerToggleSection">
+                <div class="title">Layer</div>
+                <div id="layerToggleArea">
+                    <button class="layerToggleBtn" data-function="top">
+                        <img src="../static/assets/arrow-up-to-line.svg">
+                    </button>
+                    <button class="layerToggleBtn" data-function="up">
+                        <img src="../static/assets/arrow-up.svg">
+                    </button>
+                    <button class="layerToggleBtn" data-function="down">
+                        <img src="../static/assets/arrow-down.svg">
+                    </button>
+                    <button class="layerToggleBtn" data-function="bottom">
+                        <img src="../static/assets/arrow-down-to-line.svg">
                     </button>
                 </div>
             </div>

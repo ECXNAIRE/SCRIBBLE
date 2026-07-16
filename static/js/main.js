@@ -8,6 +8,7 @@ const fillSection = document.getElementById("fillSection")
 const sloppinessSection = document.getElementById("sloppinessSection")
 const fillTypeSection = document.getElementById("fillTypeSection")
 const edgeSection = document.getElementById("edgeSection")
+const layerSection = document.getElementById("layerToggleSection")
 
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
@@ -36,6 +37,7 @@ let selectedFillType = "solid"
 let shiftPressed = false
 let isErasing = false
 let edgeStyle = 0
+let layerOptionShow = false
 
 
 document.querySelectorAll(".edgeStyleBtn").forEach(button => {
@@ -277,12 +279,10 @@ function mouseDown(e) {
 
                 return;
             }
+
         }
 
-
-
         const clickedShape = getClickedShape(e.offsetX, e.offsetY)
-        updateToolBar(clickedShape.type)
 
         if (clickedShape && !isResizing) {
             saveState()
@@ -302,6 +302,8 @@ function mouseDown(e) {
 
 
         if (clickedShape) {
+            layerOptionShow = true
+            updateToolBar(clickedShape.type)
 
             if (clickedShape !== selectedShape) {
                 objects.forEach(shape => {
@@ -1044,6 +1046,9 @@ function updateToolBar(tool) {
     fillTypeSection.style.display = "none"
     edgeSection.style.display = "none"
     sloppinessSection.style.display = "none"
+    layerSection.style.display = "none"
+
+    console.log(layerOptionShow);
 
 
     switch (tool) {
@@ -1052,6 +1057,10 @@ function updateToolBar(tool) {
             fillTypeSection.style.display = "block"
             edgeSection.style.display = "block"
             sloppinessSection.style.display = "block"
+            if(layerOptionShow === true) {
+                layerSection.style.display = "block"
+            }
+
 
             break
 
@@ -1061,15 +1070,22 @@ function updateToolBar(tool) {
             fillSection.style.display = "block"
             fillTypeSection.style.display = "block"
             sloppinessSection.style.display = "block"
+            if(layerOptionShow === true) {
+                layerSection.style.display = "block"
+            }
+
             break
 
 
         case "line":
         case "arrow":
             sloppinessSection.style.display = "block"
+            if(layerOptionShow === true) {
+                layerSection.style.display = "block"
+            }
+
 
             break
-
 
     }
 }
