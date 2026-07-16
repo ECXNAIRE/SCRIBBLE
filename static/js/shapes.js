@@ -8,15 +8,50 @@ import { Path, drawPath } from "./testnewArch.js";
 
 export function drawRectangle(shape, ctx, sloppiness) {
 
+    const path = new Path()
+    const maxRadius = Math.min(
+        Math.abs(shape.width),
+        Math.abs(shape.height)
+    ) / 2;
+
+
+    const x1 = Math.min(shape.x, shape.x + shape.width);
+    const y1 = Math.min(shape.y, shape.y + shape.height);
+
+    const x2 = Math.max(shape.x, shape.x + shape.width);
+    const y2 = Math.max(shape.y, shape.y + shape.height);
+
+    const r = Math.min(shape.edgeStyle, maxRadius);
+
     if (shape.fill) {
         if (shape.fillType === "solid") {
+            ctx.beginPath();
+            ctx.moveTo(x1 + r, y1);
+            ctx.lineTo(x2 - r, y1);
+            ctx.arc(x2 - r, y1 + r, r, -Math.PI / 2, 0);
+            ctx.lineTo(x2, y2 - r);
+            ctx.arc(x2 - r, y2 - r, r, 0, Math.PI / 2);
+            ctx.lineTo(x1 + r, y2);
+            ctx.arc(x1 + r, y2 - r, r, Math.PI / 2, Math.PI);
+            ctx.lineTo(x1, y1 + r);
+            ctx.arc(x1 + r, y1 + r, r, Math.PI, Math.PI * 1.5);
+            ctx.closePath();
             ctx.fillStyle = shape.fillColor;
-            ctx.fillRect(shape.x, shape.y, shape.width, shape.height);
+            ctx.fill();
         } else if (shape.fillType === "hachure") {
             drawHachure(ctx,
                 () => {
                     ctx.beginPath();
-                    ctx.rect(shape.x, shape.y, shape.width, shape.height)
+                    ctx.moveTo(x1 + r, y1);
+                    ctx.lineTo(x2 - r, y1);
+                    ctx.arc(x2 - r, y1 + r, r, -Math.PI / 2, 0);
+                    ctx.lineTo(x2, y2 - r);
+                    ctx.arc(x2 - r, y2 - r, r, 0, Math.PI / 2);
+                    ctx.lineTo(x1 + r, y2);
+                    ctx.arc(x1 + r, y2 - r, r, Math.PI / 2, Math.PI);
+                    ctx.lineTo(x1, y1 + r);
+                    ctx.arc(x1 + r, y1 + r, r, Math.PI, Math.PI * 1.5);
+                    ctx.closePath();
                 },
                 {
                     left: Math.min(shape.x, shape.x + shape.width),
@@ -27,35 +62,14 @@ export function drawRectangle(shape, ctx, sloppiness) {
         }
     }
 
-
-    const x1 = Math.min(shape.x, shape.x + shape.width);
-    const y1 = Math.min(shape.y, shape.y + shape.height);
-
-    const x2 = Math.max(shape.x, shape.x + shape.width);
-    const y2 = Math.max(shape.y, shape.y + shape.height);
-
-
-
-
-
-    const path = new Path()
-    const maxRadius = Math.min(
-        Math.abs(shape.width),
-        Math.abs(shape.height)
-    ) / 2;
-
-    const r = Math.min(25, maxRadius);
     path.moveTo(x1 + r, y1);
 
     path.lineTo(x2 - r, y1);
     path.arc(x2 - r, y1 + r, r, -Math.PI / 2, 0);
-
     path.lineTo(x2, y2 - r);
     path.arc(x2 - r, y2 - r, r, 0, Math.PI / 2);
-
     path.lineTo(x1 + r, y2);
     path.arc(x1 + r, y2 - r, r, Math.PI / 2, Math.PI);
-
     path.lineTo(x1, y1 + r);
     path.arc(x1 + r, y1 + r, r, Math.PI, Math.PI * 1.5);
 

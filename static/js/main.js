@@ -30,6 +30,25 @@ let selectedStrokeWidth = 2
 let selectedFillType = "solid"
 let shiftPressed = false
 let isErasing = false
+let edgeStyle = 0
+
+
+document.querySelectorAll(".edgeStyleBtn").forEach(button => {
+    button.addEventListener("click", () => {
+        edgeStyle = Number(button.dataset.edgestyle)
+        document
+            .querySelector(".edgeStyleBtn.active")
+            ?.classList.remove("active")
+
+        button.classList.add("active")
+
+        if(selectedShape){
+            selectedShape.edgeStyle = edgeStyle
+            render()
+        }
+
+    })
+})
 
 window.addEventListener("keydown", (e) => {
     if (e.key === "Shift") {
@@ -320,7 +339,8 @@ function mouseDown(e) {
             fillColor: fillColor,
             fill: true,
             strokeWidth: selectedStrokeWidth,
-            fillType: selectedFillType
+            fillType: selectedFillType,
+            edgeStyle: edgeStyle
         }
     }
 

@@ -97,7 +97,8 @@
 
         #strokeArea,
         #strokeWidthArea,
-        #fillTypeArea {
+        #fillTypeArea,
+        #edgeStyleArea {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
@@ -105,7 +106,8 @@
 
         .strokeBtn,
         .strokeWidthBtn,
-        .fillTypeBtn {
+        .fillTypeBtn,
+        .edgeStyleBtn {
             width: 32px;
             height: 32px;
             display: flex;
@@ -123,13 +125,15 @@
 
         .strokeBtn:hover,
         .strokeWidthBtn:hover,
-        .fillTypeBtn:hover {
+        .fillTypeBtn:hover,
+        .edgeStyleBtn:hover {
             background: #cfe4ff;
         }
 
         .strokeBtn.active,
         .strokeWidthBtn.active,
-        .fillTypeBtn.active {
+        .fillTypeBtn.active,
+        .edgeStyleBtn.active {
             background: #bedaff;
         }
 
@@ -368,6 +372,18 @@
                     <img src="../static/assets/minus.svg">
                 </button>
             </div>
+
+
+            <div class="title">Edge Style</div>
+            <div id="edgeStyleArea">
+                <button class="edgeStyleBtn active" data-edgestyle="0">
+                    <img src="../static/assets/minus.svg">
+                </button>
+                <button class="edgeStyleBtn" data-edgestyle="25">
+                    <img src="../static/assets/minus.svg">
+                </button>
+            </div>
+
 
 
         </div>
