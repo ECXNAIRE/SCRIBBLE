@@ -41,6 +41,8 @@ let edgeStyle = 0
 let layerOptionShow = false
 let gridToggle = false
 let clipboard = null
+let cursorX = 0;
+let cursorY = 0;
 
 let gridToggleBtn = document.getElementById("gridToggleBtn")
 
@@ -219,6 +221,11 @@ function render() {
 
     if (gridToggle) {
         drawGrid(ctx, canvas)
+    }
+
+
+    if (tool === 'pencil') {
+        drawBrushCursor(ctx)
     }
 }
 
@@ -535,7 +542,7 @@ function mouseDown(e) {
 
         currentShape = {
             type: "pencil",
-            points: [{ x: e.offsetX, y: e.offsetY }],
+            points: [{ x: e.offsetX, y: e.offsetY, pressure: e.pressure }],
             strokeColor: strokeColor,
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
@@ -549,6 +556,14 @@ function mouseDown(e) {
 
 
 function mouseMove(e) {
+    cursorX = e.offsetX
+    cursorY = e.offsetY
+
+    if (tool === "pencil") {
+        canvas.style.cursor = "none";
+        render();
+    }
+
 
     if (tool == "eraser" && isErasing) {
         const hoveredShape = getClickedShape(e.offsetX, e.offsetY)
@@ -582,8 +597,12 @@ function mouseMove(e) {
     }
 
 
-    if (isResizing || isDrawing) {
+    if (isResizing) {
         canvas.style.cursor = "crosshair";
+    }
+
+    if (isDrawing && tool !== 'pencil') {
+        canvas.style.cursor = "crosshair"
     }
 
     if (isResizing) {
@@ -659,7 +678,8 @@ function mouseMove(e) {
     if (tool === "pencil") {
         currentShape.points.push({
             x: e.offsetX,
-            y: e.offsetY
+            y: e.offsetY,
+            pressure: e.pressure
         })
 
         render()
@@ -853,9 +873,9 @@ function drawShape(shape) {
             if (shape.selectedStroke === "stroke1") {
                 drawPencil(shape, ctx, 0)
             } else if (shape.selectedStroke === "stroke2") {
-                drawPencil(shape, ctx, 1.5)
+                drawPencil(shape, ctx, 0)
             } else if (shape.selectedStroke === "stroke3") {
-                drawPencil(shape, ctx, 3)
+                drawPencil(shape, ctx, 0)
             }
             break
     }
@@ -1206,10 +1226,10 @@ window.addEventListener("keydown", (e) => {
 window.addEventListener("keydown", (e) => {
     if (!selectedShape) return;
 
-    let step 
-    if(e.shiftKey) {
+    let step
+    if (e.shiftKey) {
         step = 10
-    } else{
+    } else {
         step = 1
     }
 
@@ -1237,3 +1257,23 @@ window.addEventListener("keydown", (e) => {
     saveState()
     render()
 })
+
+
+
+function drawBrushCursor(ctx) {
+
+    ctx.beginPath();
+
+    ctx.arc(
+        cursorX,
+        cursorY,
+        selectedStrokeWidth / 2,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+
+    ctx.stroke();
+}

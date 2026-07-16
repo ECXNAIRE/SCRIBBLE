@@ -422,16 +422,33 @@ export function drawArrow(shape, ctx, sloppiness) {
 
 
 export function drawPencil(shape, ctx, sloppiness) {
+    ctx.strokeStyle = shape.strokeColor
+    ctx.lineCap = "round"
+    ctx.lineJoin = "round"
 
     for (let i = 1; i < shape.points.length; i++) {
-        roughLine(
-            ctx,
-            shape.points[i - 1].x,
-            shape.points[i - 1].y,
-            shape.points[i].x,
-            shape.points[i].y,
-            shape,
-            sloppiness
-        );
+        const previous = shape.points[i - 1]
+        const current = shape.points[i]
+
+        ctx.lineWidth = calculatePressureWidth(current.pressure, shape.strokeWidth)
+
+        ctx.beginPath()
+
+        ctx.moveTo(previous.x, previous.y)
+        ctx.lineTo(current.x, current.y)
+
+        ctx.stroke()
     }
+}
+
+
+function calculatePressureWidth(pressure, baseWidth) {
+    pressure = Math.pow(pressure, 0.5)
+
+    const minWidth = baseWidth * 0.5;
+    const maxWidth = baseWidth * 2
+
+    return minWidth +
+        (maxWidth - minWidth) * pressure;
+
 }
