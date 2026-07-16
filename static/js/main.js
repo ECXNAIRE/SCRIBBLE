@@ -80,7 +80,7 @@ document.querySelectorAll(".fillTypeBtn").forEach(button => {
         button.classList.add("active")
 
         if (selectedShape) {
-            selectedShape.fillType === selectedFillType
+            selectedShape.fillType = selectedFillType
             render()
         }
 
@@ -320,6 +320,9 @@ function mouseDown(e) {
                 shape.selected = false,
                     shape.editMode = false
             });
+
+
+            selectedShape = null
         }
 
         render();
@@ -1047,8 +1050,6 @@ function updateToolBar(tool) {
     edgeSection.style.display = "none"
     sloppinessSection.style.display = "none"
     layerSection.style.display = "none"
-
-    console.log(layerOptionShow);
 
 
     switch (tool) {
