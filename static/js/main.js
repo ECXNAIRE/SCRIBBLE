@@ -14,6 +14,9 @@ const layerSection = document.getElementById("layerToggleSection")
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
+
+const overlayCanvas = document.getElementById("overlayCanvas")
+const overlayCtx = overlayCanvas.getContext("2d")
 const canvasArea = document.getElementById("canvasArea")
 let objects = []
 let isDrawing = false
@@ -223,10 +226,6 @@ function render() {
         drawGrid(ctx, canvas)
     }
 
-
-    if (tool === 'pencil') {
-        drawBrushCursor(ctx)
-    }
 }
 
 
@@ -236,6 +235,8 @@ function render() {
 function resizeCanvas() {
     canvas.width = canvasArea.clientWidth;
     canvas.height = canvasArea.clientHeight;
+    overlayCanvas.width = canvas.width;
+    overlayCanvas.height = canvas.height;
 
     render()
 }
@@ -315,7 +316,9 @@ canvas.addEventListener("pointerdown", mouseDown)
 canvas.addEventListener("pointerup", mouseUp)
 canvas.addEventListener("pointermove", mouseMove)
 canvas.addEventListener("dblclick", mouseDoubleClick)
-canvas.addEventListener("pointercancel", mouseUp);
+canvas.addEventListener("pointercancel", (e) => {
+    console.log("pointercancel", e.pointerType);
+});
 
 function mouseDown(e) {
     canvas.setPointerCapture(e.pointerId);
@@ -558,6 +561,8 @@ function mouseDown(e) {
 function mouseMove(e) {
     cursorX = e.offsetX
     cursorY = e.offsetY
+
+    drawBrushCursor()
 
     if (tool === "pencil") {
         canvas.style.cursor = "none";
@@ -1260,11 +1265,15 @@ window.addEventListener("keydown", (e) => {
 
 
 
-function drawBrushCursor(ctx) {
+function drawBrushCursor() {
 
-    ctx.beginPath();
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height)
 
-    ctx.arc(
+    if(tool !== "pencil") return
+
+    overlayCtx.beginPath();
+
+    overlayCtx.arc(
         cursorX,
         cursorY,
         selectedStrokeWidth / 2,
@@ -1272,8 +1281,8 @@ function drawBrushCursor(ctx) {
         Math.PI * 2
     );
 
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
+    overlayCtx.strokeStyle = "black";
+    overlayCtx.lineWidth = 1;
 
-    ctx.stroke();
+    overlayCtx.stroke();
 }
