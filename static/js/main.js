@@ -40,7 +40,7 @@ let isErasing = false
 let edgeStyle = 0
 let layerOptionShow = false
 let gridToggle = false
-
+let clipboard = null
 
 let gridToggleBtn = document.getElementById("gridToggleBtn")
 
@@ -1152,7 +1152,7 @@ function updateToolBar(tool) {
 
 
 window.addEventListener("keydown", (e) => {
-    if((e.key === "Delete" || e.key === "Backspace") && selectedShape) {
+    if ((e.key === "Delete" || e.key === "Backspace") && selectedShape) {
         deleteSelectedShape()
     }
 })
@@ -1168,7 +1168,35 @@ function deleteSelectedShape() {
 
     selectedShape.editMode = false
     selectedShape = null
-    
+
 
     render()
 }
+
+
+//COPY PASTE SHAPE 
+
+window.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === "c") {
+        if (!selectedShape) return;
+        clipboard = structuredClone(selectedShape);
+
+
+    }
+})
+
+window.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === "v" && clipboard !== null) {
+        const newShape = structuredClone(clipboard);
+
+        newShape.x += 20;
+        newShape.y += 20;
+
+        objects.push(newShape);
+
+        selectedShape = newShape;
+        editMode = true;
+
+        render();
+    }
+})
