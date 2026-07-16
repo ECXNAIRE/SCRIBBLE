@@ -4,6 +4,11 @@ import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 
 
+const fillSection = document.getElementById("fillSection")
+const sloppinessSection = document.getElementById("sloppinessSection")
+const fillTypeSection = document.getElementById("fillTypeSection")
+const edgeSection = document.getElementById("edgeSection")
+
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
@@ -42,7 +47,7 @@ document.querySelectorAll(".edgeStyleBtn").forEach(button => {
 
         button.classList.add("active")
 
-        if(selectedShape){
+        if (selectedShape) {
             selectedShape.edgeStyle = edgeStyle
             render()
         }
@@ -213,6 +218,7 @@ document.querySelectorAll("#toolBarTop button").forEach(button => {
     button.addEventListener("click", () => {
 
         const selectedTool = button.dataset.tool
+        updateToolBar(selectedTool)
         if (selectedTool === "undo") {
             undo();
             return;
@@ -276,6 +282,7 @@ function mouseDown(e) {
 
 
         const clickedShape = getClickedShape(e.offsetX, e.offsetY)
+        updateToolBar(clickedShape.type)
 
         if (clickedShape && !isResizing) {
             saveState()
@@ -456,7 +463,7 @@ function mouseDown(e) {
             fillColor: fillColor,
             fill: true,
             strokeWidth: selectedStrokeWidth,
-            fillType: fillType
+            fillType: selectedFillType
         }
     }
 
@@ -619,7 +626,7 @@ function mouseUp(e) {
         return
     }
 
-    if(isErasing) {
+    if (isErasing) {
         isErasing = false
         return
     }
@@ -1007,3 +1014,42 @@ document.addEventListener("keydown", (e) => {
         redo();
     }
 })
+
+
+
+
+
+function updateToolBar(tool) {
+    fillSection.style.display = "none"
+    fillTypeSection.style.display = "none"
+    edgeSection.style.display = "none"
+    sloppinessSection.style.display = "none"
+
+
+    switch (tool) {
+        case "rectangle":
+            fillSection.style.display = "block"
+            fillTypeSection.style.display = "block"
+            edgeSection.style.display = "block"
+            sloppinessSection.style.display = "block"
+
+            break
+
+        case "triangle":
+        case "circle":
+        case "diamond":
+            fillSection.style.display = "block"
+            fillTypeSection.style.display = "block"
+            sloppinessSection.style.display = "block"
+            break
+
+
+        case "line":
+        case "arrow":
+            sloppinessSection.style.display = "block"
+
+            break
+
+
+    }
+}

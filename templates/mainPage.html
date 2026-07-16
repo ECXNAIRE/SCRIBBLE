@@ -101,7 +101,7 @@
         #edgeStyleArea {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
 
         .strokeBtn,
@@ -118,7 +118,7 @@
             border: none;
             cursor: pointer;
             transition: .15s;
-            margin-bottom: 25px;
+            margin-bottom: 0px;
             font-size: 15px;
             font-weight: 500;
         }
@@ -141,7 +141,7 @@
             font-size: 13px;
             color: #000000;
             letter-spacing: 0.5px;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .styleGroup {
@@ -150,7 +150,7 @@
             flex-direction: row;
             gap: 3px;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 14px;
         }
 
         .styleGroup input[type="color"] {
@@ -291,7 +291,7 @@
         <div id="toolBarLeft">
 
             <div class="title">Stroke</div>
-            <div class="styleGroup">
+            <div class="styleGroup" id="strokeColorArea">
                 <input type="color" id="strokeColorPicker" value="#000000">
                 <div class="divider"></div>
                 <button class="strokeColorBtn" data-color="#2563EB">
@@ -312,25 +312,27 @@
             </div>
 
 
-            <div class="title">Fill</div>
-            <div class="styleGroup">
-                <input type="color" id="fillColorPicker" value="#ffffff">
-                <div class="divider"></div>
-                <button class="fillColorBtn" data-color="#FF6B6B">
-                    <div style="background:#FF6B6B;"></div>
-                </button>
-                <button class="fillColorBtn" data-color="#81C784">
-                    <div style="background:#81C784;"></div>
-                </button>
-                <button class="fillColorBtn" data-color="#F48FB1">
-                    <div style="background:#F48FB1;"></div>
-                </button>
-                <button class="fillColorBtn" data-color="#A1887F">
-                    <div style="background:#A1887F;"></div>
-                </button>
-                <button class="fillColorBtn" data-color="#FACC15">
-                    <div style="background:#FDE68A;"></div>
-                </button>
+            <div id="fillSection">
+                <div class="title">Fill</div>
+                <div class="styleGroup" if="fillColorArea">
+                    <input type="color" id="fillColorPicker" value="#ffffff">
+                    <div class="divider"></div>
+                    <button class="fillColorBtn" data-color="#FF6B6B">
+                        <div style="background:#FF6B6B;"></div>
+                    </button>
+                    <button class="fillColorBtn" data-color="#81C784">
+                        <div style="background:#81C784;"></div>
+                    </button>
+                    <button class="fillColorBtn" data-color="#F48FB1">
+                        <div style="background:#F48FB1;"></div>
+                    </button>
+                    <button class="fillColorBtn" data-color="#A1887F">
+                        <div style="background:#A1887F;"></div>
+                    </button>
+                    <button class="fillColorBtn" data-color="#FACC15">
+                        <div style="background:#FDE68A;"></div>
+                    </button>
+                </div>
             </div>
 
             <div class="title">Stroke Width</div>
@@ -346,42 +348,47 @@
                 </button>
             </div>
 
-            <div class="title">Sloppiness</div>
-            <div id="strokeArea">
-                <button class="strokeBtn active" data-stroke="stroke1">
-                    <img src="../static/assets/smooth3.png">
-                </button>
-                <button class="strokeBtn" data-stroke="stroke2">
-                    <img src="../static/assets/medium.png">
-                </button>
-                <button class="strokeBtn" data-stroke="stroke3">
-                    <img src="../static/assets/high.png">
-                </button>
+
+
+            <div id="sloppinessSection">
+                <div class="title">Sloppiness</div>
+                <div id="strokeArea">
+                    <button class="strokeBtn active" data-stroke="stroke1">
+                        <img src="../static/assets/smooth3.png">
+                    </button>
+                    <button class="strokeBtn" data-stroke="stroke2">
+                        <img src="../static/assets/medium.png">
+                    </button>
+                    <button class="strokeBtn" data-stroke="stroke3">
+                        <img src="../static/assets/high.png">
+                    </button>
+                </div>
             </div>
 
 
-            <div class="title">Fill Type</div>
-            <div id="fillTypeArea">
-                <button class="fillTypeBtn active" data-filltype="solid">
-                    <img src="../static/assets/minus.svg">
-                </button>
-                <button class="fillTypeBtn" data-filltype="hachure">
-                    <img src="../static/assets/minus.svg">
-                </button>
-                <button class="fillTypeBtn" data-filltype="hatch">
-                    <img src="../static/assets/minus.svg">
-                </button>
+            <div id="fillTypeSection">
+                <div class="title">Fill Type</div>
+                <div id="fillTypeArea">
+                    <button class="fillTypeBtn active" data-filltype="solid">
+                        <img src="../static/assets/minus.svg">
+                    </button>
+                    <button class="fillTypeBtn" data-filltype="hachure">
+                        <img src="../static/assets/minus.svg">
+                    </button>
+                </div>
             </div>
 
 
-            <div class="title">Edge Style</div>
-            <div id="edgeStyleArea">
-                <button class="edgeStyleBtn active" data-edgestyle="0">
-                    <img src="../static/assets/minus.svg">
-                </button>
-                <button class="edgeStyleBtn" data-edgestyle="25">
-                    <img src="../static/assets/minus.svg">
-                </button>
+            <div id="edgeSection">
+                <div class="title">Edge Style</div>
+                <div id="edgeStyleArea">
+                    <button class="edgeStyleBtn active" data-edgestyle="0">
+                        <img src="../static/assets/minus.svg">
+                    </button>
+                    <button class="edgeStyleBtn" data-edgestyle="25">
+                        <img src="../static/assets/minus.svg">
+                    </button>
+                </div>
             </div>
 
 

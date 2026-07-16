@@ -76,7 +76,13 @@ export function drawRectangle(shape, ctx, sloppiness) {
     path.close();
 
     drawPath(ctx, path, shape, sloppiness);
-    console.log(path.commands);
+
+
+    if (shape.selected && shape.editMode) {
+        selectionBox(shape, ctx)
+    }
+
+    ctx.restore()
 
 }
 
