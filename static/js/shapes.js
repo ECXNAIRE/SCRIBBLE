@@ -2,6 +2,7 @@ import { selectionBox } from "./handle&selectionbox.js";
 import { distanceToLine, lineSelectionBox } from "./lineTools.js";
 import { roughEllipse, roughLine } from "./roughness.js";
 import { drawHachure } from "./fillType.js";
+import { Path, drawPath } from "./testnewArch.js";
 
 //RECTANGLE
 
@@ -27,57 +28,24 @@ export function drawRectangle(shape, ctx, sloppiness) {
     }
 
 
+    const x1 = Math.min(shape.x, shape.x + shape.width);
+    const y1 = Math.min(shape.y, shape.y + shape.height);
+
+    const x2 = Math.max(shape.x, shape.x + shape.width);
+    const y2 = Math.max(shape.y, shape.y + shape.height);
+
+
+    const path = new Path()
+    const r = 0
+
+    path.roughLine(x1 + r, y1, x2 - r, y1, shape, sloppiness);
+    path.roughLine(x2, y1 + r, x2, y2 - r, shape, sloppiness);
+    path.roughLine(x2 - r, y2, x1 + r, y2, shape, sloppiness);
+    path.roughLine(x1, y2 - r, x1, y1 + r, shape, sloppiness);
 
 
 
-    ctx.beginPath();
-
-
-    roughLine(
-        ctx,
-        shape.x,
-        shape.y,
-        shape.x + shape.width,
-        shape.y,
-        shape,
-        sloppiness
-    );
-
-    roughLine(
-        ctx,
-        shape.x + shape.width,
-        shape.y,
-        shape.x + shape.width,
-        shape.y + shape.height,
-        shape,
-        sloppiness
-    );
-
-    roughLine(
-        ctx,
-        shape.x + shape.width,
-        shape.y + shape.height,
-        shape.x,
-        shape.y + shape.height,
-        shape,
-        sloppiness
-    );
-
-    roughLine(
-        ctx,
-        shape.x,
-        shape.y + shape.height,
-        shape.x,
-        shape.y,
-        shape,
-        sloppiness
-    );
-
-    if (shape.selected && shape.editMode) {
-        selectionBox(shape, ctx)
-    }
-
-    ctx.restore()
+    drawPath(ctx, path);
 
 }
 

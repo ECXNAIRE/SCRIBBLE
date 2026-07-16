@@ -1,0 +1,48 @@
+    // ctx.beginPath();
+
+
+    // roughLine(
+    //     ctx,
+    //     shape.x,
+    //     shape.y,
+    //     shape.x + shape.width,
+    //     shape.y,
+    //     shape,
+    //     sloppiness
+    // );
+
+    // roughLine(
+    //     ctx,
+    //     shape.x + shape.width,
+    //     shape.y,
+    //     shape.x + shape.width,
+    //     shape.y + shape.height,
+    //     shape,
+    //     sloppiness
+    // );
+
+    // roughLine(
+    //     ctx,
+    //     shape.x + shape.width,
+    //     shape.y + shape.height,
+    //     shape.x,
+    //     shape.y + shape.height,
+    //     shape,
+    //     sloppiness
+    // );
+
+    // roughLine(
+    //     ctx,
+    //     shape.x,
+    //     shape.y + shape.height,
+    //     shape.x,
+    //     shape.y,
+    //     shape,
+    //     sloppiness
+    // );
+
+    // if (shape.selected && shape.editMode) {
+    //     selectionBox(shape, ctx)
+    // }
+
+    // ctx.restore()

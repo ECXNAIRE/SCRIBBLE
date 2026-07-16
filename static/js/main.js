@@ -3,15 +3,6 @@ import { Path, drawPath } from "./testnewArch.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 
-const path = new Path();
-
-path.moveTo(100, 100)
-path.lineTo(300, 100)
-path.lineTo(300, 200)
-path.lineTo(100, 200)
-path.close()
-
-console.log(path.commands)
 
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
@@ -177,8 +168,6 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
         button.classList.add('active')
     })
 })
-
-drawPath(ctx, path)
 
 document.querySelectorAll(".strokeWidthBtn").forEach(button => {
     button.addEventListener("click", () => {
