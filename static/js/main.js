@@ -1200,3 +1200,40 @@ window.addEventListener("keydown", (e) => {
         render();
     }
 })
+
+
+
+window.addEventListener("keydown", (e) => {
+    if (!selectedShape) return;
+
+    let step 
+    if(e.shiftKey) {
+        step = 10
+    } else{
+        step = 1
+    }
+
+    switch (e.key) {
+        case "ArrowUp":
+            selectedShape.y -= step
+            break
+
+        case "ArrowDown":
+            selectedShape.y += step
+            break
+
+        case "ArrowLeft":
+            selectedShape.x -= step
+            break
+
+        case "ArrowRight":
+            selectedShape.x += step
+            break
+
+        default:
+            return
+    }
+
+    saveState()
+    render()
+})
