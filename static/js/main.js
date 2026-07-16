@@ -695,6 +695,26 @@ function getClickedShape(mouseX, mouseY) {
                 ) {
                     return shape;
                 }
+
+            case "pencil":
+                for (let i = 1; i < shape.points.length; i++) {
+
+                    const p1 = shape.points[i - 1];
+                    const p2 = shape.points[i];
+
+                    if (
+                        distanceToLine(
+                            mouseX,
+                            mouseY,
+                            p1.x,
+                            p1.y,
+                            p2.x,
+                            p2.y
+                        ) <= 8
+                    ) {
+                        return shape;
+                    }
+                }
         }
 
     }
