@@ -28,6 +28,7 @@ let selectedStroke = "stroke1"
 let selectedStrokeWidth = 2
 let selectedFillType = "solid"
 let shiftPressed = false
+let isErasing = false
 
 window.addEventListener("keydown", (e) => {
     if (e.key === "Shift") {
@@ -225,6 +226,11 @@ canvas.addEventListener("pointercancel", mouseUp);
 
 function mouseDown(e) {
     canvas.setPointerCapture(e.pointerId);
+
+    if (tool === "eraser") {
+        saveState()
+        isErasing = true
+    }
 
     if (tool === "pointer") {
 
@@ -453,6 +459,22 @@ function mouseDown(e) {
 
 function mouseMove(e) {
 
+    if (tool == "eraser" && isErasing) {
+        const hoveredShape = getClickedShape(e.offsetX, e.offsetY)
+
+        if (hoveredShape) {
+            const index = objects.indexOf(hoveredShape);
+
+            if (!(index < 0)) {
+                objects.splice(index, 1);
+                render();
+            }
+
+        }
+
+        return
+    }
+
     if (tool === "pointer") {
         const hoveredShape = getClickedShape(e.offsetX, e.offsetY)
         const hoveredHandle = hoveredShape
@@ -573,6 +595,11 @@ function mouseUp(e) {
     if (isDragging) {
         isDragging = false;
         dragShape = null
+        return
+    }
+
+    if(isErasing) {
+        isErasing = false
         return
     }
 
