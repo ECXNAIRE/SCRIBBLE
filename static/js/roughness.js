@@ -94,30 +94,39 @@ export function roughEllipse(ctx, shape, sloppiness) {
 
 
 
-export function roughArc(ctx, cx, cy, radius, startAngle, endAngle, shape, sloppiness) {
+export function roughArc(ctx, cx, cy, radius, startAngle, endAngle, shape, sloppiness, counterClockwise = false) {
     ctx.strokeStyle = shape.strokeColor
     ctx.lineWidth = shape.strokeWidth
     ctx.lineJoin = "round"
     ctx.lineCap = "round"
 
-    for(let pass = 0; pass < 2; pass ++) {
+    for (let pass = 0; pass < 2; pass++) {
         ctx.beginPath()
 
         const steps = 10
+        let delta = endAngle - startAngle;
 
-        for(let i= 0; i <= steps; i++) {
+        if (!counterClockwise && delta < 0) {
+            delta += Math.PI * 2;
+        }
+
+        if (counterClockwise && delta > 0) {
+            delta -= Math.PI * 2;
+        }
+
+        for (let i = 0; i <= steps; i++) {
             const t = i / steps
 
-            const angle = startAngle + (endAngle - startAngle) * t
+             const angle = startAngle + delta * t;
 
-            const x = cx + Math.cos(angle) * radius + randomOffset(shape.seed + pass * 1000 + i *2, sloppiness)
+            const x = cx + Math.cos(angle) * radius + randomOffset(shape.seed + pass * 1000 + i * 2, sloppiness)
 
             const y = cy + Math.sin(angle) * radius + randomOffset(shape.seed + pass * 1000 + i * 2 + 1, sloppiness)
 
 
-            if(i === 0) {
+            if (i === 0) {
                 ctx.moveTo(x, y)
-            }else {
+            } else {
                 ctx.lineTo(x, y)
             }
         }

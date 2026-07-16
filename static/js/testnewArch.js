@@ -22,14 +22,15 @@ export class Path {
         });
     }
 
-    arc(cx, cy, radius, startAngle, endAngle) {
+    arc(cx, cy, radius, startAngle, endAngle, counterClockwise = false) {
         this.commands.push({
             type: "arc",
             cx,
             cy,
             radius,
             startAngle,
-            endAngle
+            endAngle,
+            counterClockwise
         });
     }
 
@@ -85,7 +86,8 @@ export function drawPath(ctx, path, shape, sloppiness) {
                     cmd.startAngle,
                     cmd.endAngle,
                     shape,
-                    sloppiness
+                    sloppiness,
+                    cmd.counterClockwise
                 );
 
                 currentX =
@@ -97,6 +99,15 @@ export function drawPath(ctx, path, shape, sloppiness) {
                 break;
 
             case "close":
+                roughLine(
+                    ctx,
+                    currentX,
+                    currentY,
+                    path.commands[0].x,
+                    path.commands[0].y,
+                    shape,
+                    sloppiness
+                );
                 break;
         }
     }

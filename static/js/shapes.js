@@ -35,8 +35,16 @@ export function drawRectangle(shape, ctx, sloppiness) {
     const y2 = Math.max(shape.y, shape.y + shape.height);
 
 
+
+
+
     const path = new Path()
-    const r = 25
+    const maxRadius = Math.min(
+        Math.abs(shape.width),
+        Math.abs(shape.height)
+    ) / 2;
+
+    const r = Math.min(25, maxRadius);
     path.moveTo(x1 + r, y1);
 
     path.lineTo(x2 - r, y1);
@@ -315,39 +323,15 @@ export function drawTriangle(shape, ctx, sloppiness) {
 
         }
     }
+    const path = new Path();
 
+    path.moveTo(top.x, top.y)
+    path.lineTo(right.x, right.y)
+    path.lineTo(left.x, left.y)
+    path.lineTo(top.x, top.y)
+    path.close();
 
-    roughLine(
-        ctx,
-        top.x,
-        top.y,
-        right.x,
-        right.y,
-        shape,
-        sloppiness
-    )
-
-    roughLine(
-        ctx,
-        right.x,
-        right.y,
-        left.x,
-        left.y,
-        shape,
-        sloppiness
-    )
-
-    roughLine(
-        ctx,
-        left.x,
-        left.y,
-        top.x,
-        top.y,
-        shape,
-        sloppiness
-    )
-
-
+    drawPath(ctx, path, shape, sloppiness);
 
     if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
