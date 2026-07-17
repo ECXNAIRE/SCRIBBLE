@@ -15,11 +15,15 @@ const layerSection = document.getElementById("layerToggleSection")
 
 
 const camera = {
-    x: 200,
-    y: 100,
+    x: 0,
+    y: 0,
     zoom: 1
 }
 
+let isPanning = false
+let panStartX = 0;
+let panStartY = 0;
+let spacePressed = false;
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
@@ -220,28 +224,42 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
 //RENDER FUNCTION FOR DRAWING 
 function render() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     ctx.save();
 
-    // ctx.setTransform(
-    //     camera.zoom,
-    //     0,
-    //     0,
-    //     camera.zoom,
-    //     -camera.x * camera.zoom,
-    //     -camera.y * camera.zoom
-    // );
+    ctx.translate(-camera.x, -camera.y);
+    ctx.scale(camera.zoom, camera.zoom);
 
-    objects.forEach(drawShape);
 
-    if (currentShape) {
-        drawShape(currentShape);
-    }
+    objects.forEach(shape => {
+        drawShape(shape);
+    });
 
-    // ctx.restore();
+
+    ctx.restore();
 }
 
+objects.push({
+    type: "rectangle",
+    x: 500,
+    y: 500,
+    width: 100,
+    height: 100,
 
+    strokeColor: "black",
+    strokeWidth: 2,
 
+    seed: 1,
+    selectedStroke: "stroke1",
+
+    fill: true,
+    fillColor: "red",
+    fillType: "solid",
+    edgeStyle: 0
+});
+render();
 
 // RESIXZING CANVAS
 function resizeCanvas() {
@@ -299,6 +317,8 @@ document.querySelectorAll(".toolBarTopBtn").forEach(button => {
 
         const selectedTool = button.dataset.tool
         updateToolBar(selectedTool)
+
+
         if (selectedTool === "undo") {
             undo();
             return;
@@ -331,6 +351,16 @@ canvas.addEventListener("dblclick", mouseDoubleClick)
 canvas.addEventListener("pointercancel", mouseUp);
 
 function mouseDown(e) {
+    console.log("MOUSE DOWN", e.button, spacePressed);
+    if (tool === "hand") {
+        isPanning = true;
+
+        panStartX = e.offsetX;
+        panStartY = e.offsetY;
+
+        canvas.style.cursor = "grabbing";
+        return;
+    }
     const mouse = screenToWorld(e.offsetX, e.offsetY, camera);
     canvas.setPointerCapture(e.pointerId);
 
@@ -418,8 +448,8 @@ function mouseDown(e) {
 
         currentShape = {
             type: "rectangle",
-            x: startX,
-            y: startY,
+            x: mouse.x,
+            y: mouse.y,
             width: 0,
             height: 0,
             selected: false,
@@ -570,6 +600,26 @@ function mouseDown(e) {
 
 
 function mouseMove(e) {
+    if (isPanning) {
+
+        const dx = e.offsetX - panStartX;
+        const dy = e.offsetY - panStartY;
+
+        console.log("DELTA:", dx, dy);
+
+
+        const panSpeed = 0.5;
+
+        camera.x -= dx * panSpeed;
+        camera.y -= dy * panSpeed;
+
+        panStartX = e.offsetX;
+        panStartY = e.offsetY;
+
+        render();
+        return;
+    }
+
     const mouse = screenToWorld(e.offsetX, e.offsetY, camera);
     cursorX = e.offsetX;
     cursorY = e.offsetY;
@@ -733,6 +783,12 @@ function mouseMove(e) {
 
 function mouseUp(e) {
     canvas.releasePointerCapture(e.pointerId);
+
+    if (isPanning) {
+        isPanning = false;
+        canvas.style.cursor = "default";
+        return;
+    }
 
     if (isResizing) {
         isResizing = false;

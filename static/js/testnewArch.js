@@ -47,6 +47,7 @@ export class Path {
 
 export function drawPath(ctx, path, shape, sloppiness) {
 
+
     let currentX = 0;
     let currentY = 0;
 

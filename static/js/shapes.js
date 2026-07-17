@@ -3,12 +3,18 @@ import { distanceToLine, lineSelectionBox } from "./lineTools.js";
 import { roughEllipse, roughLine, roughArc } from "./roughness.js";
 import { drawHachure } from "./fillType.js";
 import { Path, drawPath } from "./testnewArch.js";
-
-import { worldToScreen } from "./cameraFunction.js";
 //RECTANGLE
 
 export function drawRectangle(shape, ctx, sloppiness) {
 
+    console.log(
+    "RECT:",
+    shape.x,
+    shape.y,
+    "CTX:",
+    ctx.getTransform().e,
+    ctx.getTransform().f
+);
     const path = new Path()
     const maxRadius = Math.min(
         Math.abs(shape.width),
@@ -62,9 +68,6 @@ export function drawRectangle(shape, ctx, sloppiness) {
                 }, shape, sloppiness)
         }
     }
-
-    ctx.strokeStyle = "red";
-    ctx.strokeRect(shape.x, shape.y, shape.width, shape.height);
     path.moveTo(x1 + r, y1);
 
     path.lineTo(x2 - r, y1);
@@ -450,6 +453,8 @@ export function drawPencil(shape, ctx, sloppiness) {
             midY
         );
     }
+
+    ctx.stroke()
 
 }
 

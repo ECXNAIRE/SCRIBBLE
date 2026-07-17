@@ -13,6 +13,7 @@ function seededRandom(seed) {
 }
 
 export function roughLine(ctx, x1, y1, x2, y2, shape, sloppiness) {
+   
     ctx.strokeStyle = shape.strokeColor
     ctx.lineWidth = shape.strokeWidth
     ctx.lineJoin = "round";
