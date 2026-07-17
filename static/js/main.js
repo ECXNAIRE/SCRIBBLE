@@ -882,6 +882,7 @@ function getClickedShape(mouseX, mouseY) {
                 }
 
             case "pencil":
+                if (!shape.points) break;
                 for (let i = 1; i < shape.points.length; i++) {
 
                     const p1 = shape.points[i - 1];
@@ -1249,6 +1250,7 @@ function updateToolBar(tool) {
         case "triangle":
         case "circle":
         case "diamond":
+        case "ellipse":
             fillSection.style.display = "block"
             fillTypeSection.style.display = "block"
             sloppinessSection.style.display = "block"
