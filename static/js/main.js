@@ -87,7 +87,9 @@ document.querySelectorAll(".layerToggleBtn").forEach(button => {
 
         if (doFunction === "top") {
             objects.splice(index, 1)
+            console.trace("Render", objects.length);
             objects.push(selectedShape)
+            console.trace("Render", objects.length);
 
         } else if (doFunction === "up") {
             if (index < objects.length - 1) {
@@ -103,7 +105,9 @@ document.querySelectorAll(".layerToggleBtn").forEach(button => {
 
         } else if (doFunction === "bottom") {
             objects.splice(index, 1);
+            console.trace("Render", objects.length);
             objects.unshift(selectedShape);
+            console.trace("Render", objects.length);
 
         }
 
@@ -228,6 +232,7 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
 //RENDER FUNCTION FOR DRAWING 
 function render() {
+    console.trace("Render", objects.length);
     ctx.setTransform(
         camera.zoom,
         0,
@@ -610,6 +615,7 @@ function mouseDown(e) {
 
         objects.push(currentShape);
         selectedShape = currentShape;
+        console.log(objects.includes(selectedShape))
         currentShape = null;
 
         startTextEditing(selectedShape);
@@ -662,6 +668,7 @@ function mouseMove(e) {
 
             if (!(index < 0)) {
                 objects.splice(index, 1);
+                console.trace("Render", objects.length);
                 render();
             }
 
@@ -847,6 +854,7 @@ function mouseUp(e) {
     isDrawing = false
 
     objects.push(currentShape)
+    console.trace("Render", objects.length);
     currentShape = null
 
     render()
@@ -1008,7 +1016,7 @@ function drawShape(shape) {
 
 
         case "text":
-            if(!shape.editMode){
+            if (!shape.editMode) {
                 drawText(shape, ctx)
             }
     }
@@ -1171,6 +1179,10 @@ function mouseDoubleClick(e) {
     if (shape) {
         shape.selected = true
         shape.editMode = true
+        if (shape.type === "text") {
+            startTextEditing(shape);
+        }
+
     }
 
 
@@ -1307,6 +1319,7 @@ function updateToolBar(tool) {
 
 
 window.addEventListener("keydown", (e) => {
+     if (e.target.tagName === "TEXTAREA") return;
     if ((e.key === "Delete" || e.key === "Backspace") && selectedShape) {
         deleteSelectedShape()
     }
@@ -1320,6 +1333,7 @@ function deleteSelectedShape() {
     saveState()
 
     objects.splice(index, 1)
+    console.trace("Render", objects.length);
 
     selectedShape.editMode = false
     selectedShape = null
@@ -1348,6 +1362,7 @@ window.addEventListener("keydown", (e) => {
         newShape.y += 20;
 
         objects.push(newShape);
+        console.trace("Render", objects.length);
 
         selectedShape = newShape;
         editMode = true;
@@ -1451,6 +1466,8 @@ zoomOutBtn.addEventListener("click", () => {
 
 function startTextEditing(shape) {
 
+    console.log("Existing textareas:", document.querySelectorAll("textarea").length);
+
     const screenX = (shape.x - camera.x) * camera.zoom;
     const screenY = (shape.y - camera.y) * camera.zoom;
     const textarea = document.createElement("textArea")
@@ -1477,6 +1494,7 @@ function startTextEditing(shape) {
 
     textarea.rows = 1
 
+    document.querySelectorAll("textarea").forEach(t => t.remove());
     canvasArea.appendChild(textarea)
     console.log("After append:", canvasArea.children.length);
 
@@ -1494,11 +1512,20 @@ function startTextEditing(shape) {
 
 
     textarea.addEventListener("blur", () => {
-        shape.text = textarea.value
-        shape.editMode = false
-        textarea.remove()
-        render()
-    })
+        console.log("==== BLUR ====");
+        console.log("Textarea:", textarea.value);
+        console.log("Shape before:", shape);
+        console.log("Index:", objects.indexOf(shape));
+        console.log("Includes:", objects.includes(shape));
+
+        shape.text = textarea.value;
+        shape.editMode = false;
+
+        console.log("Shape after:", shape);
+
+        textarea.remove();
+        render();
+    });
 
 
 
