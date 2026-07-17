@@ -57,6 +57,10 @@ let clipboard = null
 let cursorX = 0;
 let cursorY = 0;
 
+const zoomInBtn = document.getElementById("zoomInBtn")
+const zoomValue = document.getElementById("zoomValue")
+const zoomOutBtn = document.getElementById("zoomOutBtn")
+
 canvas.addEventListener("wheel", zoomCanvas, { passive: false });
 
 let gridToggleBtn = document.getElementById("gridToggleBtn")
@@ -1377,6 +1381,7 @@ function zoomCanvas(e) {
     camera.zoom *= zoomFactor;
 
     camera.zoom = Math.max(0.1, Math.min(camera.zoom, 10));
+    updateZoomDisplay()
 
 
     camera.x = worldX - mouseX / camera.zoom;
@@ -1386,3 +1391,25 @@ function zoomCanvas(e) {
     render();
 
 }
+
+
+function updateZoomDisplay() {
+    zoomValue.textContent = `${Math.round(camera.zoom * 100)}%`;
+}
+
+zoomInBtn.addEventListener("click", () => {
+    camera.zoom *= 1.1
+    camera.zoom = Math.min(camera.zoom, 10)
+
+    updateZoomDisplay()
+    render()
+})
+
+
+zoomOutBtn.addEventListener("click", () => {
+    camera.zoom /= 1.1
+    camera.zoom = Math.max(camera.zoom, 0.1)
+
+    updateZoomDisplay()
+    render()
+})

@@ -256,6 +256,43 @@
             border-radius: 12px;
             margin-top: auto;
         }
+
+        #zoomDisplay {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid #D9E6F2;
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            z-index: 10;
+            user-select: none;
+        }
+
+
+        #zoomDisplay button {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        #zoomDisplay button img {
+            width: 100%;
+            height: 100%
+        }
     </style>
 </head>
 
@@ -466,6 +503,16 @@
             </canvas>
             <canvas id="overlayCanvas">
             </canvas>
+
+            <div id="zoomDisplay">
+                <button id="zoomOutBtn">
+                    <img src="../static/assets/minus.svg">
+                </button>
+                <span id="zoomValue">100%</span>
+                <button id="zoomInBtn">
+                    <img src="../static/assets/plus.svg">
+                </button>
+            </div>
         </div>
     </div>
 
