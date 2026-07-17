@@ -237,29 +237,16 @@ function render() {
         drawShape(shape);
     });
 
+    if (currentShape) {
+        drawShape(currentShape)
+    }
+
+    if(gridToggle) {
+        drawGrid(ctx, canvas, camera)
+    }
 
     ctx.restore();
 }
-
-objects.push({
-    type: "rectangle",
-    x: 500,
-    y: 500,
-    width: 100,
-    height: 100,
-
-    strokeColor: "black",
-    strokeWidth: 2,
-
-    seed: 1,
-    selectedStroke: "stroke1",
-
-    fill: true,
-    fillColor: "red",
-    fillType: "solid",
-    edgeStyle: 0
-});
-render();
 
 // RESIXZING CANVAS
 function resizeCanvas() {
@@ -601,6 +588,7 @@ function mouseDown(e) {
 
 function mouseMove(e) {
     if (isPanning) {
+        canvas.style.cursor = "grabbing";
 
         const dx = e.offsetX - panStartX;
         const dy = e.offsetY - panStartY;
@@ -647,6 +635,13 @@ function mouseMove(e) {
         return
     }
 
+    if (tool === "hand") {
+        if (isPanning) {
+            canvas.style.cursor = "grabbing";
+        } else {
+            canvas.style.cursor = "grab";
+        }
+    }
     if (tool === "pointer") {
         const hoveredShape = getClickedShape(mouse.x, mouse.y)
         const hoveredHandle = hoveredShape
@@ -667,7 +662,7 @@ function mouseMove(e) {
         canvas.style.cursor = "crosshair";
     }
 
-    if (isDrawing && tool !== 'pencil') {
+    if (isDrawing && tool !== 'pencil' && tool !== "hand") {
         canvas.style.cursor = "crosshair"
     }
 
@@ -713,7 +708,7 @@ function mouseMove(e) {
         return
     }
 
-    if (tool !== "pointer" && tool !== "pencil" && tool !== "text" && tool !== "undo" && tool !== "redo" && tool !== "download" && tool !== "setting" && tool !== "eraser") {
+    if (tool !== "pointer" && tool !== "pencil" && tool !== "text" && tool !== "undo" && tool !== "redo" && tool !== "download" && tool !== "setting" && tool !== "eraser" && tool !== "hand") {
         canvas.style.cursor = "crosshair"
     }
 
@@ -786,7 +781,7 @@ function mouseUp(e) {
 
     if (isPanning) {
         isPanning = false;
-        canvas.style.cursor = "default";
+        canvas.style.cursor = "grab";
         return;
     }
 
