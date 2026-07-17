@@ -3,6 +3,7 @@ import { Path, drawPath } from "./testnewArch.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 import { drawGrid } from "./grid.js"
+import { overlayCanvas, drawBrushCursor, updateCursor, overlayCtx } from "./overlayCanvas.js"
 
 
 const fillSection = document.getElementById("fillSection")
@@ -14,9 +15,6 @@ const layerSection = document.getElementById("layerToggleSection")
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
-
-const overlayCanvas = document.getElementById("overlayCanvas")
-const overlayCtx = overlayCanvas.getContext("2d")
 const canvasArea = document.getElementById("canvasArea")
 let objects = []
 let isDrawing = false
@@ -316,9 +314,7 @@ canvas.addEventListener("pointerdown", mouseDown)
 canvas.addEventListener("pointerup", mouseUp)
 canvas.addEventListener("pointermove", mouseMove)
 canvas.addEventListener("dblclick", mouseDoubleClick)
-canvas.addEventListener("pointercancel", (e) => {
-    console.log("pointercancel", e.pointerType);
-});
+canvas.addEventListener("pointercancel", mouseUp);
 
 function mouseDown(e) {
     canvas.setPointerCapture(e.pointerId);
@@ -562,13 +558,12 @@ function mouseMove(e) {
     cursorX = e.offsetX
     cursorY = e.offsetY
 
-    drawBrushCursor()
+    updateCursor(tool, cursorX, cursorY, selectedStrokeWidth)
 
-    if (tool === "pencil") {
+    if (tool === "pencil" || tool === "eraser") {
         canvas.style.cursor = "none";
         render();
     }
-
 
     if (tool == "eraser" && isErasing) {
         const hoveredShape = getClickedShape(e.offsetX, e.offsetY)
@@ -652,7 +647,7 @@ function mouseMove(e) {
         return
     }
 
-    if (tool !== "pointer" && tool !== "pencil" && tool !== "text" && tool !== "undo" && tool !== "redo" && tool !== "download" && tool !== "setting") {
+    if (tool !== "pointer" && tool !== "pencil" && tool !== "text" && tool !== "undo" && tool !== "redo" && tool !== "download" && tool !== "setting" && tool !== "eraser") {
         canvas.style.cursor = "crosshair"
     }
 
@@ -1265,24 +1260,3 @@ window.addEventListener("keydown", (e) => {
 
 
 
-function drawBrushCursor() {
-
-    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height)
-
-    if(tool !== "pencil") return
-
-    overlayCtx.beginPath();
-
-    overlayCtx.arc(
-        cursorX,
-        cursorY,
-        selectedStrokeWidth / 2,
-        0,
-        Math.PI * 2
-    );
-
-    overlayCtx.strokeStyle = "black";
-    overlayCtx.lineWidth = 1;
-
-    overlayCtx.stroke();
-}
