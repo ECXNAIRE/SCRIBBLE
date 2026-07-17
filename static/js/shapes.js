@@ -469,3 +469,20 @@ function calculatePressureWidth(pressure, baseWidth) {
         (maxWidth - minWidth) * pressure;
 
 }
+
+
+
+
+
+
+export function drawText(shape, ctx) {
+    ctx.save()
+    ctx.font = `${shape.fontSize}px ${shape.fontFamily}`
+    ctx.fillStyle = shape.strokeColor
+    ctx.textBaseLine = "top"
+
+
+    ctx.fillText(shape.text, shape.x, shape.y)
+
+    ctx.restore()
+}

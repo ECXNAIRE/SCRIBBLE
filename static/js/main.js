@@ -1,4 +1,4 @@
-import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow, drawPencil } from "./shapes.js"
+import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow, drawPencil, drawText } from "./shapes.js"
 import { Path, drawPath } from "./testnewArch.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
@@ -440,7 +440,6 @@ function mouseDown(e) {
 
 
     if (tool === "rectangle") {
-        isDrawing = true
 
         startX = mouse.x
         startY = mouse.y
@@ -592,6 +591,30 @@ function mouseDown(e) {
             strokeWidth: selectedStrokeWidth,
             fillType: selectedFillType
         }
+    }
+
+
+    if (tool === "text") {
+        isDrawing = true
+
+        currentShape = {
+            type: "text",
+            x: mouse.x,
+            y: mouse.y,
+            text: "",
+            fontSize: 24,
+            fontFamily: "Arial",
+            strokeColor: strokeColor,
+            selected: false,
+            editMode: true
+        }
+
+        objects.push(currentShape);
+        selectedShape = currentShape;
+        currentShape = null;
+
+        startTextEditing(selectedShape);
+        render();
     }
 
 }
@@ -901,6 +924,7 @@ function getClickedShape(mouseX, mouseY) {
                         return shape;
                     }
                 }
+
         }
 
     }
@@ -911,6 +935,7 @@ function getClickedShape(mouseX, mouseY) {
 
 //gneeric function to draw shape 
 function drawShape(shape) {
+    if (!shape) return;
     switch (shape.type) {
         case "rectangle":
             if (shape.selectedStroke === "stroke1") {
@@ -981,6 +1006,10 @@ function drawShape(shape) {
                 drawPencil(shape, ctx, 0)
             }
             break
+
+
+        case "text":
+            drawText(shape, ctx)
     }
 
 
@@ -1415,3 +1444,64 @@ zoomOutBtn.addEventListener("click", () => {
     updateZoomDisplay()
     render()
 })
+
+
+
+
+function startTextEditing(shape){
+    const textarea = document.createElement("textArea")
+    textarea.value = shape.text
+
+    textarea.style.position = "absolute"
+    textarea.style.left = `${shape.x}px`
+    textarea.style.top = `${shape.y}px`
+
+
+    textarea.style.fontSize = `${shape.fontSize}px`
+    textarea.style.fontFamily = shape.fontFamily
+    textarea.style.color = shape.strokeColor
+
+
+    textarea.style.border = "none"
+    textarea.style.outline = "none"
+    textarea.style.background = shape.fillColor
+    textarea.style.resize = "none"
+    textarea.style.overflow = "hidden"
+    textarea.style.width = "200px";
+
+    textarea.rows = 1
+
+    canvasArea.appendChild(textarea)
+
+    textarea.focus()
+
+
+
+    textarea.addEventListener('input', () => {
+
+        shape.text = textarea.value
+
+        render()
+    })
+
+
+    textarea.addEventListener("blur", () => {
+        shape.text = textarea.value
+        shape.editMode = false
+        textarea.remove()
+        render()
+    })
+
+
+
+    textarea.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault()
+
+            textarea.blur()
+        }
+    })
+}
+
+
+
