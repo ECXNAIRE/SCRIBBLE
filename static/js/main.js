@@ -12,6 +12,20 @@ const sloppinessSection = document.getElementById("sloppinessSection")
 const fillTypeSection = document.getElementById("fillTypeSection")
 const edgeSection = document.getElementById("edgeSection")
 const layerSection = document.getElementById("layerToggleSection")
+const strokeWidthSection = document.getElementById("strokeWidthSection")
+const fontSection = document.getElementById("fontSection")
+const strokeColorSection = document.getElementById("strokeColorSection")
+
+fillSection.style.display = "none"
+fillTypeSection.style.display = "none"
+edgeSection.style.display = "none"
+sloppinessSection.style.display = "none"
+layerSection.style.display = "none"
+strokeWidthSection.style.display = "none"
+fontSection.style.display = "none"
+strokeColorSection.style.display = "none"
+
+
 
 
 const camera = {
@@ -1205,7 +1219,7 @@ function mouseDoubleClick(e) {
     if (shape) {
         shape.selected = true
         shape.editMode = true
-        
+
 
         selectedShape = shape;
         if (shape.type === "text") {
@@ -1298,12 +1312,15 @@ document.addEventListener("keydown", (e) => {
 
 
 function updateToolBar(tool) {
+
     fillSection.style.display = "none"
     fillTypeSection.style.display = "none"
     edgeSection.style.display = "none"
     sloppinessSection.style.display = "none"
     layerSection.style.display = "none"
-
+    strokeWidthSection.style.display = "none"
+    fontSection.style.display = "none"
+    strokeColorSection.style.display = "none"
 
     switch (tool) {
         case "rectangle":
@@ -1314,6 +1331,8 @@ function updateToolBar(tool) {
             if (layerOptionShow === true) {
                 layerSection.style.display = "block"
             }
+            strokeWidthSection.style.display = "block"
+            strokeColorSection.style.display = "block"
 
 
             break
@@ -1328,6 +1347,8 @@ function updateToolBar(tool) {
             if (layerOptionShow === true) {
                 layerSection.style.display = "block"
             }
+            strokeWidthSection.style.display = "block"
+            strokeColorSection.style.display = "block"
 
             break
 
@@ -1338,10 +1359,24 @@ function updateToolBar(tool) {
             if (layerOptionShow === true) {
                 layerSection.style.display = "block"
             }
+            strokeWidthSection.style.display = "block"
+            strokeColorSection.style.display = "block"
+
 
 
             break
 
+
+        case "text":
+            strokeColorSection.style.display = "block"
+            fontSection.style.display = "block"
+            break
+
+        case "pencil":
+            strokeColorSection.style.display = "block"
+            strokeWidthSection.style.display = "block"
+
+            break
     }
 }
 

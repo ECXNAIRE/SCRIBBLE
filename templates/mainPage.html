@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCRIBBLE</title>
     <style>
-        @font-face{
+        @font-face {
             font-family: "codingFont";
             src: url("../static/fonts/codingFont.ttf") format("truetype");
         }
 
-        @font-face{
+        @font-face {
             font-family: "handWriting";
             src: url("../static/fonts/handWritingFont.ttf") format("truetype");
             font-size: 100px;
@@ -441,27 +441,28 @@
         <div id="leftPanel">
             <div id="toolBarLeft">
 
-                <div class="title">Stroke</div>
-                <div class="styleGroup" id="strokeColorArea">
-                    <input type="color" id="strokeColorPicker" value="#000000">
-                    <div class="divider"></div>
-                    <button class="strokeColorBtn" data-color="#2563EB">
-                        <div style="background:#2563EB;"></div>
-                    </button>
-                    <button class="strokeColorBtn" data-color="#DC2626">
-                        <div style="background:#DC2626;"></div>
-                    </button>
-                    <button class="strokeColorBtn" data-color="#16A34A">
-                        <div style="background:#16A34A;"></div>
-                    </button>
-                    <button class="strokeColorBtn" data-color="#7C3AED">
-                        <div style="background:#7C3AED;"></div>
-                    </button>
-                    <button class="strokeColorBtn" data-color="#000000">
-                        <div style="background:#000000;"></div>
-                    </button>
+                <div id="strokeColorSection">
+                    <div class="title">Stroke</div>
+                    <div class="styleGroup" id="strokeColorArea">
+                        <input type="color" id="strokeColorPicker" value="#000000">
+                        <div class="divider"></div>
+                        <button class="strokeColorBtn" data-color="#2563EB">
+                            <div style="background:#2563EB;"></div>
+                        </button>
+                        <button class="strokeColorBtn" data-color="#DC2626">
+                            <div style="background:#DC2626;"></div>
+                        </button>
+                        <button class="strokeColorBtn" data-color="#16A34A">
+                            <div style="background:#16A34A;"></div>
+                        </button>
+                        <button class="strokeColorBtn" data-color="#7C3AED">
+                            <div style="background:#7C3AED;"></div>
+                        </button>
+                        <button class="strokeColorBtn" data-color="#000000">
+                            <div style="background:#000000;"></div>
+                        </button>
+                    </div>
                 </div>
-
 
                 <div id="fillSection">
                     <div class="title">Fill</div>
@@ -486,17 +487,19 @@
                     </div>
                 </div>
 
-                <div class="title">Stroke Width</div>
-                <div id="strokeWidthArea">
-                    <button class="strokeWidthBtn active" data-strokewidth="2">
-                        2
-                    </button>
-                    <button class="strokeWidthBtn" data-strokewidth="4">
-                        4
-                    </button>
-                    <button class="strokeWidthBtn" data-strokewidth="6">
-                        6
-                    </button>
+                <div id="strokeWidthSection">
+                    <div class="title">Stroke Width</div>
+                    <div id="strokeWidthArea">
+                        <button class="strokeWidthBtn active" data-strokewidth="2">
+                            2
+                        </button>
+                        <button class="strokeWidthBtn" data-strokewidth="4">
+                            4
+                        </button>
+                        <button class="strokeWidthBtn" data-strokewidth="6">
+                            6
+                        </button>
+                    </div>
                 </div>
 
 
@@ -515,7 +518,7 @@
                     </div>
                 </div>
 
-            
+
 
 
                 <div id="fillTypeSection">
@@ -552,7 +555,6 @@
                         <button class="fontStyleBtn" data-fontstyle="codingFont">
                             <img src="../static/assets/minus.svg">
                         </button>
-
                         <button class="fontStyleBtn" data-fontstyle="handWriting">
                             <img src="../static/assets/minus.svg">
                         </button>
