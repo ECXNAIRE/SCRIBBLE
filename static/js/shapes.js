@@ -6,15 +6,6 @@ import { Path, drawPath } from "./testnewArch.js";
 //RECTANGLE
 
 export function drawRectangle(shape, ctx, sloppiness) {
-
-    console.log(
-    "RECT:",
-    shape.x,
-    shape.y,
-    "CTX:",
-    ctx.getTransform().e,
-    ctx.getTransform().f
-);
     const path = new Path()
     const maxRadius = Math.min(
         Math.abs(shape.width),
@@ -476,7 +467,6 @@ function calculatePressureWidth(pressure, baseWidth) {
 
 
 export function drawText(shape, ctx) {
-    console.log("DRAW", shape.text, shape.editMode, shape.x, shape.y);
     ctx.save()
     ctx.font = `${shape.fontSize}px ${shape.fontFamily}`
     ctx.fillStyle = shape.strokeColor

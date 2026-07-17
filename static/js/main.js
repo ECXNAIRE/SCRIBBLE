@@ -161,8 +161,6 @@ document.querySelectorAll(".fillTypeBtn").forEach(button => {
             render()
         }
 
-
-        console.log(selectedFillType)
     })
 })
 
@@ -232,7 +230,6 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
 //RENDER FUNCTION FOR DRAWING 
 function render() {
-    console.trace("Render", objects.length);
     ctx.setTransform(
         camera.zoom,
         0,
@@ -286,8 +283,6 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
             render()
         }
 
-        console.log(selectedStroke)
-
         document.querySelector(".strokeBtn.active")
             ?.classList.remove("active")
 
@@ -304,7 +299,6 @@ document.querySelectorAll(".strokeWidthBtn").forEach(button => {
             render()
         }
 
-        console.log(selectedStrokeWidth)
 
         document.querySelector(".strokeWidthBtn.active")
             ?.classList.remove("active")
@@ -340,7 +334,6 @@ document.querySelectorAll(".toolBarTopBtn").forEach(button => {
             ?.classList.remove("active");
 
         button.classList.add("active");
-        console.log(tool)
     })
 
 })
@@ -378,6 +371,9 @@ function mouseDown(e) {
 
 
         selectedShape = objects.find(shape => shape.selected)
+        console.log(selectedShape);
+        console.log(selectedShape?.selected);
+        console.log(selectedShape?.editMode);
 
         if (selectedShape?.editMode) {
             const handle = getClickedHandle(selectedShape, mouse.x, mouse.y)
@@ -399,6 +395,7 @@ function mouseDown(e) {
         if (clickedShape.type === "text") {
             if (!clickedShape.selected) {
                 clickedShape.selected = true;
+                clickedShape.editMode = true
                 selectedShape = clickedShape;
                 render();
                 return;
@@ -436,6 +433,8 @@ function mouseDown(e) {
 
                 clickedShape.selected = true;
             }
+
+            selectedShape = clickedShape;
 
         } else {
             objects.forEach(shape => {
@@ -625,7 +624,6 @@ function mouseDown(e) {
 
         objects.push(currentShape);
         selectedShape = currentShape;
-        console.log(objects.includes(selectedShape))
         currentShape = null;
 
         startTextEditing(selectedShape);
@@ -643,14 +641,12 @@ function mouseMove(e) {
         const dx = e.offsetX - panStartX;
         const dy = e.offsetY - panStartY;
 
-        console.log("DELTA:", dx, dy);
 
 
         const panSpeed = 1;
 
         camera.x -= dx * panSpeed / camera.zoom;
         camera.y -= dy * panSpeed / camera.zoom;
-        console.log(camera.zoom)
 
         panStartX = e.offsetX;
         panStartY = e.offsetY;
@@ -730,6 +726,7 @@ function mouseMove(e) {
                 selectedShape.y2 = mouse.y;
             }
         } else {
+            console.log("resizing", resizeHandle, mouse.x, mouse.y);
             resizeShape(selectedShape, resizeHandle, mouse.x, mouse.y);
         }
 
@@ -1099,6 +1096,7 @@ function getClickedHandle(shape, mouseX, mouseY) {
 
 
 function resizeShape(shape, handle, mouseX, mouseY) {
+    console.log(shape.width, shape.height);
     switch (handle) {
         case "se":
             shape.width = mouseX - shape.x;
@@ -1191,6 +1189,9 @@ function mouseDoubleClick(e) {
     if (shape) {
         shape.selected = true
         shape.editMode = true
+        
+
+        selectedShape = shape;
         if (shape.type === "text") {
             startTextEditing(shape);
         }
@@ -1478,8 +1479,6 @@ zoomOutBtn.addEventListener("click", () => {
 
 function startTextEditing(shape) {
 
-    console.log("Existing textareas:", document.querySelectorAll("textarea").length);
-
     document.querySelectorAll("input.text-editor").forEach(i => i.remove());
 
     const screenX = (shape.x - camera.x) * camera.zoom;
@@ -1540,16 +1539,10 @@ function startTextEditing(shape) {
 
 
     input.addEventListener("blur", () => {
-        console.log("==== BLUR ====");
-        console.log("Textarea:", input.value);
-        console.log("Shape before:", shape);
-        console.log("Index:", objects.indexOf(shape));
-        console.log("Includes:", objects.includes(shape));
 
         shape.text = input.value;
         shape.editMode = false;
 
-        console.log("Shape after:", shape);
 
         input.remove();
         render();
