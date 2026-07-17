@@ -57,7 +57,7 @@ let clipboard = null
 let cursorX = 0;
 let cursorY = 0;
 
-
+canvas.addEventListener("wheel", zoomCanvas, { passive: false });
 
 let gridToggleBtn = document.getElementById("gridToggleBtn")
 
@@ -224,13 +224,21 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
 //RENDER FUNCTION FOR DRAWING 
 function render() {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(
+        camera.zoom,
+        0,
+        0,
+        camera.zoom,
+        -camera.x * camera.zoom,
+        -camera.y * camera.zoom
+    );
 
-    ctx.save();
-
-    ctx.translate(-camera.x, -camera.y);
-    ctx.scale(camera.zoom, camera.zoom);
+    ctx.clearRect(
+        camera.x,
+        camera.y,
+        canvas.width / camera.zoom,
+        canvas.height / camera.zoom
+    );
 
 
     objects.forEach(shape => {
@@ -238,14 +246,14 @@ function render() {
     });
 
     if (currentShape) {
-        drawShape(currentShape)
+        drawShape(currentShape);
     }
 
-    if(gridToggle) {
-        drawGrid(ctx, canvas, camera)
+    if (gridToggle) {
+        drawGrid(ctx, canvas, camera);
     }
 
-    ctx.restore();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
 // RESIXZING CANVAS
@@ -596,10 +604,11 @@ function mouseMove(e) {
         console.log("DELTA:", dx, dy);
 
 
-        const panSpeed = 0.5;
+        const panSpeed = 1;
 
-        camera.x -= dx * panSpeed;
-        camera.y -= dy * panSpeed;
+        camera.x -= dx * panSpeed / camera.zoom;
+        camera.y -= dy * panSpeed / camera.zoom;
+        console.log(camera.zoom)
 
         panStartX = e.offsetX;
         panStartY = e.offsetY;
@@ -1350,3 +1359,30 @@ window.addEventListener("keydown", (e) => {
 
 
 
+
+function zoomCanvas(e) {
+    if (tool !== "hand") return
+
+    e.preventDefault()
+
+    const mouseX = e.offsetX
+    const mouseY = e.offsetY
+
+    const worldX = mouseX / camera.zoom + camera.x
+    const worldY = mouseY / camera.zoom + camera.y
+
+    const zoomSpeed = 0.03;
+    const zoomFactor = Math.exp(-e.deltaY * zoomSpeed);
+
+    camera.zoom *= zoomFactor;
+
+    camera.zoom = Math.max(0.1, Math.min(camera.zoom, 10));
+
+
+    camera.x = worldX - mouseX / camera.zoom;
+    camera.y = worldY - mouseY / camera.zoom;
+
+
+    render();
+
+}
