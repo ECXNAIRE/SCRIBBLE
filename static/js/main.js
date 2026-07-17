@@ -1319,7 +1319,7 @@ function updateToolBar(tool) {
 
 
 window.addEventListener("keydown", (e) => {
-     if (e.target.tagName === "TEXTAREA") return;
+    if (e.target.tagName === "INPUT") return;
     if ((e.key === "Delete" || e.key === "Backspace") && selectedShape) {
         deleteSelectedShape()
     }
@@ -1468,72 +1468,87 @@ function startTextEditing(shape) {
 
     console.log("Existing textareas:", document.querySelectorAll("textarea").length);
 
+    document.querySelectorAll("input.text-editor").forEach(i => i.remove());
+
     const screenX = (shape.x - camera.x) * camera.zoom;
     const screenY = (shape.y - camera.y) * camera.zoom;
-    const textarea = document.createElement("textArea")
-    textarea.value = shape.text
+    const input = document.createElement("input")
 
-    textarea.style.position = "absolute"
-    textarea.style.left = `${screenX}px`;
-    textarea.style.top = `${screenY}px`;
+    input.type = "text"
+    input.className = "text-editor"
+    input.value = shape.text
 
-
-    textarea.style.fontSize = `${shape.fontSize}px`
-    textarea.style.fontFamily = shape.fontFamily
-    textarea.style.color = shape.strokeColor
+    input.style.position = "absolute"
+    input.style.left = `${screenX}px`;
+    input.style.top = `${screenY}px`;
 
 
-    textarea.style.border = "none"
-    textarea.style.outline = "none"
-    textarea.style.background = "transparent"
-    textarea.style.resize = "none"
-    textarea.style.overflow = "hidden"
-    textarea.style.width = "200px";
-    textarea.style.height = "40px";
+    input.style.fontSize = `${shape.fontSize}px`
+    input.style.fontFamily = shape.fontFamily
+    input.style.color = shape.strokeColor
 
 
-    textarea.rows = 1
+    input.style.border = "none"
+    input.style.outline = "none"
+    input.style.background = "transparent"
+    input.style.padding = "0";
+    input.style.margin = "0";
+    input.style.height = `${shape.fontSize + 8}px`;
+    input.style.minWidth = "20px";
+    input.style.width = "20px";
 
-    document.querySelectorAll("textarea").forEach(t => t.remove());
-    canvasArea.appendChild(textarea)
-    console.log("After append:", canvasArea.children.length);
 
+    canvasArea.appendChild(input)
+
+    function updateWidth() {
+        ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
+        const width = ctx.measureText(input.value || " ").width;
+
+        input.style.width = `${Math.max(20, width + 8)}px`;
+    }
+
+    updateWidth()
     setTimeout(() => {
-        textarea.focus();
+        input.focus();
     }, 500);
 
 
-    textarea.addEventListener('input', () => {
+    input.addEventListener('input', () => {
 
-        shape.text = textarea.value
+        shape.text = input.value
+
 
         render()
+        updateWidth()
     })
 
 
-    textarea.addEventListener("blur", () => {
+    input.addEventListener("blur", () => {
         console.log("==== BLUR ====");
-        console.log("Textarea:", textarea.value);
+        console.log("Textarea:", input.value);
         console.log("Shape before:", shape);
         console.log("Index:", objects.indexOf(shape));
         console.log("Includes:", objects.includes(shape));
 
-        shape.text = textarea.value;
+        shape.text = input.value;
         shape.editMode = false;
 
         console.log("Shape after:", shape);
 
-        textarea.remove();
+        input.remove();
         render();
     });
 
 
 
-    textarea.addEventListener("keydown", (e) => {
+    input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault()
 
-            textarea.blur()
+            shape.selected = false
+            selectedShape = null
+
+            input.blur()
         }
     })
 }
