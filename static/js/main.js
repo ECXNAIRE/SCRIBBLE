@@ -679,15 +679,28 @@ function mouseMove(e) {
 
         const last = currentShape.points[currentShape.points.length - 1]
         let smoothPressure
+        let x = e.offsetX;
+        let y = e.offsetY;
 
-        if(last) {
-            smoothPressure  = last.pressure * 0.8 + e.pressure * 0.2
+        if (last) {
+            const dx = e.offsetX - last.x
+            const dy = e.offsetY - last.y
+            if (Math.hypot(dx, dy) < 1.5) {
+                return;
+            }
+
+            const distance = Math.hypot(dx, dy)
+            smoothPressure = last.pressure * 0.65 + e.pressure * 0.35
+
+
+            x = last.x * 0.3 + e.offsetX * 0.7
+            y = last.y * 0.3 + e.offsetY * 0.7
         } else {
             smoothPressure = e.pressure
         }
         currentShape.points.push({
-            x: e.offsetX,
-            y: e.offsetY,
+            x,
+            y,
             pressure: smoothPressure
         })
 

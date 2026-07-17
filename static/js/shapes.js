@@ -422,23 +422,40 @@ export function drawArrow(shape, ctx, sloppiness) {
 
 
 export function drawPencil(shape, ctx, sloppiness) {
+
+    const points = shape.points
+
+    if (points.length < 2) return
+
+
     ctx.strokeStyle = shape.strokeColor
     ctx.lineCap = "round"
     ctx.lineJoin = "round"
 
-    for (let i = 1; i < shape.points.length; i++) {
-        const previous = shape.points[i - 1]
-        const current = shape.points[i]
+    ctx.beginPath();
+
+    ctx.moveTo(points[0].x, points[0].y);
+
+    for (let i = 1; i < points.length - 1; i++) {
+        const current = points[i]
+        const next = points[i + 1]
+
+
+        const midX = (current.x + next.x) / 2
+        const midY = (current.y + next.y) / 2
+
 
         ctx.lineWidth = calculatePressureWidth(current.pressure, shape.strokeWidth)
 
-        ctx.beginPath()
-
-        ctx.moveTo(previous.x, previous.y)
-        ctx.lineTo(current.x, current.y)
-
-        ctx.stroke()
+        ctx.quadraticCurveTo(
+            current.x,
+            current.y,
+            midX,
+            midY
+        );
     }
+
+    ctx.stroke()
 }
 
 
