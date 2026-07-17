@@ -56,7 +56,24 @@ let gridToggle = false
 let clipboard = null
 let cursorX = 0;
 let cursorY = 0;
+let selectedFont
 
+
+document.querySelectorAll("fontStyleBtn").forEach(button => {
+    button.addEventListener("click", () => {
+        selectedFont = button.dataset.fontstyle
+
+        document
+            .querySelector(".fontStyleBtn.active")
+            ?.classList.remove("active")
+
+        button.classList.add("active")
+
+        console.log(selectedFont)
+
+
+    })
+})
 const zoomInBtn = document.getElementById("zoomInBtn")
 const zoomValue = document.getElementById("zoomValue")
 const zoomOutBtn = document.getElementById("zoomOutBtn")
