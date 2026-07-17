@@ -1448,13 +1448,16 @@ zoomOutBtn.addEventListener("click", () => {
 
 
 
-function startTextEditing(shape){
+function startTextEditing(shape) {
+
+    const screenX = (shape.x - camera.x) * camera.zoom;
+    const screenY = (shape.y - camera.y) * camera.zoom;
     const textarea = document.createElement("textArea")
     textarea.value = shape.text
 
     textarea.style.position = "absolute"
-    textarea.style.left = `${shape.x}px`
-    textarea.style.top = `${shape.y}px`
+    textarea.style.left = `${screenX}px`;
+    textarea.style.top = `${screenY}px`;
 
 
     textarea.style.fontSize = `${shape.fontSize}px`
@@ -1464,17 +1467,24 @@ function startTextEditing(shape){
 
     textarea.style.border = "none"
     textarea.style.outline = "none"
-    textarea.style.background = shape.fillColor
+    textarea.style.background = "transparent"
     textarea.style.resize = "none"
     textarea.style.overflow = "hidden"
     textarea.style.width = "200px";
+    textarea.style.height = "40px";
+
 
     textarea.rows = 1
 
     canvasArea.appendChild(textarea)
+    console.log("After append:", canvasArea.children.length);
+
+    setTimeout(() => {
+        console.log("1 second later:", canvasArea.children.length);
+        console.log(canvasArea.innerHTML);
+    }, 1000);
 
     textarea.focus()
-
 
 
     textarea.addEventListener('input', () => {
@@ -1488,6 +1498,7 @@ function startTextEditing(shape){
     textarea.addEventListener("blur", () => {
         shape.text = textarea.value
         shape.editMode = false
+        console.log("blur fired")
         textarea.remove()
         render()
     })
@@ -1495,7 +1506,7 @@ function startTextEditing(shape){
 
 
     textarea.addEventListener("keydown", (e) => {
-        if(e.key === "Enter" && !e.shiftKey) {
+        if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault()
 
             textarea.blur()
