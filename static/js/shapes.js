@@ -485,5 +485,9 @@ export function drawText(shape, ctx) {
 
     ctx.fillText(shape.text, shape.x, shape.y)
 
+    if (shape.selected) {
+        selectionBox(shape, ctx)
+    }
+
     ctx.restore()
 }

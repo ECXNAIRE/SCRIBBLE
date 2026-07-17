@@ -396,6 +396,16 @@ function mouseDown(e) {
 
         const clickedShape = getClickedShape(mouse.x, mouse.y)
 
+        if (clickedShape.type === "text") {
+            if (!clickedShape.selected) {
+                clickedShape.selected = true;
+                selectedShape = clickedShape;
+                render();
+                return;
+            }
+
+        }
+
         if (clickedShape && !isResizing) {
             saveState()
             isDragging = true
@@ -886,6 +896,7 @@ function getClickedShape(mouseX, mouseY) {
             case "ellipse":
             case "diamond":
             case "triangle":
+            case "text":
                 if (
                     mouseX >= left - hitPadding &&
                     mouseX <= right + hitPadding &&
@@ -1060,6 +1071,7 @@ function getClickedHandle(shape, mouseX, mouseY) {
         case "ellipse":
         case "diamond":
         case "triangle":
+        case "text":
             for (const handle of handles) {
                 if (
                     mouseX >= handle.x - half &&
@@ -1516,6 +1528,10 @@ function startTextEditing(shape) {
     input.addEventListener('input', () => {
 
         shape.text = input.value
+
+        ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
+        shape.width = ctx.measureText(shape.text || " ").width;
+        shape.height = shape.fontSize;
 
 
         render()
