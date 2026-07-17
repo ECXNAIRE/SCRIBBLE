@@ -676,10 +676,19 @@ function mouseMove(e) {
     }
 
     if (tool === "pencil") {
+
+        const last = currentShape.points[currentShape.points.length - 1]
+        let smoothPressure
+
+        if(last) {
+            smoothPressure  = last.pressure * 0.8 + e.pressure * 0.2
+        } else {
+            smoothPressure = e.pressure
+        }
         currentShape.points.push({
             x: e.offsetX,
             y: e.offsetY,
-            pressure: e.pressure
+            pressure: smoothPressure
         })
 
         render()
