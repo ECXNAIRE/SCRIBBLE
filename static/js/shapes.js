@@ -4,6 +4,7 @@ import { roughEllipse, roughLine, roughArc } from "./roughness.js";
 import { drawHachure } from "./fillType.js";
 import { Path, drawPath } from "./testnewArch.js";
 
+import { worldToScreen } from "./cameraFunction.js";
 //RECTANGLE
 
 export function drawRectangle(shape, ctx, sloppiness) {
@@ -62,6 +63,8 @@ export function drawRectangle(shape, ctx, sloppiness) {
         }
     }
 
+    ctx.strokeStyle = "red";
+    ctx.strokeRect(shape.x, shape.y, shape.width, shape.height);
     path.moveTo(x1 + r, y1);
 
     path.lineTo(x2 - r, y1);
@@ -81,8 +84,6 @@ export function drawRectangle(shape, ctx, sloppiness) {
     if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
-
-    ctx.restore()
 
 }
 
@@ -172,7 +173,6 @@ export function drawEllipse(shape, ctx, sloppiness) {
         selectionBox(shape, ctx)
     }
 
-    ctx.restore()
 }
 
 
@@ -199,7 +199,6 @@ export function drawLine(shape, ctx, sloppiness) {
         lineSelectionBox(shape, ctx)
     }
 
-    ctx.restore()
 }
 
 
@@ -295,7 +294,6 @@ export function drawDiamond(shape, ctx, sloppiness) {
     if (shape.selected && shape.editMode) {
         selectionBox(shape, ctx)
     }
-    ctx.restore()
 }
 
 
@@ -357,7 +355,6 @@ export function drawTriangle(shape, ctx, sloppiness) {
         selectionBox(shape, ctx)
     }
 
-    ctx.restore()
 }
 
 
@@ -415,7 +412,6 @@ export function drawArrow(shape, ctx, sloppiness) {
         lineSelectionBox(shape, ctx)
     }
 
-    ctx.restore()
 }
 
 
@@ -455,7 +451,6 @@ export function drawPencil(shape, ctx, sloppiness) {
         );
     }
 
-    ctx.stroke()
 }
 
 

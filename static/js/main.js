@@ -4,6 +4,7 @@ import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 import { drawGrid } from "./grid.js"
 import { overlayCanvas, drawBrushCursor, updateCursor, overlayCtx } from "./overlayCanvas.js"
+import { screenToWorld } from "./cameraFunction.js"
 
 
 const fillSection = document.getElementById("fillSection")
@@ -11,6 +12,13 @@ const sloppinessSection = document.getElementById("sloppinessSection")
 const fillTypeSection = document.getElementById("fillTypeSection")
 const edgeSection = document.getElementById("edgeSection")
 const layerSection = document.getElementById("layerToggleSection")
+
+
+const camera = {
+    x: 200,
+    y: 100,
+    zoom: 1
+}
 
 let tool = "pointer"
 const canvas = document.getElementById("canvas")
@@ -44,6 +52,8 @@ let gridToggle = false
 let clipboard = null
 let cursorX = 0;
 let cursorY = 0;
+
+
 
 let gridToggleBtn = document.getElementById("gridToggleBtn")
 
@@ -210,20 +220,24 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
 //RENDER FUNCTION FOR DRAWING 
 function render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.save();
 
+    // ctx.setTransform(
+    //     camera.zoom,
+    //     0,
+    //     0,
+    //     camera.zoom,
+    //     -camera.x * camera.zoom,
+    //     -camera.y * camera.zoom
+    // );
 
-
-    objects.forEach(drawShape)
+    objects.forEach(drawShape);
 
     if (currentShape) {
-        drawShape(currentShape)
+        drawShape(currentShape);
     }
 
-    if (gridToggle) {
-        drawGrid(ctx, canvas)
-    }
-
+    // ctx.restore();
 }
 
 
@@ -317,6 +331,7 @@ canvas.addEventListener("dblclick", mouseDoubleClick)
 canvas.addEventListener("pointercancel", mouseUp);
 
 function mouseDown(e) {
+    const mouse = screenToWorld(e.offsetX, e.offsetY, camera);
     canvas.setPointerCapture(e.pointerId);
 
     if (tool === "eraser") {
@@ -332,21 +347,21 @@ function mouseDown(e) {
         selectedShape = objects.find(shape => shape.selected)
 
         if (selectedShape?.editMode) {
-            const handle = getClickedHandle(selectedShape, e.offsetX, e.offsetY)
+            const handle = getClickedHandle(selectedShape, mouse.x, mouse.y)
             if (handle) {
                 saveState()
                 isResizing = true
 
                 resizeHandle = handle
-                startX = e.offsetX;
-                startY = e.offsetY;
+                startX = mouse.x;
+                startY = mouse.y;
 
                 return;
             }
 
         }
 
-        const clickedShape = getClickedShape(e.offsetX, e.offsetY)
+        const clickedShape = getClickedShape(mouse.x, mouse.y)
 
         if (clickedShape && !isResizing) {
             saveState()
@@ -354,11 +369,11 @@ function mouseDown(e) {
             dragShape = clickedShape
 
             if (clickedShape.type === "line" || clickedShape.type === "arrow") {
-                dragOffsetX = e.offsetX
-                dragOffsetY = e.offsetY
+                dragOffsetX = mouse.x
+                dragOffsetY = mouse.y
             } else {
-                dragOffsetX = e.offsetX - dragShape.x
-                dragOffsetY = e.offsetY - dragShape.y
+                dragOffsetX = mouse.x - dragShape.x
+                dragOffsetY = mouse.y - dragShape.y
             }
 
         }
@@ -398,8 +413,8 @@ function mouseDown(e) {
     if (tool === "rectangle") {
         isDrawing = true
 
-        startX = e.offsetX
-        startY = e.offsetY
+        startX = mouse.x
+        startY = mouse.y
 
         currentShape = {
             type: "rectangle",
@@ -423,8 +438,8 @@ function mouseDown(e) {
     if (tool === "circle") {
         isDrawing = true
 
-        startX = e.offsetX
-        startY = e.offsetY
+        startX = mouse.x
+        startY = mouse.y
         currentShape = {
             type: "ellipse",
             x: startX,
@@ -446,14 +461,14 @@ function mouseDown(e) {
     if (tool === "line") {
         isDrawing = true
 
-        startX = e.offsetX
-        startY = e.offsetY
+        startX = mouse.x
+        startY = mouse.y
         currentShape = {
             type: "line",
-            x1: e.offsetX,
-            y1: e.offsetY,
-            x2: e.offsetX,
-            y2: e.offsetY,
+            x1: mouse.x,
+            y1: mouse.y,
+            x2: mouse.x,
+            y2: mouse.y,
             selected: false,
             editMode: false,
             selectedStroke: selectedStroke,
@@ -469,8 +484,8 @@ function mouseDown(e) {
     if (tool === "diamond") {
         isDrawing = true
 
-        startX = e.offsetX
-        startY = e.offsetY
+        startX = mouse.x
+        startY = mouse.y
         currentShape = {
             type: "diamond",
             x: startX,
@@ -492,8 +507,8 @@ function mouseDown(e) {
     if (tool === "triangle") {
         isDrawing = true
 
-        startX = e.offsetX
-        startY = e.offsetY
+        startX = mouse.x
+        startY = mouse.y
 
         currentShape = {
             type: "triangle",
@@ -516,14 +531,14 @@ function mouseDown(e) {
     if (tool === "arrow") {
         isDrawing = true
 
-        startX = e.offsetX
-        startY = e.offsetY
+        startX = mouse.x
+        startY = mouse.y
         currentShape = {
             type: "arrow",
-            x1: e.offsetX,
-            y1: e.offsetY,
-            x2: e.offsetX,
-            y2: e.offsetY,
+            x1: mouse.x,
+            y1: mouse.y,
+            x2: mouse.x,
+            y2: mouse.y,
             selected: false,
             editMode: false,
             selectedStroke: selectedStroke,
@@ -541,7 +556,7 @@ function mouseDown(e) {
 
         currentShape = {
             type: "pencil",
-            points: [{ x: e.offsetX, y: e.offsetY, pressure: e.pressure }],
+            points: [{ x: mouse.x, y: mouse.y, pressure: e.pressure }],
             strokeColor: strokeColor,
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
@@ -555,8 +570,9 @@ function mouseDown(e) {
 
 
 function mouseMove(e) {
-    cursorX = e.offsetX
-    cursorY = e.offsetY
+    const mouse = screenToWorld(e.offsetX, e.offsetY, camera);
+    cursorX = e.offsetX;
+    cursorY = e.offsetY;
 
     updateCursor(tool, cursorX, cursorY, selectedStrokeWidth)
 
@@ -566,7 +582,7 @@ function mouseMove(e) {
     }
 
     if (tool == "eraser" && isErasing) {
-        const hoveredShape = getClickedShape(e.offsetX, e.offsetY)
+        const hoveredShape = getClickedShape(mouse.x, mouse.y)
 
         if (hoveredShape) {
             const index = objects.indexOf(hoveredShape);
@@ -582,9 +598,9 @@ function mouseMove(e) {
     }
 
     if (tool === "pointer") {
-        const hoveredShape = getClickedShape(e.offsetX, e.offsetY)
+        const hoveredShape = getClickedShape(mouse.x, mouse.y)
         const hoveredHandle = hoveredShape
-            ? getClickedHandle(hoveredShape, e.offsetX, e.offsetY)
+            ? getClickedHandle(hoveredShape, mouse.x, mouse.y)
             : null
 
         if (hoveredHandle) {
@@ -608,16 +624,16 @@ function mouseMove(e) {
     if (isResizing) {
         if (selectedShape.type === "line" || selectedShape.type === "arrow") {
             if (resizeHandle === "start") {
-                selectedShape.x1 = e.offsetX;
-                selectedShape.y1 = e.offsetY;
+                selectedShape.x1 = mouse.x;
+                selectedShape.y1 = mouse.y;
             }
 
             if (resizeHandle === "end") {
-                selectedShape.x2 = e.offsetX;
-                selectedShape.y2 = e.offsetY;
+                selectedShape.x2 = mouse.x;
+                selectedShape.y2 = mouse.y;
             }
         } else {
-            resizeShape(selectedShape, resizeHandle, e.offsetX, e.offsetY);
+            resizeShape(selectedShape, resizeHandle, mouse.x, mouse.y);
         }
 
         render();
@@ -627,8 +643,8 @@ function mouseMove(e) {
     if (isDragging) {
         canvas.style.cursor = "grabbing"
         if (dragShape.type === "line" || dragShape.type === "arrow") {
-            const dx = e.offsetX - dragOffsetX
-            const dy = e.offsetY - dragOffsetY
+            const dx = mouse.x - dragOffsetX
+            const dy = mouse.y - dragOffsetY
 
             dragShape.x1 += dx
             dragShape.y1 += dy
@@ -636,11 +652,11 @@ function mouseMove(e) {
             dragShape.y2 += dy
 
 
-            dragOffsetX = e.offsetX
-            dragOffsetY = e.offsetY
+            dragOffsetX = mouse.x
+            dragOffsetY = mouse.y
         } else {
-            dragShape.x = e.offsetX - dragOffsetX
-            dragShape.y = e.offsetY - dragOffsetY
+            dragShape.x = mouse.x - dragOffsetX
+            dragShape.y = mouse.y - dragOffsetY
         }
 
         render()
@@ -656,8 +672,8 @@ function mouseMove(e) {
 
     if (tool === "rectangle" || tool === "circle" || tool === "diamond" || tool === "triangle") {
 
-        let width = e.offsetX - startX
-        let height = e.offsetY - startY
+        let width = mouse.x - startX
+        let height = mouse.y - startY
 
         if (shiftPressed) {
             let size = Math.max(Math.abs(width), Math.abs(height))
@@ -671,20 +687,20 @@ function mouseMove(e) {
     }
 
     if (tool === "line" || tool === "arrow") {
-        currentShape.x2 = e.offsetX
-        currentShape.y2 = e.offsetY
+        currentShape.x2 = mouse.x
+        currentShape.y2 = mouse.y
     }
 
     if (tool === "pencil") {
 
         const last = currentShape.points[currentShape.points.length - 1]
         let smoothPressure
-        let x = e.offsetX;
-        let y = e.offsetY;
+        let x = mouse.x;
+        let y = mouse.y;
 
         if (last) {
-            const dx = e.offsetX - last.x
-            const dy = e.offsetY - last.y
+            const dx = mouse.x - last.x
+            const dy = mouse.y - last.y
             if (Math.hypot(dx, dy) < 1.5) {
                 return;
             }
@@ -693,8 +709,8 @@ function mouseMove(e) {
             smoothPressure = last.pressure * 0.65 + e.pressure * 0.35
 
 
-            x = last.x * 0.3 + e.offsetX * 0.7
-            y = last.y * 0.3 + e.offsetY * 0.7
+            x = last.x * 0.3 + mouse.x * 0.7
+            y = last.y * 0.3 + mouse.y * 0.7
         } else {
             smoothPressure = e.pressure
         }
@@ -1049,7 +1065,8 @@ function resizeShape(shape, handle, mouseX, mouseY) {
 
 
 function mouseDoubleClick(e) {
-    const shape = getClickedShape(e.offsetX, e.offsetY)
+    const mouse = screenToWorld(e.offsetX, e.offsetY, camera);
+    const shape = getClickedShape(mouse.x, mouse.y)
 
     objects.forEach(s => {
         s.selected = false
