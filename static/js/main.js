@@ -395,7 +395,6 @@ function mouseDown(e) {
         if (clickedShape.type === "text") {
             if (!clickedShape.selected) {
                 clickedShape.selected = true;
-                clickedShape.editMode = true
                 selectedShape = clickedShape;
                 render();
                 return;
@@ -1494,7 +1493,7 @@ function startTextEditing(shape) {
     input.style.top = `${screenY}px`;
 
 
-    input.style.fontSize = `${shape.fontSize}px`
+    input.style.fontSize = `${shape.fontSize * camera.zoom}px`
     input.style.fontFamily = shape.fontFamily
     input.style.color = shape.strokeColor
 
@@ -1504,8 +1503,7 @@ function startTextEditing(shape) {
     input.style.background = "transparent"
     input.style.padding = "0";
     input.style.margin = "0";
-    input.style.height = `${shape.fontSize + 8}px`;
-    input.style.minWidth = "20px";
+    input.style.height = `${(shape.fontSize + 8) * camera.zoom}px`;
     input.style.width = "20px";
 
 
@@ -1515,7 +1513,7 @@ function startTextEditing(shape) {
         ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
         const width = ctx.measureText(input.value || " ").width;
 
-        input.style.width = `${Math.max(20, width + 8)}px`;
+        input.style.width = `${Math.max(20, width + 8) * camera.zoom}px`;
     }
 
     updateWidth()
