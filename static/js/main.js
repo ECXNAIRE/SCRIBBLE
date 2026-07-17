@@ -56,10 +56,10 @@ let gridToggle = false
 let clipboard = null
 let cursorX = 0;
 let cursorY = 0;
-let selectedFont
+let selectedFont = "sans-serif"
 
 
-document.querySelectorAll("fontStyleBtn").forEach(button => {
+document.querySelectorAll(".fontStyleBtn").forEach(button => {
     button.addEventListener("click", () => {
         selectedFont = button.dataset.fontstyle
 
@@ -632,7 +632,7 @@ function mouseDown(e) {
             y: mouse.y,
             text: "",
             fontSize: 24,
-            fontFamily: "Arial",
+            fontFamily: selectedFont,
             strokeColor: strokeColor,
             selected: false,
             editMode: true
