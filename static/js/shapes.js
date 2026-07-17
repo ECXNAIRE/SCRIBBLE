@@ -476,10 +476,12 @@ function calculatePressureWidth(pressure, baseWidth) {
 
 
 export function drawText(shape, ctx) {
+
+    if(shape.editMode) return
     ctx.save()
     ctx.font = `${shape.fontSize}px ${shape.fontFamily}`
     ctx.fillStyle = shape.strokeColor
-    ctx.textBaseLine = "top"
+    ctx.textBaseline = "top"
 
 
     ctx.fillText(shape.text, shape.x, shape.y)

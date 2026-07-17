@@ -350,7 +350,6 @@ canvas.addEventListener("dblclick", mouseDoubleClick)
 canvas.addEventListener("pointercancel", mouseUp);
 
 function mouseDown(e) {
-    console.log("MOUSE DOWN", e.button, spacePressed);
     if (tool === "hand") {
         isPanning = true;
 
@@ -440,6 +439,7 @@ function mouseDown(e) {
 
 
     if (tool === "rectangle") {
+        isDrawing = true
 
         startX = mouse.x
         startY = mouse.y
@@ -595,7 +595,6 @@ function mouseDown(e) {
 
 
     if (tool === "text") {
-        isDrawing = true
 
         currentShape = {
             type: "text",
@@ -1009,7 +1008,9 @@ function drawShape(shape) {
 
 
         case "text":
-            drawText(shape, ctx)
+            if(!shape.editMode){
+                drawText(shape, ctx)
+            }
     }
 
 
@@ -1480,11 +1481,8 @@ function startTextEditing(shape) {
     console.log("After append:", canvasArea.children.length);
 
     setTimeout(() => {
-        console.log("1 second later:", canvasArea.children.length);
-        console.log(canvasArea.innerHTML);
-    }, 1000);
-
-    textarea.focus()
+        textarea.focus();
+    }, 500);
 
 
     textarea.addEventListener('input', () => {
@@ -1498,7 +1496,6 @@ function startTextEditing(shape) {
     textarea.addEventListener("blur", () => {
         shape.text = textarea.value
         shape.editMode = false
-        console.log("blur fired")
         textarea.remove()
         render()
     })
