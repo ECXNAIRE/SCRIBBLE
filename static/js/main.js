@@ -217,6 +217,7 @@ document.querySelectorAll(".fillTypeBtn").forEach(button => {
 
 const strokePicker = document.getElementById("strokeColorPicker")
 const fillPicker = document.getElementById("fillColorPicker")
+const fillPickerPreview = document.getElementById("fillPickerPreview");
 
 let strokeColor = strokePicker.value;
 let fillColor = fillPicker.value;
@@ -230,10 +231,18 @@ strokePicker.addEventListener("input", () => {
 
 
 fillPicker.addEventListener("input", () => {
-    fillColor = fillPicker.value
-    document
-        .querySelector(".fillColorBtn.active")
+    fillColor = fillPicker.value;
+
+    fillPickerPreview.classList.remove("transparentColor");
+    fillPickerPreview.style.background = fillColor;
+
+    document.querySelector(".fillColorBtn.active")
         ?.classList.remove("active");
+
+    if (selectedShape) {
+        selectedShape.fillColor = fillColor;
+        scheduleRender();
+    }
 })
 
 
@@ -266,11 +275,20 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
         fillColor = button.dataset.color
 
+        if (fillColor === "transparent") {
+            fillPickerPreview.style.removeProperty("background");
+            fillPickerPreview.classList.add("transparentColor");
+            console.log(fillPickerPreview.className);
+        } else {
+            fillPickerPreview.classList.remove("transparentColor");
+            fillPickerPreview.style.background = fillColor;
+            fillPicker.value = fillColor;
+        }
+
         if (selectedShape) {
             selectedShape.fillColor = fillColor;
-            scheduleRender()
+            scheduleRender();
         }
-        fillPicker.value = fillColor
     })
 })
 
