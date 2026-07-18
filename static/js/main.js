@@ -74,6 +74,7 @@ let cursorX = 0;
 let cursorY = 0;
 let selectedFont = "sans-serif"
 let pressure = "false"
+let needsRender = false
 
 document.querySelectorAll(".pressureBtn").forEach(button => {
     button.addEventListener("click", () => {
@@ -122,7 +123,7 @@ gridToggleBtn.addEventListener("click", () => {
         gridToggleBtn.classList.remove("active");
     }
 
-    render();
+ scheduleRender();
 });
 
 document.querySelectorAll(".layerToggleBtn").forEach(button => {
@@ -160,7 +161,7 @@ document.querySelectorAll(".layerToggleBtn").forEach(button => {
         }
 
 
-        render()
+        scheduleRender()
     })
 })
 
@@ -176,7 +177,7 @@ document.querySelectorAll(".edgeStyleBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.edgeStyle = edgeStyle
-            render()
+            scheduleRender()
         }
 
     })
@@ -206,7 +207,7 @@ document.querySelectorAll(".fillTypeBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.fillType = selectedFillType
-            render()
+            scheduleRender()
         }
 
     })
@@ -246,7 +247,7 @@ document.querySelectorAll(".strokeColorBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.strokeColor = strokeColor;
-            render()
+            scheduleRender()
         }
         strokePicker.value = strokeColor
     })
@@ -265,7 +266,7 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.fillColor = fillColor;
-            render()
+            scheduleRender()
         }
         fillPicker.value = fillColor
     })
@@ -317,7 +318,7 @@ function resizeCanvas() {
     overlayCanvas.width = canvas.width;
     overlayCanvas.height = canvas.height;
 
-    render()
+    scheduleRender()
 }
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
@@ -328,7 +329,7 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.selectedStroke = selectedStroke
-            render()
+            scheduleRender()
         }
 
         document.querySelector(".strokeBtn.active")
@@ -344,7 +345,7 @@ document.querySelectorAll(".strokeWidthBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.strokeWidth = selectedStrokeWidth
-            render()
+            scheduleRender()
         }
 
 
@@ -444,7 +445,7 @@ function mouseDown(e) {
             if (!clickedShape.selected) {
                 clickedShape.selected = true;
                 selectedShape = clickedShape;
-                render();
+               scheduleRender() ;
                 return;
             }
 
@@ -493,7 +494,7 @@ function mouseDown(e) {
             selectedShape = null
         }
 
-        render();
+        scheduleRender()
     }
 
 
@@ -675,7 +676,7 @@ function mouseDown(e) {
         currentShape = null;
 
         startTextEditing(selectedShape);
-        render();
+        scheduleRender()
     }
 
 }
@@ -699,7 +700,7 @@ function mouseMove(e) {
         panStartX = e.offsetX;
         panStartY = e.offsetY;
 
-        render();
+        scheduleRender()
         return;
     }
 
@@ -711,7 +712,7 @@ function mouseMove(e) {
 
     if (tool === "pencil" || tool === "eraser") {
         canvas.style.cursor = "none";
-        render();
+       scheduleRender();
     }
 
     if (tool == "eraser" && isErasing) {
@@ -723,7 +724,7 @@ function mouseMove(e) {
             if (!(index < 0)) {
                 objects.splice(index, 1);
                 console.trace("Render", objects.length);
-                render();
+                scheduleRender();
             }
 
         }
@@ -778,7 +779,7 @@ function mouseMove(e) {
             resizeShape(selectedShape, resizeHandle, mouse.x, mouse.y);
         }
 
-        render();
+        scheduleRender();
         return;
     }
 
@@ -801,11 +802,11 @@ function mouseMove(e) {
             dragShape.y = mouse.y - dragOffsetY
         }
 
-        render()
+        scheduleRender()
         return
     }
 
-    if (tool !== "pointer" && tool !== "pencil" && tool !== "text" && tool !== "undo" && tool !== "redo" && tool !== "download" && tool !== "setting" && tool !== "eraser" && tool !== "hand") {
+    if (tool !== "pointer" && tool !== "pencil" && tool !== "undo" && tool !== "redo" && tool !== "download" && tool !== "setting" && tool !== "eraser" && tool !== "hand") {
         canvas.style.cursor = "crosshair"
     }
 
@@ -843,7 +844,7 @@ function mouseMove(e) {
         if (last) {
             const dx = mouse.x - last.x
             const dy = mouse.y - last.y
-            if (Math.hypot(dx, dy) < 1.5) {
+            if (Math.hypot(dx, dy) < 4) {
                 return;
             }
 
@@ -862,13 +863,13 @@ function mouseMove(e) {
             pressure: smoothPressure
         })
 
-        render()
+        scheduleRender()
         return
     }
 
 
 
-    render()
+    scheduleRender()
 }
 
 
@@ -912,7 +913,7 @@ function mouseUp(e) {
     console.trace("Render", objects.length);
     currentShape = null
 
-    render()
+    scheduleRender()
 }
 
 
@@ -1247,7 +1248,7 @@ function mouseDoubleClick(e) {
     }
 
 
-    render()
+    scheduleRender()
 }
 
 
@@ -1298,7 +1299,7 @@ function undo() {
 
     objects = undoStack.pop()
 
-    render()
+    scheduleRender()
 }
 
 
@@ -1308,7 +1309,7 @@ function redo() {
 
     objects = redoStack.pop()
 
-    render()
+    scheduleRender()
 }
 
 
@@ -1426,7 +1427,7 @@ function deleteSelectedShape() {
     selectedShape = null
 
 
-    render()
+    scheduleRender()
 }
 
 
@@ -1454,7 +1455,7 @@ window.addEventListener("keydown", (e) => {
         selectedShape = newShape;
         editMode = true;
 
-        render();
+        scheduleRender();
     }
 })
 
@@ -1492,7 +1493,7 @@ window.addEventListener("keydown", (e) => {
     }
 
     saveState()
-    render()
+    scheduleRender()
 })
 
 
@@ -1522,7 +1523,7 @@ function zoomCanvas(e) {
     camera.y = worldY - mouseY / camera.zoom;
 
 
-    render();
+    scheduleRender();
 
 }
 
@@ -1536,7 +1537,7 @@ zoomInBtn.addEventListener("click", () => {
     camera.zoom = Math.min(camera.zoom, 10)
 
     updateZoomDisplay()
-    render()
+    scheduleRender()
 })
 
 
@@ -1545,7 +1546,7 @@ zoomOutBtn.addEventListener("click", () => {
     camera.zoom = Math.max(camera.zoom, 0.1)
 
     updateZoomDisplay()
-    render()
+    scheduleRender()
 })
 
 
@@ -1606,7 +1607,7 @@ function startTextEditing(shape) {
         shape.height = shape.fontSize;
 
 
-        render()
+        scheduleRender()
         updateWidth()
     })
 
@@ -1618,7 +1619,7 @@ function startTextEditing(shape) {
 
 
         input.remove();
-        render();
+        scheduleRender();
     });
 
 
@@ -1637,3 +1638,17 @@ function startTextEditing(shape) {
 
 
 
+
+
+
+function scheduleRender() {
+    if(needsRender) return
+    
+    needsRender = true
+
+
+    requestAnimationFrame(()=>{
+        needsRender = false;
+        render();
+    });
+}
