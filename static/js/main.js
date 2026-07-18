@@ -218,12 +218,17 @@ document.querySelectorAll(".fillTypeBtn").forEach(button => {
 const strokePicker = document.getElementById("strokeColorPicker")
 const fillPicker = document.getElementById("fillColorPicker")
 const fillPickerPreview = document.getElementById("fillPickerPreview");
+const strokePickerPreview = document.getElementById("strokePickerPreview");
 
 let strokeColor = strokePicker.value;
 let fillColor = fillPicker.value;
 
+
+
 strokePicker.addEventListener("input", () => {
     strokeColor = strokePicker.value
+    strokePickerPreview.style.background = strokeColor;
+
     document
         .querySelector(".strokeColorBtn.active")
         ?.classList.remove("active");
@@ -260,7 +265,8 @@ document.querySelectorAll(".strokeColorBtn").forEach(button => {
             selectedShape.strokeColor = strokeColor;
             scheduleRender()
         }
-        strokePicker.value = strokeColor
+
+        strokePickerPreview.style.background = fillColor;
     })
 })
 
@@ -282,7 +288,6 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
         } else {
             fillPickerPreview.classList.remove("transparentColor");
             fillPickerPreview.style.background = fillColor;
-            fillPicker.value = fillColor;
         }
 
         if (selectedShape) {

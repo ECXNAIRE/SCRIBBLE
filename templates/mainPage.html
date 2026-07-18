@@ -383,7 +383,8 @@
             background-size: 12px 12px;
         }
 
-        .fillPickerWrapper {
+        .fillPickerWrapper,
+        .strokePickerWrapper {
             width: 35px;
             height: 35px;
             position: relative;
@@ -392,7 +393,8 @@
             border: 0.5px solid black
         }
 
-        #fillPickerPreview {
+        #fillPickerPreview,
+        #strokePickerPreview {
             position: absolute;
             inset: 0;
             border-radius: 8px;
@@ -400,7 +402,8 @@
         }
 
 
-        .fillPickerWrapper input {
+        .fillPickerWrapper input,
+        .strokePickerWrapper input {
             position: absolute;
             inset: 0;
             width: 100%;
@@ -493,7 +496,13 @@
                 <div id="strokeColorSection">
                     <div class="title">Stroke</div>
                     <div class="styleGroup" id="strokeColorArea">
+
+                        <div class="strokePickerWrapper">
+                            <div id="strokePickerPreview"></div>
                         <input type="color" id="strokeColorPicker" value="#000000">
+                        </div>
+
+
                         <div class="divider"></div>
                         <button class="strokeColorBtn" data-color="#2563EB">
                             <div style="background:#2563EB;"></div>
