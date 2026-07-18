@@ -180,7 +180,9 @@
             border: 1.5px solid #3B82F6;
         }
 
-        .pressureBtn img {
+        .pressureBtn img,
+        .strokeWidthBtn img,
+        .fillTypeBtn img {
             width: 24px;
             height: 24px
         }
@@ -411,6 +413,8 @@
             opacity: 0;
             cursor: pointer;
         }
+
+
     </style>
 </head>
 
@@ -556,13 +560,13 @@
                     <div class="title">Stroke Width</div>
                     <div id="strokeWidthArea">
                         <button class="strokeWidthBtn active" data-strokewidth="2">
-                            2
+                            <img src="../static/assets/strokeWidth3png.svg">
                         </button>
                         <button class="strokeWidthBtn" data-strokewidth="4">
-                            4
+                            <img src="../static/assets/strokeWidth2png.svg">
                         </button>
                         <button class="strokeWidthBtn" data-strokewidth="6">
-                            6
+                            <img src="../static/assets/strokeWidth1png.svg">
                         </button>
                     </div>
                 </div>
@@ -590,10 +594,10 @@
                     <div class="title">Fill Type</div>
                     <div id="fillTypeArea">
                         <button class="fillTypeBtn active" data-filltype="solid">
-                            <img src="../static/assets/minus.svg">
+                            <img src="../static/assets/solid.svg">
                         </button>
                         <button class="fillTypeBtn" data-filltype="hachure">
-                            <img src="../static/assets/minus.svg">
+                            <img src="../static/assets/hachure.svg">
                         </button>
                     </div>
                 </div>

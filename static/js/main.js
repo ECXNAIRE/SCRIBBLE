@@ -270,7 +270,7 @@ document.querySelectorAll(".strokeColorBtn").forEach(button => {
             scheduleRender()
         }
 
-        strokePickerPreview.style.background = fillColor;
+        strokePickerPreview.style.background = strokeColor;
     })
 })
 
