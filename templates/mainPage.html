@@ -128,7 +128,8 @@
         #fillTypeArea,
         #edgeStyleArea,
         #layerToggleArea,
-        #fontStyleArea {
+        #fontStyleArea,
+        #pressureSelectionArea {
             display: flex;
             gap: 20px;
             margin-bottom: 14px;
@@ -139,7 +140,8 @@
         .fillTypeBtn,
         .edgeStyleBtn,
         .layerToggleBtn,
-        .fontStyleBtn {
+        .fontStyleBtn,
+        .pressureBtn {
             width: 40px;
             height: 32px;
             display: flex;
@@ -160,7 +162,8 @@
         .fillTypeBtn:hover,
         .edgeStyleBtn:hover,
         .layerToggleBtn:hover,
-        .fontStyleBtn:hover {
+        .fontStyleBtn:hover,
+        .pressureBtn:hover {
             background: #cfe4ff;
         }
 
@@ -168,9 +171,15 @@
         .strokeWidthBtn.active,
         .fillTypeBtn.active,
         .edgeStyleBtn.active,
-        .fontStyleBtn.active {
+        .fontStyleBtn.active,
+        .pressureBtn.active {
             background: #bedaff;
             border: 1.5px solid #3B82F6;
+        }
+
+        .pressureBtn img {
+            width: 24px;
+            height: 24px
         }
 
         .title {
@@ -343,7 +352,7 @@
         }
 
         #toolBarLeft::-webkit-scrollbar {
-            width: 8px;
+            width: 5px;
         }
 
         #toolBarLeft::-webkit-scrollbar-track {
@@ -359,6 +368,15 @@
         #toolBarLeft::-webkit-scrollbar-thumb:hover {
             background: #A9B8CC;
         }
+
+        .transparentColor {
+            background:
+                linear-gradient(45deg, #ddd 25%, transparent 25%) -4px 0/8px 8px,
+                linear-gradient(-45deg, #ddd 25%, transparent 25%) -4px 0/8px 8px,
+                linear-gradient(45deg, transparent 75%, #ddd 75%) -4px 0/8px 8px,
+                linear-gradient(-45deg, transparent 75%, #ddd 75%) -4px 0/8px 8px;
+        }
+
     </style>
 </head>
 
@@ -478,11 +496,11 @@
                         <button class="fillColorBtn" data-color="#F48FB1">
                             <div style="background:#F48FB1;"></div>
                         </button>
-                        <button class="fillColorBtn" data-color="#A1887F">
-                            <div style="background:#A1887F;"></div>
-                        </button>
                         <button class="fillColorBtn" data-color="#FACC15">
                             <div style="background:#FDE68A;"></div>
+                        </button>
+                        <button class="fillColorBtn" data-color="transparent">
+                            <div class="transparentColor"></div>
                         </button>
                     </div>
                 </div>
@@ -542,6 +560,18 @@
                         </button>
                         <button class="edgeStyleBtn" data-edgestyle="25">
                             <img src="../static/assets/minus.svg">
+                        </button>
+                    </div>
+                </div>
+
+                <div id="pressureSelectionSection">
+                    <div class="title">Pressure</div>
+                    <div id="pressureSelectionArea">
+                        <button class="pressureBtn active" data-pressure="false">
+                            <img src="../static/assets/normalPenType2.svg">
+                        </button>
+                        <button class="pressureBtn" data-pressure="true">
+                            <img src="../static/assets/pressurePenType2.svg">
                         </button>
                     </div>
                 </div>

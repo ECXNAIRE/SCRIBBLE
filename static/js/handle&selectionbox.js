@@ -1,6 +1,7 @@
 export function selectionBox(rect, ctx) {
+    ctx.save()
     const padding = 6
-    const handleSize = 8
+    const handleSize = 10
 
     const left = Math.min(rect.x, rect.x + rect.width) - padding
     const top = Math.min(rect.y, rect.y + rect.height) - padding
@@ -9,12 +10,14 @@ export function selectionBox(rect, ctx) {
     const height = Math.abs(rect.height) + padding * 2
 
     ctx.strokeStyle = "#3B82F6";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 1.5;
     ctx.strokeRect(left, top, width, height);
 
 
     ctx.fillStyle = "#FFFFFF"
+    ctx.shadowColor = "rgba(0,0,0,.15)";
     ctx.strokeStyle = "#3B82F6"
+    ctx.shadowBlur = 3;
 
     drawHandle(left, top, handleSize, ctx)
     drawHandle(left + width, top, handleSize, ctx)
@@ -25,18 +28,22 @@ export function selectionBox(rect, ctx) {
     drawHandle(left + width, top + height / 2, handleSize, ctx)
     drawHandle(left + width / 2, top + height, handleSize, ctx)
 
+
+    ctx.restore()
+
 }
 
 
 
 export function drawHandle(x, y, size, ctx) {
     ctx.beginPath();
-    ctx.rect(
-        x - size / 2,
-        y - size / 2,
-        size,
-        size
-    )
+    ctx.arc(
+        x,
+        y,
+        size / 2,
+        0,
+        Math.PI * 2
+    );
 
     ctx.fill();
     ctx.stroke()

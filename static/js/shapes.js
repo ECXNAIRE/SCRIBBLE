@@ -434,8 +434,16 @@ export function drawPencil(shape, ctx, sloppiness) {
         const midX = (current.x + next.x) / 2
         const midY = (current.y + next.y) / 2
 
+        let pressure 
 
-        ctx.lineWidth = calculatePressureWidth(current.pressure, shape.strokeWidth)
+        if(shape.pressure === "false") {
+            pressure = 0.7
+        } else {
+            pressure = current.pressure
+        }
+
+
+        ctx.lineWidth = calculatePressureWidth(pressure, shape.strokeWidth)
 
         ctx.quadraticCurveTo(
             current.x,

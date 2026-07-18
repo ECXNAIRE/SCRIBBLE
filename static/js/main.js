@@ -15,6 +15,7 @@ const layerSection = document.getElementById("layerToggleSection")
 const strokeWidthSection = document.getElementById("strokeWidthSection")
 const fontSection = document.getElementById("fontSection")
 const strokeColorSection = document.getElementById("strokeColorSection")
+const pressureSelectionSection = document.getElementById("pressureSelectionSection")
 
 fillSection.style.display = "none"
 fillTypeSection.style.display = "none"
@@ -24,6 +25,7 @@ layerSection.style.display = "none"
 strokeWidthSection.style.display = "none"
 fontSection.style.display = "none"
 strokeColorSection.style.display = "none"
+pressureSelectionSection.style.display = "none"
 
 
 
@@ -71,6 +73,21 @@ let clipboard = null
 let cursorX = 0;
 let cursorY = 0;
 let selectedFont = "sans-serif"
+let pressure = "false"
+
+document.querySelectorAll(".pressureBtn").forEach(button => {
+    button.addEventListener("click", () => {
+        pressure = button.dataset.pressure
+
+        console.log(pressure)
+
+        document
+            .querySelector(".pressureBtn.active")
+            ?.classList.remove("active")
+
+        button.classList.add("active")
+    })
+})
 
 
 document.querySelectorAll(".fontStyleBtn").forEach(button => {
@@ -633,7 +650,8 @@ function mouseDown(e) {
             selectedStroke: selectedStroke,
             seed: Math.random() * 100000,
             strokeWidth: selectedStrokeWidth,
-            fillType: selectedFillType
+            fillType: selectedFillType,
+            pressure: pressure
         }
     }
 
@@ -1321,6 +1339,7 @@ function updateToolBar(tool) {
     strokeWidthSection.style.display = "none"
     fontSection.style.display = "none"
     strokeColorSection.style.display = "none"
+    pressureSelectionSection.style.display = "none"
 
     switch (tool) {
         case "rectangle":
@@ -1370,11 +1389,15 @@ function updateToolBar(tool) {
         case "text":
             strokeColorSection.style.display = "block"
             fontSection.style.display = "block"
+            if (layerOptionShow === true) {
+                layerSection.style.display = "block"
+            }
             break
 
         case "pencil":
             strokeColorSection.style.display = "block"
             strokeWidthSection.style.display = "block"
+            pressureSelectionSection.style.display = "block"
 
             break
     }
