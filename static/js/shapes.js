@@ -422,11 +422,10 @@ export function drawPencil(shape, ctx, sloppiness) {
     ctx.lineCap = "round"
     ctx.lineJoin = "round"
 
-    ctx.beginPath();
 
-    ctx.moveTo(points[0].x, points[0].y);
 
     for (let i = 1; i < points.length - 1; i++) {
+        const prev = points[i - 1];
         const current = points[i]
         const next = points[i + 1]
 
@@ -434,10 +433,10 @@ export function drawPencil(shape, ctx, sloppiness) {
         const midX = (current.x + next.x) / 2
         const midY = (current.y + next.y) / 2
 
-        let pressure 
+        let pressure
 
-        if(shape.pressure === "false") {
-            pressure = 0.7
+        if (shape.pressureToggle === "false") {
+            pressure = 0.4
         } else {
             pressure = current.pressure
         }
@@ -445,34 +444,29 @@ export function drawPencil(shape, ctx, sloppiness) {
 
         ctx.lineWidth = calculatePressureWidth(pressure, shape.strokeWidth)
 
+        ctx.beginPath();
+        ctx.moveTo(prev.x, prev.y);
         ctx.quadraticCurveTo(
             current.x,
             current.y,
             midX,
             midY
         );
+        ctx.stroke()
     }
-
-    ctx.stroke()
-
 }
 
 
 function calculatePressureWidth(pressure, baseWidth) {
     pressure = Math.pow(pressure, 0.5)
 
-    const minWidth = baseWidth * 0.5;
-    const maxWidth = baseWidth * 2
+    const minWidth = baseWidth * 0.005;
+    const maxWidth = baseWidth * 3
 
     return minWidth +
         (maxWidth - minWidth) * pressure;
 
 }
-
-
-
-
-
 
 export function drawText(shape, ctx) {
     ctx.save()

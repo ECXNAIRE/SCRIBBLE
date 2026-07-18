@@ -651,7 +651,7 @@ function mouseDown(e) {
             seed: Math.random() * 100000,
             strokeWidth: selectedStrokeWidth,
             fillType: selectedFillType,
-            pressure: pressure
+            pressureToggle: pressure
         }
     }
 
