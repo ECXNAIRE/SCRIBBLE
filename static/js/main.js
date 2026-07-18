@@ -3,7 +3,7 @@ import { Path, drawPath } from "./testnewArch.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 import { drawGrid } from "./grid.js"
-import { overlayCanvas, drawBrushCursor, updateCursor, overlayCtx } from "./overlayCanvas.js"
+import { overlayCanvas, drawBrushCursor, updateCursor, overlayCtx, setCursorVisible} from "./overlayCanvas.js"
 import { screenToWorld } from "./cameraFunction.js"
 
 
@@ -78,11 +78,22 @@ let selectedFont = "sans-serif"
 let pressure = "false"
 let needsRender = false
 
+
+canvas.addEventListener("pointerenter", () => {
+    setCursorVisible(true)
+})
+
+canvas.addEventListener("pointerleave", () => {
+    setCursorVisible(false)
+
+    scheduleRender()
+})
+
+
+
 document.querySelectorAll(".pressureBtn").forEach(button => {
     button.addEventListener("click", () => {
         pressure = button.dataset.pressure
-
-        console.log(pressure)
 
         document
             .querySelector(".pressureBtn.active")
@@ -102,9 +113,6 @@ document.querySelectorAll(".fontStyleBtn").forEach(button => {
             ?.classList.remove("active")
 
         button.classList.add("active")
-
-        console.log(selectedFont)
-
 
     })
 })
@@ -138,9 +146,7 @@ document.querySelectorAll(".layerToggleBtn").forEach(button => {
 
         if (doFunction === "top") {
             objects.splice(index, 1)
-            console.trace("Render", objects.length);
             objects.push(selectedShape)
-            console.trace("Render", objects.length);
 
         } else if (doFunction === "up") {
             if (index < objects.length - 1) {
@@ -156,9 +162,7 @@ document.querySelectorAll(".layerToggleBtn").forEach(button => {
 
         } else if (doFunction === "bottom") {
             objects.splice(index, 1);
-            console.trace("Render", objects.length);
             objects.unshift(selectedShape);
-            console.trace("Render", objects.length);
 
         }
 
@@ -283,8 +287,7 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
         if (fillColor === "transparent") {
             fillPickerPreview.style.removeProperty("background");
-            fillPickerPreview.classList.add("transparentColor");
-            console.log(fillPickerPreview.className);
+            fillPickerPreview.classList.add("transparentColor")
         } else {
             fillPickerPreview.classList.remove("transparentColor");
             fillPickerPreview.style.background = fillColor;
@@ -443,9 +446,6 @@ function mouseDown(e) {
 
 
         selectedShape = objects.find(shape => shape.selected)
-        console.log(selectedShape);
-        console.log(selectedShape?.selected);
-        console.log(selectedShape?.editMode);
 
         if (selectedShape?.editMode) {
             const handle = getClickedHandle(selectedShape, mouse.x, mouse.y)
@@ -464,7 +464,7 @@ function mouseDown(e) {
 
         const clickedShape = getClickedShape(mouse.x, mouse.y)
 
-        if (clickedShape.type === "text") {
+        if (clickedShape && clickedShape.type === "text") {
             if (!clickedShape.selected) {
                 clickedShape.selected = true;
                 selectedShape = clickedShape;
@@ -746,7 +746,6 @@ function mouseMove(e) {
 
             if (!(index < 0)) {
                 objects.splice(index, 1);
-                console.trace("Render", objects.length);
                 scheduleRender();
             }
 
@@ -798,7 +797,6 @@ function mouseMove(e) {
                 selectedShape.y2 = mouse.y;
             }
         } else {
-            console.log("resizing", resizeHandle, mouse.x, mouse.y);
             resizeShape(selectedShape, resizeHandle, mouse.x, mouse.y);
         }
 
@@ -1170,7 +1168,6 @@ function getClickedHandle(shape, mouseX, mouseY) {
 
 
 function resizeShape(shape, handle, mouseX, mouseY) {
-    console.log(shape.width, shape.height);
     switch (handle) {
         case "se":
             shape.width = mouseX - shape.x;
@@ -1260,7 +1257,7 @@ function mouseDoubleClick(e) {
         s.editMode = false
     })
 
-    if (shape) {
+    if (shape && tool === "pointer") {
         shape.selected = true
         shape.editMode = true
 
@@ -1446,7 +1443,6 @@ function deleteSelectedShape() {
     saveState()
 
     objects.splice(index, 1)
-    console.trace("Render", objects.length);
 
     selectedShape.editMode = false
     selectedShape = null
@@ -1475,7 +1471,6 @@ window.addEventListener("keydown", (e) => {
         newShape.y += 20;
 
         objects.push(newShape);
-        console.trace("Render", objects.length);
 
         selectedShape = newShape;
         editMode = true;

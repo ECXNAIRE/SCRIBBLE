@@ -1,6 +1,19 @@
 export const overlayCanvas = document.getElementById("overlayCanvas")
 export const overlayCtx = overlayCanvas.getContext("2d")
 let cursorNeedsUpdate = false;
+let cursorVisible = false
+
+
+
+
+export function setCursorVisible(value) {
+    cursorVisible = value;
+
+    if (!value) {
+        overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+    }
+}
+
 
 export function drawBrushCursor(tool, cursorX, cursorY, selectedStrokeWidth) {
 
@@ -10,28 +23,30 @@ export function drawBrushCursor(tool, cursorX, cursorY, selectedStrokeWidth) {
 
     overlayCtx.beginPath();
 
-    if (tool === "pencil") {
-        overlayCtx.arc(
-            cursorX,
-            cursorY,
-            selectedStrokeWidth / 2,
-            0,
-            Math.PI * 2
-        );
-    } else if(tool === "eraser") {
-        overlayCtx.arc(
-            cursorX,
-            cursorY,
-            4,
-            0,
-            Math.PI * 2
-        );
+    if (cursorVisible) {
+        if (tool === "pencil") {
+            overlayCtx.arc(
+                cursorX,
+                cursorY,
+                selectedStrokeWidth / 2,
+                0,
+                Math.PI * 2
+            );
+        } else if (tool === "eraser") {
+            overlayCtx.arc(
+                cursorX,
+                cursorY,
+                4,
+                0,
+                Math.PI * 2
+            );
+        }
+
+        overlayCtx.strokeStyle = "black";
+        overlayCtx.lineWidth = 1;
+
+        overlayCtx.stroke();
     }
-
-    overlayCtx.strokeStyle = "black";
-    overlayCtx.lineWidth = 1;
-
-    overlayCtx.stroke();
 }
 
 
