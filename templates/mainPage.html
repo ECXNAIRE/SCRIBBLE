@@ -253,7 +253,8 @@
         }
 
         #canvas,
-        #overlayCanvas {
+        #overlayCanvas,
+        #cacheCanvas {
             position: absolute;
             inset: 0;
             width: 100%;
@@ -261,7 +262,8 @@
             touch-action: none;
         }
 
-        #overlayCanvas {
+        #overlayCanvas,
+        #cacheCanvas {
             pointer-events: none;
         }
 
@@ -621,8 +623,11 @@
         <div id="canvasArea">
             <canvas id="canvas">
             </canvas>
+            <canvas id="cacheCanvas">
+            </canvas>
             <canvas id="overlayCanvas">
             </canvas>
+
 
             <div id="zoomDisplay">
                 <button id="zoomOutBtn">

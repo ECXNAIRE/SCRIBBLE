@@ -44,6 +44,8 @@ let tool = "pointer"
 const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
 const canvasArea = document.getElementById("canvasArea")
+const cacheCanvas = document.getElementById("cacheCanvas")
+const cacheCtx = cacheCanvas.getContext("2d")
 let objects = []
 let isDrawing = false
 let startX
@@ -123,7 +125,7 @@ gridToggleBtn.addEventListener("click", () => {
         gridToggleBtn.classList.remove("active");
     }
 
- scheduleRender();
+    scheduleRender();
 });
 
 document.querySelectorAll(".layerToggleBtn").forEach(button => {
@@ -297,12 +299,8 @@ function render() {
 
 
     objects.forEach(shape => {
-        drawShape(shape);
+        drawShape(shape, ctx);
     });
-
-    if (currentShape) {
-        drawShape(currentShape);
-    }
 
     if (gridToggle) {
         drawGrid(ctx, canvas, camera);
@@ -317,6 +315,8 @@ function resizeCanvas() {
     canvas.height = canvasArea.clientHeight;
     overlayCanvas.width = canvas.width;
     overlayCanvas.height = canvas.height;
+    cacheCanvas.width = canvas.width
+    cacheCanvas.height = canvas.height
 
     scheduleRender()
 }
@@ -445,7 +445,7 @@ function mouseDown(e) {
             if (!clickedShape.selected) {
                 clickedShape.selected = true;
                 selectedShape = clickedShape;
-               scheduleRender() ;
+                scheduleRender();
                 return;
             }
 
@@ -712,7 +712,7 @@ function mouseMove(e) {
 
     if (tool === "pencil" || tool === "eraser") {
         canvas.style.cursor = "none";
-       scheduleRender();
+        scheduleRender();
     }
 
     if (tool == "eraser" && isErasing) {
@@ -779,7 +779,7 @@ function mouseMove(e) {
             resizeShape(selectedShape, resizeHandle, mouse.x, mouse.y);
         }
 
-        scheduleRender();
+        renderCurrentShape();
         return;
     }
 
@@ -802,7 +802,7 @@ function mouseMove(e) {
             dragShape.y = mouse.y - dragOffsetY
         }
 
-        scheduleRender()
+        renderCurrentShape()
         return
     }
 
@@ -863,13 +863,13 @@ function mouseMove(e) {
             pressure: smoothPressure
         })
 
-        scheduleRender()
+        renderCurrentShape()
         return
     }
 
 
 
-    scheduleRender()
+    renderCurrentShape()
 }
 
 
@@ -910,7 +910,9 @@ function mouseUp(e) {
     isDrawing = false
 
     objects.push(currentShape)
-    console.trace("Render", objects.length);
+    cacheCtx.clearRect(
+        0, 0, cacheCanvas.width, cacheCanvas.height
+    )
     currentShape = null
 
     scheduleRender()
@@ -998,7 +1000,7 @@ function getClickedShape(mouseX, mouseY) {
 
 
 //gneeric function to draw shape 
-function drawShape(shape) {
+function drawShape(shape, ctx) {
     if (!shape) return;
     switch (shape.type) {
         case "rectangle":
@@ -1640,15 +1642,41 @@ function startTextEditing(shape) {
 
 
 
-
 function scheduleRender() {
-    if(needsRender) return
-    
+    if (needsRender) return
+
     needsRender = true
 
 
-    requestAnimationFrame(()=>{
+    requestAnimationFrame(() => {
         needsRender = false;
         render();
     });
+}
+
+
+
+function renderCurrentShape() {
+    cacheCtx.setTransform(
+        camera.zoom,
+        0,
+        0,
+        camera.zoom,
+        -camera.x * camera.zoom,
+        -camera.y * camera.zoom
+    )
+
+    cacheCtx.clearRect(
+        camera.x,
+        camera.y,
+        cacheCanvas.width / camera.zoom,
+        cacheCanvas.height / camera.zoom
+    );
+
+
+    if (currentShape) {
+        drawShape(currentShape, cacheCtx);
+    }
+
+    cacheCtx.setTransform(1, 0, 0, 1, 0, 0);
 }
