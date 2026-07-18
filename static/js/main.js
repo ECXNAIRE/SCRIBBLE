@@ -802,7 +802,7 @@ function mouseMove(e) {
             resizeShape(selectedShape, resizeHandle, mouse.x, mouse.y);
         }
 
-        renderCurrentShape();
+        scheduleRender();
         return;
     }
 
@@ -825,7 +825,7 @@ function mouseMove(e) {
             dragShape.y = mouse.y - dragOffsetY
         }
 
-        renderCurrentShape()
+        scheduleRender();   
         return
     }
 
@@ -1699,6 +1699,10 @@ function renderCurrentShape() {
 
     if (currentShape) {
         drawShape(currentShape, cacheCtx);
+    } else if (isDragging && dragShape) {
+        drawShape(dragShape, cacheCtx);
+    } else if (isResizing && selectedShape) {
+        drawShape(selectedShape, cacheCtx);
     }
 
     cacheCtx.setTransform(1, 0, 0, 1, 0, 0);
