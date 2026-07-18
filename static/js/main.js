@@ -3,7 +3,7 @@ import { Path, drawPath } from "./testnewArch.js"
 import { distanceToLine } from "./lineTools.js"
 import { selectionBox } from "./handle&selectionbox.js"
 import { drawGrid } from "./grid.js"
-import { overlayCanvas, drawBrushCursor, updateCursor, overlayCtx, setCursorVisible} from "./overlayCanvas.js"
+import { overlayCanvas, drawBrushCursor, updateCursor, overlayCtx, setCursorVisible } from "./overlayCanvas.js"
 import { screenToWorld } from "./cameraFunction.js"
 
 
@@ -767,8 +767,41 @@ function mouseMove(e) {
             ? getClickedHandle(hoveredShape, mouse.x, mouse.y)
             : null
 
-        if (hoveredHandle) {
-            canvas.style.cursor = "crosshair"
+        if (hoveredHandle || isResizing) {
+            switch (hoveredHandle) {
+                case "n":
+                    canvas.style.cursor = "n-resize";
+                    break;
+
+                case "ne":
+                    canvas.style.cursor = "ne-resize";
+                    break;
+
+                case "e":
+                    canvas.style.cursor = "e-resize";
+                    break;
+
+                case "se":
+                    canvas.style.cursor = "se-resize";
+                    break;
+
+                case "s":
+                    canvas.style.cursor = "s-resize";
+                    break;
+
+                case "sw":
+                    canvas.style.cursor = "sw-resize";
+                    break;
+
+                case "w":
+                    canvas.style.cursor = "w-resize";
+                    break;
+
+                case "nw":
+                    canvas.style.cursor = "nw-resize";
+                    break;
+
+            }
         } else if (hoveredShape) {
             canvas.style.cursor = "grab"
         } else (
@@ -776,10 +809,6 @@ function mouseMove(e) {
         )
     }
 
-
-    if (isResizing) {
-        canvas.style.cursor = "crosshair";
-    }
 
     if (isDrawing && tool !== 'pencil' && tool !== "hand") {
         canvas.style.cursor = "crosshair"
@@ -823,7 +852,7 @@ function mouseMove(e) {
             dragShape.y = mouse.y - dragOffsetY
         }
 
-        scheduleRender();   
+        scheduleRender();
         return
     }
 
