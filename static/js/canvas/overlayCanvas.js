@@ -1,5 +1,8 @@
+import { state } from "../state.js";
+
 export const overlayCanvas = document.getElementById("overlayCanvas")
 export const overlayCtx = overlayCanvas.getContext("2d")
+
 let cursorNeedsUpdate = false;
 let cursorVisible = false
 
@@ -15,7 +18,7 @@ export function setCursorVisible(value) {
 }
 
 
-export function drawBrushCursor(tool, cursorX, cursorY, selectedStrokeWidth) {
+export function drawBrushCursor(tool) {
 
     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height)
 
@@ -26,16 +29,16 @@ export function drawBrushCursor(tool, cursorX, cursorY, selectedStrokeWidth) {
     if (cursorVisible) {
         if (tool === "pencil") {
             overlayCtx.arc(
-                cursorX,
-                cursorY,
-                selectedStrokeWidth / 2,
+                state.cursorX,
+                state.cursorY,
+                state.selectedStrokeWidth / 2,
                 0,
                 Math.PI * 2
             );
         } else if (tool === "eraser") {
             overlayCtx.arc(
-                cursorX,
-                cursorY,
+                state.cursorX,
+                state.cursorY,
                 4,
                 0,
                 Math.PI * 2
@@ -50,13 +53,13 @@ export function drawBrushCursor(tool, cursorX, cursorY, selectedStrokeWidth) {
 }
 
 
-export function updateCursor(tool, cursorX, cursorY, selectedStrokeWidth) {
+export function updateCursor(tool) {
     if (cursorNeedsUpdate) return;
 
     cursorNeedsUpdate = true;
 
     requestAnimationFrame(() => {
-        drawBrushCursor(tool, cursorX, cursorY, selectedStrokeWidth);
+        drawBrushCursor(tool);
         cursorNeedsUpdate = false;
     });
 }

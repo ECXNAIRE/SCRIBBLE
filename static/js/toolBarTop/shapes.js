@@ -3,7 +3,14 @@ import { distanceToLine, lineSelectionBox } from "../helpers/lineTools.js";
 import { roughEllipse, roughLine, roughArc } from "../helpers/strokeEditor.js";
 import { drawHachure } from "../helpers/fillType.js";
 import { Path, drawPath } from "../helpers/pathArch.js";
+import { scheduleRender } from "../helpers/scheduleRender.js";
 import { state } from "../state.js";
+
+
+
+
+
+
 //RECTANGLE
 
 export function drawRectangle(shape, ctx, sloppiness) {
@@ -486,7 +493,7 @@ export function drawText(shape, ctx) {
 }
 
 
-export function startTextEditing(shape) {
+export function startTextEditing(shape, camera, ctx, render) {
 
     document.querySelectorAll("input.text-editor").forEach(i => i.remove());
 
@@ -541,7 +548,7 @@ export function startTextEditing(shape) {
         shape.height = shape.fontSize;
 
 
-        scheduleRender()
+        scheduleRender(render)
         updateWidth()
     })
 
@@ -553,7 +560,7 @@ export function startTextEditing(shape) {
 
 
         input.remove();
-        scheduleRender();
+        scheduleRender(render);
     });
 
 

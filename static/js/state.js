@@ -1,35 +1,33 @@
 export const state = {
-    isPanning :false,
-    panStartX : 0,
-    panStartY :0,
-    spacePressed: false,
+    isPanning :false, // done
+    panStartX : 0, // done
+    panStartY :0, //done
     tool: "pointer", //done
     objects: [], //done
     isDrawing: false, //done
     startX: 0, //done
-    startY: 0,
-    currentX: 0,
-    currentY: 0,
+    startY: 0, //done
+    currentX: 0, //done
+    currentY: 0, //done
     currentShape : null, //done
-    isResizing : false,
-    resizeHandle: null,
+    isResizing : false, //done
+    resizeHandle: null, //done
     selectedShape: null, //done
-    editMode : false,
-    isDragging : false,
-    dragOffsetX : 0,
-    dragOffsetY : 0,
-    dragShape : null,
-    selectedStroke : "stroke1",
-    selectedStrokeWidth :2,
-    selectedFillType : "solid",
-    shiftPressed : false,
-    isErasing :false,
-    edgeStyle : 0,
-    gridToggle : false,
-    cursorX : 0,
-    cursorY : 0,
-    selectedFont : "sans-serif",
-    pressure : "false"
+    isDragging : false, //done
+    dragOffsetX : 0, //done
+    dragOffsetY : 0, //done
+    dragShape : null, //done
+    selectedStroke : "stroke1", //done
+    selectedStrokeWidth :2, //done
+    selectedFillType : "solid", //done
+    shiftPressed : false, //done
+    isErasing :false, //done
+    edgeStyle : 0, //done
+    gridToggle : false, //dobe
+    cursorX : 0, //done
+    cursorY : 0, //done
+    selectedFont : "sans-serif", //done
+    pressure : "false" //done
 
 
 }

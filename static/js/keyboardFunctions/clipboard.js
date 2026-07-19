@@ -5,7 +5,6 @@ let clipboard = null
 
 
 export function setupClipbaord({
-    objects,
     render,
     getSelectedShape,
     setSelectedShape,
@@ -28,8 +27,8 @@ export function setupClipbaord({
             newShape.x += 20;
             newShape.y += 20;
 
-            objects.push(newShape);
-            objects.forEach(shape => {
+            state.objects.push(newShape);
+            state.objects.forEach(shape => {
                 shape.selected = false,
                 shape.editMode = false
             });

@@ -28,41 +28,6 @@ const camera = {
     zoom: 1
 }
 
-let isPanning = false
-let panStartX = 0;
-let panStartY = 0;
-let spacePressed = false;
-let tool = "pointer"
-let objects = []
-let isDrawing = false
-let startX
-let startY
-let currentX
-let currentY
-let currentShape
-let isResizing = false
-let resizeHandle
-let selectedShape
-let editMode = false
-let isDragging = false
-let dragOffsetX = 0
-let dragOffsetY = 0
-let dragShape = null
-let selectedStroke = "stroke1"
-let selectedStrokeWidth = 2
-let selectedFillType = "solid"
-let shiftPressed = false
-let isErasing = false
-let edgeStyle = 0
-let gridToggle = false
-let clipboard = null
-let cursorX = 0;
-let cursorY = 0;
-let selectedFont = "sans-serif"
-let pressure = "false"
-
-
-
 
 canvas.addEventListener("pointerenter", () => {
     setCursorVisible(true)
@@ -110,9 +75,9 @@ canvas.addEventListener("wheel", zoomCanvas, { passive: false });
 let gridToggleBtn = document.getElementById("gridToggleBtn")
 
 gridToggleBtn.addEventListener("click", () => {
-    gridToggle = !gridToggle;
+    state.gridToggle = !state.gridToggle;
 
-    if (gridToggle) {
+    if (state.gridToggle) {
         gridToggleBtn.classList.add("active");
     } else {
         gridToggleBtn.classList.remove("active");
@@ -159,7 +124,7 @@ document.querySelectorAll(".layerToggleBtn").forEach(button => {
 
 document.querySelectorAll(".edgeStyleBtn").forEach(button => {
     button.addEventListener("click", () => {
-        edgeStyle = Number(button.dataset.edgestyle)
+        state.edgeStyle = Number(button.dataset.edgestyle)
         document
             .querySelector(".edgeStyleBtn.active")
             ?.classList.remove("active")
@@ -167,7 +132,7 @@ document.querySelectorAll(".edgeStyleBtn").forEach(button => {
         button.classList.add("active")
 
         if (state.selectedShape) {
-            state.selectedShape.edgeStyle = edgeStyle
+            state.selectedShape.edgeStyle = state.edgeStyle
             scheduleRender(render)
         }
 
@@ -176,20 +141,20 @@ document.querySelectorAll(".edgeStyleBtn").forEach(button => {
 
 window.addEventListener("keydown", (e) => {
     if (e.key === "Shift") {
-        shiftPressed = true
+        state.shiftPressed = true
     }
 })
 
 window.addEventListener("keyup", (e) => {
     if (e.key === "Shift") {
-        shiftPressed = false
+        state.shiftPressed = false
     }
 })
 
 document.querySelectorAll(".fillTypeBtn").forEach(button => {
     button.addEventListener("click", () => {
 
-        selectedFillType = button.dataset.filltype
+        state.selectedFillType = button.dataset.filltype
         document
             .querySelector(".fillTypeBtn.active")
             ?.classList.remove("active")
@@ -197,7 +162,7 @@ document.querySelectorAll(".fillTypeBtn").forEach(button => {
         button.classList.add("active")
 
         if (state) {
-            state.selectedShape.fillType = selectedFillType
+            state.selectedShape.fillType = state.selectedFillType
             scheduleRender(render)
         }
 
@@ -336,10 +301,10 @@ window.addEventListener("resize", resizeCanvas);
 
 document.querySelectorAll(".strokeBtn").forEach(button => {
     button.addEventListener("click", () => {
-        selectedStroke = button.dataset.stroke
+        state.selectedStroke = button.dataset.stroke
 
         if (state.selectedShape) {
-            state.selectedShape.selectedStroke = selectedStroke
+            state.selectedShape.selectedStroke = state.selectedStroke
             scheduleRender(render)
         }
 
@@ -352,10 +317,10 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
 
 document.querySelectorAll(".strokeWidthBtn").forEach(button => {
     button.addEventListener("click", () => {
-        selectedStrokeWidth = Number(button.dataset.strokewidth)
+        state.selectedStrokeWidth = Number(button.dataset.strokewidth)
 
         if (state.selectedShape) {
-            state.selectedShape.strokeWidth = selectedStrokeWidth
+            state.selectedShape.strokeWidth = state.selectedStrokeWidth
             scheduleRender(render)
         }
 
@@ -387,7 +352,7 @@ document.querySelectorAll(".toolBarTopBtn").forEach(button => {
             return;
         }
 
-        tool = selectedTool
+        state.tool = selectedTool
 
         document
             .querySelector(".toolBarTopBtn.active")
@@ -401,7 +366,7 @@ document.querySelectorAll(".toolBarTopBtn").forEach(button => {
 
 
 //MOUSE HANDLING HERE
-canvas.addEventListener("pointerdown", mouseDown)
+canvas.addEventListener("pointerdown", (e) => mouseDown(e, canvas))
 canvas.addEventListener("pointerup", mouseUp)
 canvas.addEventListener("pointermove", mouseMove)
 canvas.addEventListener("dblclick", mouseDoubleClick)
@@ -519,14 +484,14 @@ function mouseDown(e, canvas) {
             height: 0,
             selected: false,
             editMode: false,
-            selectedStroke: selectedStroke,
+            selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth,
-            fillType: selectedFillType,
-            edgeStyle: edgeStyle
+            strokeWidth: state.selectedStrokeWidth,
+            fillType: state.selectedFillType,
+            edgeStyle: state.edgeStyle
         }
     }
 
@@ -541,13 +506,13 @@ function mouseDown(e, canvas) {
             height: 0,
             selected: false,
             editMode: false,
-            selectedStroke: selectedStroke,
+            selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth,
-            fillType: selectedFillType
+            strokeWidth: state.selectedStrokeWidth,
+            fillType: state.selectedFillType
         }
     }
 
@@ -562,13 +527,13 @@ function mouseDown(e, canvas) {
             y2: mouse.y,
             selected: false,
             editMode: false,
-            selectedStroke: selectedStroke,
+            selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth,
-            fillType: selectedFillType
+            strokeWidth: state.selectedStrokeWidth,
+            fillType: state.selectedFillType
         }
     }
 
@@ -583,13 +548,13 @@ function mouseDown(e, canvas) {
             height: 0,
             selected: false,
             editMode: false,
-            selectedStroke: selectedStroke,
+            selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth,
-            fillType: selectedFillType
+            strokeWidth: state.selectedStrokeWidth,
+            fillType: state.selectedFillType
         }
     }
 
@@ -604,13 +569,13 @@ function mouseDown(e, canvas) {
             height: 0,
             selected: false,
             editMode: false,
-            selectedStroke: selectedStroke,
+            selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth,
-            fillType: selectedFillType
+            strokeWidth: state.selectedStrokeWidth,
+            fillType: state.selectedFillType
         }
     }
 
@@ -625,13 +590,13 @@ function mouseDown(e, canvas) {
             y2: mouse.y,
             selected: false,
             editMode: false,
-            selectedStroke: selectedStroke,
+            selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
             strokeColor: strokeColor,
             fillColor: fillColor,
             fill: true,
-            strokeWidth: selectedStrokeWidth,
-            fillType: selectedFillType
+            strokeWidth: state.selectedStrokeWidth,
+            fillType: state.selectedFillType
         }
     }
 
@@ -642,11 +607,11 @@ function mouseDown(e, canvas) {
             type: "pencil",
             points: [{ x: mouse.x, y: mouse.y, pressure: e.pressure }],
             strokeColor: strokeColor,
-            selectedStroke: selectedStroke,
+            selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
-            strokeWidth: selectedStrokeWidth,
-            fillType: selectedFillType,
-            pressureToggle: pressure
+            strokeWidth: state.selectedStrokeWidth,
+            fillType: state.selectedFillType,
+            pressureToggle: state.pressure
         }
     }
 
@@ -659,8 +624,8 @@ function mouseDown(e, canvas) {
             y: mouse.y,
             text: "",
             fontSize: 24,
-            fontFamily: selectedFont,
-            strokeColor: strokeColor,
+            fontFamily: state.selectedFont,
+            strokeColor: state.strokeColor,
             selected: false,
             editMode: true
         }
@@ -669,7 +634,7 @@ function mouseDown(e, canvas) {
         state.selectedShape = state.currentShape;
         state.currentShape = null;
 
-        startTextEditing(state.selectedShape);
+        startTextEditing(state.selectedShape, camera, ctx, render);
         scheduleRender(render)
     }
 
@@ -699,17 +664,17 @@ function mouseMove(e) {
     }
 
     const mouse = screenToWorld(e.offsetX, e.offsetY, camera);
-    cursorX = e.offsetX;
-    cursorY = e.offsetY;
+    state.cursorX = e.offsetX;
+    state.cursorY = e.offsetY;
 
-    updateCursor(state.tool, cursorX, cursorY, selectedStrokeWidth)
+    updateCursor(state.tool, state.cursorX, state.cursorY, state.selectedStrokeWidth)
 
     if (state.tool === "pencil" || state.tool === "eraser") {
         canvas.style.cursor = "none";
         scheduleRender(render)
     }
 
-    if (state.tool == "eraser" && isErasing) {
+    if (state.tool == "eraser" && state.isErasing) {
         const hoveredShape = getClickedShape(mouse.x, mouse.y)
 
         if (hoveredShape) {
@@ -787,12 +752,12 @@ function mouseMove(e) {
 
     if (state.isResizing) {
         if (state.selectedShape.type === "line" || state.selectedShape.type === "arrow") {
-            if (resizeHandle === "start") {
+            if (state.resizeHandle === "start") {
                 state.selectedShape.x1 = mouse.x;
                 state.selectedShape.y1 = mouse.y;
             }
 
-            if (resizeHandle === "end") {
+            if (state.resizeHandle === "end") {
                 state.selectedShape.x2 = mouse.x;
                 state.selectedShape.y2 = mouse.y;
             }
@@ -806,28 +771,28 @@ function mouseMove(e) {
 
     if (state.isDragging) {
         canvas.style.cursor = "grabbing"
-        if (dragShape.type === "line" || dragShape.type === "arrow") {
-            const dx = mouse.x - dragOffsetX
-            const dy = mouse.y - dragOffsetY
+        if (state.dragShape.type === "line" || state.dragShape.type === "arrow") {
+            const dx = mouse.x - state.dragOffsetX
+            const dy = mouse.y - state.dragOffsetY
 
-            dragShape.x1 += dx
-            dragShape.y1 += dy
-            dragShape.x2 += dx
-            dragShape.y2 += dy
+           state.dragShape.x1 += dx
+            state.dragShape.y1 += dy
+            state.dragShape.x2 += dx
+            state.dragShape.y2 += dy
 
 
-            dragOffsetX = mouse.x
-            dragOffsetY = mouse.y
+            state.dragOffsetX = mouse.x
+            state.dragOffsetY = mouse.y
         } else {
-            dragShape.x = mouse.x - dragOffsetX
-            dragShape.y = mouse.y - dragOffsetY
+            state.dragShape.x = mouse.x - state.dragOffsetX
+            state.dragShape.y = mouse.y - state.dragOffsetY
         }
 
         scheduleRender(render)
         return
     }
 
-    if (state.tool !== "pointer" && state.tool !== "pencil" && state.tool !== "undo" && state.tool !== "redo" && state.tool !== "download" && state.tool !== "setting" && tool !== "eraser" && tool !== "hand") {
+    if (state.tool !== "pointer" && state.tool !== "pencil" && state.tool !== "undo" && state.tool !== "redo" && state.tool !== "download" && state.tool !== "setting" && state.tool !== "eraser" && state.tool !== "hand") {
         canvas.style.cursor = "crosshair"
     }
 
@@ -839,7 +804,7 @@ function mouseMove(e) {
         let width = mouse.x - state.startX
         let height = mouse.y - state.startY
 
-        if (shiftPressed) {
+        if (state.shiftPressed) {
             let size = Math.max(Math.abs(width), Math.abs(height))
 
             width = width < 0 ? -size : size
@@ -906,19 +871,19 @@ function mouseUp(e) {
 
     if (state.isResizing) {
         state.isResizing = false;
-        resizeHandle = null;
+        state.resizeHandle = null;
         canvas.style.cursor = "default";
         return
     }
 
     if (state.isDragging) {
         state.isDragging = false;
-        dragShape = null
+        state.dragShape = null
         return
     }
 
-    if (isErasing) {
-        isErasing = false
+    if (state.isErasing) {
+        state.isErasing = false
         return
     }
 
@@ -1219,13 +1184,13 @@ function resizeShape(shape, handle, mouseX, mouseY) {
         shape.x += shape.width;
         shape.width = Math.abs(shape.width)
 
-        switch (resizeHandle) {
-            case "e": resizeHandle = "w"; break
-            case "w": resizeHandle = "e"; break
-            case "ne": resizeHandle = "nw"; break
-            case "nw": resizeHandle = "ne"; break
-            case "se": resizeHandle = "sw"; break
-            case "sw": resizeHandle = "se"; break
+        switch (state.resizeHandle) {
+            case "e": state.resizeHandle = "w"; break
+            case "w": state.resizeHandle = "e"; break
+            case "ne": state.resizeHandle = "nw"; break
+            case "nw": state.resizeHandle = "ne"; break
+            case "se": state.resizeHandle = "sw"; break
+            case "sw": state.resizeHandle = "se"; break
         }
     }
 
@@ -1233,13 +1198,13 @@ function resizeShape(shape, handle, mouseX, mouseY) {
         shape.y += shape.height
         shape.height = Math.abs(shape.height)
 
-        switch (resizeHandle) {
-            case "n": resizeHandle = "s"; break
-            case "s": resizeHandle = "n"; break
-            case "ne": resizeHandle = "se"; break
-            case "se": resizeHandle = "ne"; break
-            case "nw": resizeHandle = "sw"; break
-            case "sw": resizeHandle = "nw"; break
+        switch (state.resizeHandle) {
+            case "n": state.resizeHandle = "s"; break
+            case "s": state.resizeHandle = "n"; break
+            case "ne": state.resizeHandle = "se"; break
+            case "se": state.resizeHandle = "ne"; break
+            case "nw": state.resizeHandle = "sw"; break
+            case "sw": state.resizeHandle = "nw"; break
         }
     }
 }
@@ -1264,7 +1229,7 @@ function mouseDoubleClick(e) {
 
         state.selectedShape = shape;
         if (shape.type === "text") {
-            startTextEditing(shape);
+            startTextEditing(shape, camera, ctx, render);
         }
 
     }
@@ -1476,8 +1441,8 @@ function renderCurrentShape() {
 
     if (state.currentShape) {
         drawShape(state.currentShape, cacheCtx);
-    } else if (state.isDragging && dragShape) {
-        drawShape(dragShape, cacheCtx);
+    } else if (state.isDragging && state.dragShape) {
+        drawShape(state.dragShape, cacheCtx);
     } else if (state.isResizing && state.selectedShape) {
         drawShape(state.selectedShape, cacheCtx);
     }
