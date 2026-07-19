@@ -1,32 +1,13 @@
-import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow, drawPencil, drawText } from "./shapes.js"
-import { Path, drawPath } from "./testnewArch.js"
-import { distanceToLine } from "./lineTools.js"
-import { selectionBox } from "./handle&selectionbox.js"
-import { drawGrid } from "./grid.js"
-import { overlayCanvas, drawBrushCursor, updateCursor, overlayCtx, setCursorVisible } from "./overlayCanvas.js"
-import { screenToWorld } from "./cameraFunction.js"
-
-
-const fillSection = document.getElementById("fillSection")
-const sloppinessSection = document.getElementById("sloppinessSection")
-const fillTypeSection = document.getElementById("fillTypeSection")
-const edgeSection = document.getElementById("edgeSection")
-const layerSection = document.getElementById("layerToggleSection")
-const strokeWidthSection = document.getElementById("strokeWidthSection")
-const fontSection = document.getElementById("fontSection")
-const strokeColorSection = document.getElementById("strokeColorSection")
-const pressureSelectionSection = document.getElementById("pressureSelectionSection")
-
-fillSection.style.display = "none"
-fillTypeSection.style.display = "none"
-edgeSection.style.display = "none"
-sloppinessSection.style.display = "none"
-layerSection.style.display = "none"
-strokeWidthSection.style.display = "none"
-fontSection.style.display = "none"
-strokeColorSection.style.display = "none"
-pressureSelectionSection.style.display = "none"
-
+import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow, drawPencil, drawText } from "./toolBarTop/shapes.js"
+import { Path, drawPath } from "./helpers/pathArch.js"
+import { distanceToLine } from "./helpers/lineTools.js"
+import { selectionBox } from "./helpers/handle&selectionbox.js"
+import { drawGrid } from "./canvas/grid.js"
+import { overlayCanvas, drawBrushCursor, updateCursor, overlayCtx, setCursorVisible } from "./canvas/overlayCanvas.js"
+import { screenToWorld } from "./canvas/cameraFunction.js"
+import { startTextEditing } from "./toolBarTop/shapes.js"
+import { updateToolBar } from "./leftToolBar/updateToolBar.js"
+import { setLayerOption } from "./leftToolBar/updateToolBar.js"
 
 
 
@@ -69,7 +50,6 @@ let selectedFillType = "solid"
 let shiftPressed = false
 let isErasing = false
 let edgeStyle = 0
-let layerOptionShow = false
 let gridToggle = false
 let clipboard = null
 let cursorX = 0;
@@ -492,7 +472,7 @@ function mouseDown(e) {
 
 
         if (clickedShape) {
-            layerOptionShow = true
+            setLayerOption(true)
             updateToolBar(clickedShape.type)
 
             if (clickedShape !== selectedShape) {
@@ -1381,81 +1361,6 @@ document.addEventListener("keydown", (e) => {
 
 
 
-function updateToolBar(tool) {
-
-    fillSection.style.display = "none"
-    fillTypeSection.style.display = "none"
-    edgeSection.style.display = "none"
-    sloppinessSection.style.display = "none"
-    layerSection.style.display = "none"
-    strokeWidthSection.style.display = "none"
-    fontSection.style.display = "none"
-    strokeColorSection.style.display = "none"
-    pressureSelectionSection.style.display = "none"
-
-    switch (tool) {
-        case "rectangle":
-            fillSection.style.display = "block"
-            fillTypeSection.style.display = "block"
-            edgeSection.style.display = "block"
-            sloppinessSection.style.display = "block"
-            if (layerOptionShow === true) {
-                layerSection.style.display = "block"
-            }
-            strokeWidthSection.style.display = "block"
-            strokeColorSection.style.display = "block"
-
-
-            break
-
-        case "triangle":
-        case "circle":
-        case "diamond":
-        case "ellipse":
-            fillSection.style.display = "block"
-            fillTypeSection.style.display = "block"
-            sloppinessSection.style.display = "block"
-            if (layerOptionShow === true) {
-                layerSection.style.display = "block"
-            }
-            strokeWidthSection.style.display = "block"
-            strokeColorSection.style.display = "block"
-
-            break
-
-
-        case "line":
-        case "arrow":
-            sloppinessSection.style.display = "block"
-            if (layerOptionShow === true) {
-                layerSection.style.display = "block"
-            }
-            strokeWidthSection.style.display = "block"
-            strokeColorSection.style.display = "block"
-
-
-
-            break
-
-
-        case "text":
-            strokeColorSection.style.display = "block"
-            fontSection.style.display = "block"
-            if (layerOptionShow === true) {
-                layerSection.style.display = "block"
-            }
-            break
-
-        case "pencil":
-            strokeColorSection.style.display = "block"
-            strokeWidthSection.style.display = "block"
-            pressureSelectionSection.style.display = "block"
-
-            break
-    }
-}
-
-
 
 window.addEventListener("keydown", (e) => {
     if (e.target.tagName === "INPUT") return;
@@ -1600,90 +1505,6 @@ zoomOutBtn.addEventListener("click", () => {
 
 
 
-
-function startTextEditing(shape) {
-
-    document.querySelectorAll("input.text-editor").forEach(i => i.remove());
-
-    const screenX = (shape.x - camera.x) * camera.zoom;
-    const screenY = (shape.y - camera.y) * camera.zoom;
-    const input = document.createElement("input")
-
-    input.type = "text"
-    input.className = "text-editor"
-    input.value = shape.text
-
-    input.style.position = "absolute"
-    input.style.left = `${screenX}px`;
-    input.style.top = `${screenY}px`;
-
-
-    input.style.fontSize = `${shape.fontSize * camera.zoom}px`
-    input.style.fontFamily = shape.fontFamily
-    input.style.color = shape.strokeColor
-
-
-    input.style.border = "none"
-    input.style.outline = "none"
-    input.style.background = "transparent"
-    input.style.padding = "0";
-    input.style.margin = "0";
-    input.style.height = `${(shape.fontSize + 8) * camera.zoom}px`;
-    input.style.width = "20px";
-
-
-    canvasArea.appendChild(input)
-
-    function updateWidth() {
-        ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
-        const width = ctx.measureText(input.value || " ").width;
-
-        input.style.width = `${Math.max(20, width + 8) * camera.zoom}px`;
-    }
-
-    updateWidth()
-    setTimeout(() => {
-        input.focus();
-    }, 500);
-
-
-    input.addEventListener('input', () => {
-
-        shape.text = input.value
-
-        ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
-        shape.width = ctx.measureText(shape.text || " ").width;
-        shape.height = shape.fontSize;
-
-
-        scheduleRender()
-        updateWidth()
-    })
-
-
-    input.addEventListener("blur", () => {
-
-        shape.text = input.value;
-        shape.editMode = false;
-
-
-        input.remove();
-        scheduleRender();
-    });
-
-
-
-    input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault()
-
-            shape.selected = false
-            selectedShape = null
-
-            input.blur()
-        }
-    })
-}
 
 
 

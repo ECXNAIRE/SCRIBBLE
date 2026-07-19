@@ -1,4 +1,4 @@
-import { roughLine, randomOffset } from "./roughness.js";
+import { roughLine, randomOffset } from "./strokeEditor.js";
 
 
 export function drawHachure(ctx, pathFunction, bounds, shape, sloppiness) {

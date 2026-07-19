@@ -1,8 +1,8 @@
-import { selectionBox } from "./handle&selectionbox.js";
-import { distanceToLine, lineSelectionBox } from "./lineTools.js";
-import { roughEllipse, roughLine, roughArc } from "./roughness.js";
-import { drawHachure } from "./fillType.js";
-import { Path, drawPath } from "./testnewArch.js";
+import { selectionBox } from "../helpers/handle&selectionbox.js";
+import { distanceToLine, lineSelectionBox } from "../helpers/lineTools.js";
+import { roughEllipse, roughLine, roughArc } from "../helpers/strokeEditor.js";
+import { drawHachure } from "../helpers/fillType.js";
+import { Path, drawPath } from "../helpers/pathArch.js";
 //RECTANGLE
 
 export function drawRectangle(shape, ctx, sloppiness) {
@@ -483,3 +483,89 @@ export function drawText(shape, ctx) {
 
     ctx.restore()
 }
+
+
+export function startTextEditing(shape) {
+
+    document.querySelectorAll("input.text-editor").forEach(i => i.remove());
+
+    const screenX = (shape.x - camera.x) * camera.zoom;
+    const screenY = (shape.y - camera.y) * camera.zoom;
+    const input = document.createElement("input")
+
+    input.type = "text"
+    input.className = "text-editor"
+    input.value = shape.text
+
+    input.style.position = "absolute"
+    input.style.left = `${screenX}px`;
+    input.style.top = `${screenY}px`;
+
+
+    input.style.fontSize = `${shape.fontSize * camera.zoom}px`
+    input.style.fontFamily = shape.fontFamily
+    input.style.color = shape.strokeColor
+
+
+    input.style.border = "none"
+    input.style.outline = "none"
+    input.style.background = "transparent"
+    input.style.padding = "0";
+    input.style.margin = "0";
+    input.style.height = `${(shape.fontSize + 8) * camera.zoom}px`;
+    input.style.width = "20px";
+
+
+    canvasArea.appendChild(input)
+
+    function updateWidth() {
+        ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
+        const width = ctx.measureText(input.value || " ").width;
+
+        input.style.width = `${Math.max(20, width + 8) * camera.zoom}px`;
+    }
+
+    updateWidth()
+    setTimeout(() => {
+        input.focus();
+    }, 500);
+
+
+    input.addEventListener('input', () => {
+
+        shape.text = input.value
+
+        ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
+        shape.width = ctx.measureText(shape.text || " ").width;
+        shape.height = shape.fontSize;
+
+
+        scheduleRender()
+        updateWidth()
+    })
+
+
+    input.addEventListener("blur", () => {
+
+        shape.text = input.value;
+        shape.editMode = false;
+
+
+        input.remove();
+        scheduleRender();
+    });
+
+
+
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault()
+
+            shape.selected = false
+            selectedShape = null
+
+            input.blur()
+        }
+    })
+}
+

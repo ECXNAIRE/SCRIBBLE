@@ -1,4 +1,4 @@
-import { roughLine, roughArc } from "./roughness.js";
+import { roughLine, roughArc } from "./strokeEditor.js";
 
 export class Path {
     constructor() {
