@@ -1,4 +1,5 @@
 import { scheduleRender } from "../helpers/scheduleRender.js";
+import { state } from "../state.js";
 
 let clipboard = null
 

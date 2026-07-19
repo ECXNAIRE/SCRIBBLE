@@ -3,6 +3,7 @@ import { distanceToLine, lineSelectionBox } from "../helpers/lineTools.js";
 import { roughEllipse, roughLine, roughArc } from "../helpers/strokeEditor.js";
 import { drawHachure } from "../helpers/fillType.js";
 import { Path, drawPath } from "../helpers/pathArch.js";
+import { state } from "../state.js";
 //RECTANGLE
 
 export function drawRectangle(shape, ctx, sloppiness) {
@@ -562,7 +563,7 @@ export function startTextEditing(shape) {
             e.preventDefault()
 
             shape.selected = false
-            selectedShape = null
+            state.selectedShape = null
 
             input.blur()
         }
