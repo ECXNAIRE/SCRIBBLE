@@ -27,7 +27,7 @@ export const state = {
     cursorX : 0, //done
     cursorY : 0, //done
     selectedFont : "sans-serif", //done
-    pressure : "false" //done
-
-
+    pressure : "false", //done
+    strokeColor: null,
+    fillColor: null
 }

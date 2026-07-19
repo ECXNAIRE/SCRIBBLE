@@ -161,7 +161,7 @@ document.querySelectorAll(".fillTypeBtn").forEach(button => {
 
         button.classList.add("active")
 
-        if (state) {
+        if (state.selectedShape) {
             state.selectedShape.fillType = state.selectedFillType
             scheduleRender(render)
         }
@@ -174,14 +174,14 @@ const fillPicker = document.getElementById("fillColorPicker")
 const fillPickerPreview = document.getElementById("fillPickerPreview");
 const strokePickerPreview = document.getElementById("strokePickerPreview");
 
-let strokeColor = strokePicker.value;
-let fillColor = fillPicker.value;
+state.strokeColor = strokePicker.value;
+state.fillColor = fillPicker.value;
 
 
 
 strokePicker.addEventListener("input", () => {
-    strokeColor = strokePicker.value
-    strokePickerPreview.style.background = strokeColor;
+    state.strokeColor = strokePicker.value
+    strokePickerPreview.style.background = state.strokeColor;
 
     document
         .querySelector(".strokeColorBtn.active")
@@ -190,16 +190,16 @@ strokePicker.addEventListener("input", () => {
 
 
 fillPicker.addEventListener("input", () => {
-    fillColor = fillPicker.value;
+    state.fillColor = fillPicker.value;
 
     fillPickerPreview.classList.remove("transparentColor");
-    fillPickerPreview.style.background = fillColor;
+    fillPickerPreview.style.background = state.fillColor;
 
     document.querySelector(".fillColorBtn.active")
         ?.classList.remove("active");
 
     if (state.selectedShape) {
-        state.selectedShape.fillColor = fillColor;
+        state.selectedShape.fillColor = state.fillColor;
         scheduleRender(render)
     }
 })
@@ -213,14 +213,14 @@ document.querySelectorAll(".strokeColorBtn").forEach(button => {
 
         button.classList.add("active");
 
-        strokeColor = button.dataset.color
+        state.strokeColor = button.dataset.color
 
         if (state.selectedShape) {
-            state.selectedShape.strokeColor = strokeColor;
+            state.selectedShape.strokeColor = state.strokeColor;
             scheduleRender(render)
         }
 
-        strokePickerPreview.style.background = strokeColor;
+        strokePickerPreview.style.background = state.strokeColor;
     })
 })
 
@@ -233,18 +233,18 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
         button.classList.add("active");
 
-        fillColor = button.dataset.color
+        state.fillColor = button.dataset.color
 
-        if (fillColor === "transparent") {
+        if (state.fillColor === "transparent") {
             fillPickerPreview.style.removeProperty("background");
             fillPickerPreview.classList.add("transparentColor")
         } else {
             fillPickerPreview.classList.remove("transparentColor");
-            fillPickerPreview.style.background = fillColor;
+            fillPickerPreview.style.background = state.fillColor;
         }
 
         if (state.selectedShape) {
-            state.selectedShape.fillColor = fillColor;
+            state.selectedShape.fillColor = state.fillColor;
             scheduleRender(render)
         }
     })
@@ -476,6 +476,10 @@ function mouseDown(e, canvas) {
     if (state.tool === "rectangle") {
         state.isDrawing = true
 
+
+        state.startX = mouse.x
+        state.startY = mouse.y
+
         state.currentShape = {
             type: "rectangle",
             x: mouse.x,
@@ -486,8 +490,8 @@ function mouseDown(e, canvas) {
             editMode: false,
             selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
-            strokeColor: strokeColor,
-            fillColor: fillColor,
+            strokeColor: state.strokeColor,
+            fillColor: state.fillColor,
             fill: true,
             strokeWidth: state.selectedStrokeWidth,
             fillType: state.selectedFillType,
@@ -497,6 +501,9 @@ function mouseDown(e, canvas) {
 
     if (state.tool === "circle") {
         state.isDrawing = true
+
+        state.startX = mouse.x
+        state.startY = mouse.y
 
         state.currentShape = {
             type: "ellipse",
@@ -508,8 +515,8 @@ function mouseDown(e, canvas) {
             editMode: false,
             selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
-            strokeColor: strokeColor,
-            fillColor: fillColor,
+            strokeColor: state.strokeColor,
+            fillColor: state.fillColor,
             fill: true,
             strokeWidth: state.selectedStrokeWidth,
             fillType: state.selectedFillType
@@ -518,6 +525,9 @@ function mouseDown(e, canvas) {
 
     if (state.tool === "line") {
         state.isDrawing = true
+
+        state.startX = mouse.x
+        state.startY = mouse.y
 
         state.currentShape = {
             type: "line",
@@ -529,8 +539,8 @@ function mouseDown(e, canvas) {
             editMode: false,
             selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
-            strokeColor: strokeColor,
-            fillColor: fillColor,
+            strokeColor: state.strokeColor,
+            fillColor: state.fillColor,
             fill: true,
             strokeWidth: state.selectedStrokeWidth,
             fillType: state.selectedFillType
@@ -539,6 +549,9 @@ function mouseDown(e, canvas) {
 
     if (state.tool === "diamond") {
         state.isDrawing = true
+
+        state.startX = mouse.x
+        state.startY = mouse.y
 
         state.currentShape = {
             type: "diamond",
@@ -550,8 +563,8 @@ function mouseDown(e, canvas) {
             editMode: false,
             selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
-            strokeColor: strokeColor,
-            fillColor: fillColor,
+            strokeColor: state.strokeColor,
+            fillColor: state.fillColor,
             fill: true,
             strokeWidth: state.selectedStrokeWidth,
             fillType: state.selectedFillType
@@ -560,6 +573,9 @@ function mouseDown(e, canvas) {
 
     if (state.tool === "triangle") {
         state.isDrawing = true
+
+        state.startX = mouse.x
+        state.startY = mouse.y
 
         state.currentShape = {
             type: "triangle",
@@ -571,8 +587,8 @@ function mouseDown(e, canvas) {
             editMode: false,
             selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
-            strokeColor: strokeColor,
-            fillColor: fillColor,
+            strokeColor: state.strokeColor,
+            fillColor: state.fillColor,
             fill: true,
             strokeWidth: state.selectedStrokeWidth,
             fillType: state.selectedFillType
@@ -581,6 +597,9 @@ function mouseDown(e, canvas) {
 
     if (state.tool === "arrow") {
         state.isDrawing = true
+
+        state.startX = mouse.x
+        state.startY = mouse.y
 
         state.currentShape = {
             type: "arrow",
@@ -592,8 +611,8 @@ function mouseDown(e, canvas) {
             editMode: false,
             selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
-            strokeColor: strokeColor,
-            fillColor: fillColor,
+            strokeColor: state.strokeColor,
+            fillColor: state.fillColor,
             fill: true,
             strokeWidth: state.selectedStrokeWidth,
             fillType: state.selectedFillType
@@ -603,10 +622,13 @@ function mouseDown(e, canvas) {
     if (state.tool === "pencil") {
         state.isDrawing = true
 
+        state.startX = mouse.x
+        state.startY = mouse.y
+
         state.currentShape = {
             type: "pencil",
             points: [{ x: mouse.x, y: mouse.y, pressure: e.pressure }],
-            strokeColor: strokeColor,
+            strokeColor: state.strokeColor,
             selectedStroke: state.selectedStroke,
             seed: Math.random() * 100000,
             strokeWidth: state.selectedStrokeWidth,
@@ -617,6 +639,9 @@ function mouseDown(e, canvas) {
 
 
     if (state.tool === "text") {
+
+        state.startX = mouse.x
+        state.startY = mouse.y
 
         state.currentShape = {
             type: "text",
