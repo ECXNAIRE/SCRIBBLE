@@ -11,6 +11,7 @@ import { setLayerOption } from "./leftToolBar/updateToolBar.js"
 import { undo, redo, saveState } from "./toolBarTop/history.js"
 import { scheduleRender } from "./helpers/scheduleRender.js"
 import { renderState } from "./helpers/renderstate.js"
+import { setupClipbaord } from "./keyboardFunctions/clipboard.js"
 
 
 const camera = {
@@ -1358,31 +1359,6 @@ function deleteSelectedShape() {
 
 //COPY PASTE SHAPE 
 
-window.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.key.toLowerCase() === "c") {
-        if (!selectedShape) return;
-        clipboard = structuredClone(selectedShape);
-
-
-    }
-})
-
-window.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.key.toLowerCase() === "v" && clipboard !== null) {
-        const newShape = structuredClone(clipboard);
-
-        newShape.x += 20;
-        newShape.y += 20;
-
-        objects.push(newShape);
-
-        selectedShape = newShape;
-        editMode = true;
-
-        scheduleRender(render)
-    }
-})
-
 
 
 window.addEventListener("keydown", (e) => {
@@ -1474,7 +1450,15 @@ zoomOutBtn.addEventListener("click", () => {
 })
 
 
+//CLIPBOARD
 
+setupClipbaord({
+    objects,
+    render,
+    getSelectedShape: () => selectedShape,
+    setSelectedShape: (shape) => selectedShape = shape,
+    setEditMode: (value) => editMode = value
+})
 
 
 
