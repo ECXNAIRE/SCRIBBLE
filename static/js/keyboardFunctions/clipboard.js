@@ -28,6 +28,13 @@ export function setupClipbaord({
             newShape.y += 20;
 
             objects.push(newShape);
+            objects.forEach(shape => {
+                shape.selected = false,
+                shape.editMode = false
+            });
+
+            newShape.selected = true
+            newShape.editMode = true
 
             setSelectedShape(newShape);
             setEditMode(true);

@@ -430,7 +430,7 @@ function mouseDown(e) {
         if (selectedShape?.editMode) {
             const handle = getClickedHandle(selectedShape, mouse.x, mouse.y)
             if (handle) {
-                saveState()
+                saveState(objects)
                 isResizing = true
 
                 resizeHandle = handle
@@ -1316,7 +1316,7 @@ function getClickedLineHandle(shape, mouseX, mouseY) {
 
 
 document.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.key.toLowerCase() === "z") {
+    if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === "z") {
         e.preventDefault();
         undo(objects, render);
     }
@@ -1324,7 +1324,7 @@ document.addEventListener("keydown", (e) => {
     if ((e.ctrlKey && e.key.toLowerCase() === "y") ||
         (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "z")) {
         e.preventDefault();
-        redo(objectsks);
+        redo(objects, render);
     }
 })
 
