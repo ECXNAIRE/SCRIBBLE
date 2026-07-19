@@ -8,7 +8,9 @@ import { screenToWorld } from "./canvas/cameraFunction.js"
 import { startTextEditing } from "./toolBarTop/shapes.js"
 import { updateToolBar } from "./leftToolBar/updateToolBar.js"
 import { setLayerOption } from "./leftToolBar/updateToolBar.js"
-
+import { undo, redo, saveState } from "./toolBarTop/history.js"
+import { scheduleRender } from "./helpers/scheduleRender.js"
+import { renderState } from "./helpers/renderstate.js"
 
 
 const camera = {
@@ -42,8 +44,6 @@ let isDragging = false
 let dragOffsetX = 0
 let dragOffsetY = 0
 let dragShape = null
-let undoStack = []
-let redoStack = []
 let selectedStroke = "stroke1"
 let selectedStrokeWidth = 2
 let selectedFillType = "solid"
@@ -56,7 +56,6 @@ let cursorX = 0;
 let cursorY = 0;
 let selectedFont = "sans-serif"
 let pressure = "false"
-let needsRender = false
 
 
 canvas.addEventListener("pointerenter", () => {
@@ -66,7 +65,7 @@ canvas.addEventListener("pointerenter", () => {
 canvas.addEventListener("pointerleave", () => {
     setCursorVisible(false)
 
-    scheduleRender()
+    scheduleRender(render)
 })
 
 
@@ -113,7 +112,7 @@ gridToggleBtn.addEventListener("click", () => {
         gridToggleBtn.classList.remove("active");
     }
 
-    scheduleRender();
+    scheduleRender(render)
 });
 
 document.querySelectorAll(".layerToggleBtn").forEach(button => {
@@ -147,7 +146,7 @@ document.querySelectorAll(".layerToggleBtn").forEach(button => {
         }
 
 
-        scheduleRender()
+        scheduleRender(render)
     })
 })
 
@@ -163,7 +162,7 @@ document.querySelectorAll(".edgeStyleBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.edgeStyle = edgeStyle
-            scheduleRender()
+            scheduleRender(render)
         }
 
     })
@@ -193,7 +192,7 @@ document.querySelectorAll(".fillTypeBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.fillType = selectedFillType
-            scheduleRender()
+            scheduleRender(render)
         }
 
     })
@@ -230,7 +229,7 @@ fillPicker.addEventListener("input", () => {
 
     if (selectedShape) {
         selectedShape.fillColor = fillColor;
-        scheduleRender();
+        scheduleRender(render)
     }
 })
 
@@ -247,7 +246,7 @@ document.querySelectorAll(".strokeColorBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.strokeColor = strokeColor;
-            scheduleRender()
+            scheduleRender(render)
         }
 
         strokePickerPreview.style.background = strokeColor;
@@ -275,7 +274,7 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.fillColor = fillColor;
-            scheduleRender();
+            scheduleRender(render)
         }
     })
 })
@@ -324,7 +323,7 @@ function resizeCanvas() {
     cacheCanvas.width = canvas.width
     cacheCanvas.height = canvas.height
 
-    scheduleRender()
+    scheduleRender(render)
 }
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
@@ -335,7 +334,7 @@ document.querySelectorAll(".strokeBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.selectedStroke = selectedStroke
-            scheduleRender()
+            scheduleRender(render)
         }
 
         document.querySelector(".strokeBtn.active")
@@ -351,7 +350,7 @@ document.querySelectorAll(".strokeWidthBtn").forEach(button => {
 
         if (selectedShape) {
             selectedShape.strokeWidth = selectedStrokeWidth
-            scheduleRender()
+            scheduleRender(render)
         }
 
 
@@ -373,12 +372,12 @@ document.querySelectorAll(".toolBarTopBtn").forEach(button => {
 
 
         if (selectedTool === "undo") {
-            undo();
+            undo(objects, render);
             return;
         }
 
         if (selectedTool === "redo") {
-            redo();
+            redo(objects, render);
             return;
         }
 
@@ -416,7 +415,7 @@ function mouseDown(e) {
     canvas.setPointerCapture(e.pointerId);
 
     if (tool === "eraser") {
-        saveState()
+        saveState(objects)
         isErasing = true
     }
 
@@ -448,14 +447,14 @@ function mouseDown(e) {
             if (!clickedShape.selected) {
                 clickedShape.selected = true;
                 selectedShape = clickedShape;
-                scheduleRender();
+                scheduleRender(render)
                 return;
             }
 
         }
 
         if (clickedShape && !isResizing) {
-            saveState()
+            saveState(objects)
             isDragging = true
             dragShape = clickedShape
 
@@ -497,7 +496,7 @@ function mouseDown(e) {
             selectedShape = null
         }
 
-        scheduleRender()
+        scheduleRender(render)
     }
 
 
@@ -679,7 +678,7 @@ function mouseDown(e) {
         currentShape = null;
 
         startTextEditing(selectedShape);
-        scheduleRender()
+        scheduleRender(render)
     }
 
 }
@@ -703,7 +702,7 @@ function mouseMove(e) {
         panStartX = e.offsetX;
         panStartY = e.offsetY;
 
-        scheduleRender()
+        scheduleRender(render)
         return;
     }
 
@@ -715,7 +714,7 @@ function mouseMove(e) {
 
     if (tool === "pencil" || tool === "eraser") {
         canvas.style.cursor = "none";
-        scheduleRender();
+        scheduleRender(render)
     }
 
     if (tool == "eraser" && isErasing) {
@@ -726,7 +725,7 @@ function mouseMove(e) {
 
             if (!(index < 0)) {
                 objects.splice(index, 1);
-                scheduleRender();
+                scheduleRender(render)
             }
 
         }
@@ -809,7 +808,7 @@ function mouseMove(e) {
             resizeShape(selectedShape, resizeHandle, mouse.x, mouse.y);
         }
 
-        scheduleRender();
+        scheduleRender(render)
         return;
     }
 
@@ -832,7 +831,7 @@ function mouseMove(e) {
             dragShape.y = mouse.y - dragOffsetY
         }
 
-        scheduleRender();
+        scheduleRender(render)
         return
     }
 
@@ -935,7 +934,7 @@ function mouseUp(e) {
 
     if (!isDrawing) return
 
-    saveState()
+    saveState(objects)
 
     isDrawing = false
 
@@ -945,7 +944,7 @@ function mouseUp(e) {
     )
     currentShape = null
 
-    scheduleRender()
+    scheduleRender(render)
 }
 
 
@@ -1279,7 +1278,7 @@ function mouseDoubleClick(e) {
     }
 
 
-    scheduleRender()
+    scheduleRender(render)
 }
 
 
@@ -1312,48 +1311,19 @@ function getClickedLineHandle(shape, mouseX, mouseY) {
 
 
 
-function saveState() {
-    undoStack.push(structuredClone(objects))
 
-    if (undoStack.length > 100) {
-        undoStack.shift()
-    }
-
-    redoStack = []
-}
-
-
-function undo() {
-    if (undoStack.length === 0) return
-
-    redoStack.push(structuredClone(objects))
-
-    objects = undoStack.pop()
-
-    scheduleRender()
-}
-
-
-function redo() {
-    if (redoStack.length === 0) return
-    undoStack.push(structuredClone(objects))
-
-    objects = redoStack.pop()
-
-    scheduleRender()
-}
 
 
 document.addEventListener("keydown", (e) => {
     if (e.ctrlKey && e.key.toLowerCase() === "z") {
         e.preventDefault();
-        undo();
+        undo(objects, render);
     }
 
     if ((e.ctrlKey && e.key.toLowerCase() === "y") ||
         (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "z")) {
         e.preventDefault();
-        redo();
+        redo(objectsks);
     }
 })
 
@@ -1374,7 +1344,7 @@ function deleteSelectedShape() {
 
     if (index < 0) return
 
-    saveState()
+    saveState(objects)
 
     objects.splice(index, 1)
 
@@ -1382,7 +1352,7 @@ function deleteSelectedShape() {
     selectedShape = null
 
 
-    scheduleRender()
+    scheduleRender(render)
 }
 
 
@@ -1409,7 +1379,7 @@ window.addEventListener("keydown", (e) => {
         selectedShape = newShape;
         editMode = true;
 
-        scheduleRender();
+        scheduleRender(render)
     }
 })
 
@@ -1446,8 +1416,8 @@ window.addEventListener("keydown", (e) => {
             return
     }
 
-    saveState()
-    scheduleRender()
+    saveState(objects)
+    scheduleRender(render)
 })
 
 
@@ -1477,7 +1447,7 @@ function zoomCanvas(e) {
     camera.y = worldY - mouseY / camera.zoom;
 
 
-    scheduleRender();
+    scheduleRender(render)
 
 }
 
@@ -1491,7 +1461,7 @@ zoomInBtn.addEventListener("click", () => {
     camera.zoom = Math.min(camera.zoom, 10)
 
     updateZoomDisplay()
-    scheduleRender()
+    scheduleRender(render)
 })
 
 
@@ -1500,7 +1470,7 @@ zoomOutBtn.addEventListener("click", () => {
     camera.zoom = Math.max(camera.zoom, 0.1)
 
     updateZoomDisplay()
-    scheduleRender()
+    scheduleRender(render)
 })
 
 
@@ -1509,18 +1479,6 @@ zoomOutBtn.addEventListener("click", () => {
 
 
 
-
-function scheduleRender() {
-    if (needsRender) return
-
-    needsRender = true
-
-
-    requestAnimationFrame(() => {
-        needsRender = false;
-        render();
-    });
-}
 
 
 
