@@ -17,7 +17,7 @@
         }
 
         body {
-            background: #F8F8F4;
+            background: #F2F5FC;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -46,7 +46,7 @@
         #topAreaLeft img {
             width: 400px;
             height: auto;
-            border: 2px solid black
+            border: 2px solid rgba(0, 0, 0, 0)
         }
 
         #midAreaLeft {
@@ -54,40 +54,157 @@
             width: 380px;
             text-align: center;
             opacity: 0.7;
-            border: 2px solid black;
+            border: 2px solid rgba(0, 0, 0, 0);
         }
 
         #bottomAreaLeft {
-            border: 2px solid black;
-            width:380px;
-            height:auto;
-            margin-top: 5px;
+            border: 2px solid rgba(0, 0, 0, 0);
+            width: 380px;
+            height: auto;
+            margin-top: 20px;
             display: flex;
+            gap: 15px
         }
 
         .leftButton {
             flex: 1;
             height: 50px;
-            font-size: 20px
+            font-size: 20px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            border: 0.5px solid #E6E6E1;
+            transition: all 0.5s ease;
         }
 
+        .leftButton:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        #startDrawing {
+            background-color: #4F7DFF;
+            color: white;
+        }
+
+        #exploreFeatures {
+            background: white;
+            color: black
+        }
 
         #headerArea {
             height: 80px;
-            border: 2px solid black;
+            border-bottom: 2px solid #E6E6E1;
             width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px
+        }
+
+        #tagline {
+            width: 170px;
+            height: 30px;
+            color: #235cf7;
+            background: #b5d6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 18px;
+            margin-left: 35px;
+        }
+
+        #logoArea {
+            flex: 1;
+            border: 2px solid rgba(0, 0, 0, 0);
+            display: flex;
+            align-items: center;
+        }
+
+        #logoArea img {
+            width: 200px;
+            height: auto;
+            margin-left: 50px;
+        }
+
+        #navArea {
+            flex: 1;
+            border: 2px solid rgba(0, 0, 0, 0);
+        }
+
+        #buttonArea {
+            flex: 1;
+            border: 2px solid rgba(0, 0, 0, 0);
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 20px
+        }
+
+        #github {
+            background: transparent;
+            border: 2px solid rgba(0, 0, 0, 0)
+        }
+
+        #launchBtn {
+            background: #4F7DFF;
+            height: 40px;
+            widtH: 150px;
+            font-size: 20px;
             border-radius: 12px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            border: 0.5px solid #E6E6E1;
+            color: white;
+            transition: all 0.5s ease;
+        }
+
+        #launchBtn:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        #github img {
+            width: 64px;
+            height: 64px
         }
     </style>
 </head>
 
 <body>
     <header id="headerArea">
+        <div id="logoArea">
+            <img src="../static/assets/scribble.png">
+        </div>
+        <div id="navArea">
+
+        </div>
+
+        <div id="buttonArea">
+            <button id="github">
+                <img src="../static/assets/github.png">
+            </button>
+            <button id="launchBtn"><span>Launch App</span><span>↗</span></button>
+        </div>
+
 
     </header>
 
     <div id="mainArea">
         <div id="leftArea">
+            <div id="tagline">
+                ☆ Free • Fast • Private
+            </div>
             <div id="topAreaLeft">
                 <img src="../static/assets/picleft.png">
             </div>
@@ -96,7 +213,7 @@
                 creators, thinkers and doers
             </div>
             <div id="bottomAreaLeft">
-                <button id="startDrawing" class="leftButton">Start Drawing</button>
+                <button id="startDrawing" class="leftButton"><span>Start Drawing</span><span>➝</span></button>
                 <button id="exploreFeatures" class="leftButton">Explore Features</button>
             </div>
         </div>
