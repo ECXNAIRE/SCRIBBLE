@@ -6,6 +6,7 @@ import { Path, drawPath } from "../helpers/pathArch.js";
 import { scheduleRender } from "../helpers/scheduleRender.js";
 import { state } from "../state.js";
 import { canvasArea } from "../canvas/canvas.js";
+import { textSelectionBox } from "../pointer/selection.js";
 
 
 
@@ -486,7 +487,7 @@ export function drawText(shape, ctx) {
     ctx.fillText(shape.text, shape.x, shape.y)
 
     if (shape.selected) {
-        selectionBox(shape, ctx)
+        textSelectionBox(shape, ctx)
     }
 
     ctx.restore()
