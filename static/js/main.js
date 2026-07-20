@@ -1,9 +1,9 @@
-import { drawEllipse, drawRectangle, drawLine, drawDiamond, drawTriangle, drawArrow, drawPencil, drawText } from "./toolBarTop/shapes.js"
+
 import { Path, drawPath } from "./helpers/pathArch.js"
 import { distanceToLine } from "./helpers/lineTools.js"
-import { selectionBox } from "./helpers/handle&selectionbox.js"
+import { selectionBox } from "./pointer/selection.js"
 import { drawGrid } from "./canvas/grid.js"
-import { overlayCanvas, drawBrushCursor, updateCursor, overlayCtx, setCursorVisible } from "./canvas/overlayCanvas.js"
+import { drawBrushCursor, updateCursor, setCursorVisible } from "./canvas/overlayCanvasFn.js"
 import { screenToWorld } from "./canvas/cameraFunction.js"
 import { startTextEditing } from "./toolBarTop/shapes.js"
 import { updateToolBar } from "./leftToolBar/updateToolBar.js"
@@ -13,17 +13,18 @@ import { scheduleRender } from "./helpers/scheduleRender.js"
 import { renderState } from "./helpers/renderstate.js"
 import { setupClipbaord } from "./keyboardFunctions/clipboard.js"
 import { state } from "./state.js"
-import { getClickedShape, getClickedHandle } from "./helpers/hitTest.js"
+import { getClickedShape, getClickedHandle } from "./pointer/hitTest.js"
 import { mouseDown } from "./events/pointerDown.js"
 import { camera } from "./canvas/cameraFunction.js"
+import { resizeShape } from "./pointer/resize.js"
+import { drawShape } from "./canvas/drawShapes.js"
+import { canvas, overlayCanvas, ctx, overlayCtx, cacheCanvas, cacheCtx, resizeCanvas } from "./canvas/canvas.js"
 
 
-const canvas = document.getElementById("canvas")
-const ctx = canvas.getContext("2d")
-const canvasArea = document.getElementById("canvasArea")
-const cacheCanvas = document.getElementById("cacheCanvas")
-const cacheCtx = cacheCanvas.getContext("2d")
 
+
+window.addEventListener("resize", resizeCanvas(render));
+resizeCanvas(render);
 
 
 canvas.addEventListener("pointerenter", () => {
@@ -283,18 +284,7 @@ function render() {
 }
 
 // RESIXZING CANVAS
-function resizeCanvas() {
-    canvas.width = canvasArea.clientWidth;
-    canvas.height = canvasArea.clientHeight;
-    overlayCanvas.width = canvas.width;
-    overlayCanvas.height = canvas.height;
-    cacheCanvas.width = canvas.width
-    cacheCanvas.height = canvas.height
 
-    scheduleRender(render)
-}
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
 
 document.querySelectorAll(".strokeBtn").forEach(button => {
     button.addEventListener("click", () => {
@@ -365,13 +355,13 @@ document.querySelectorAll(".toolBarTopBtn").forEach(button => {
 //MOUSE HANDLING HERE
 canvas.addEventListener("pointerdown", (e) => mouseDown(e, canvas, render))
 canvas.addEventListener("pointerup", mouseUp)
-canvas.addEventListener("pointermove", mouseMove)
+canvas.addEventListener("pointermove", (e) => mouseMove(e, canvas, render))
 canvas.addEventListener("dblclick", mouseDoubleClick)
 canvas.addEventListener("pointercancel", mouseUp);
 
 
 
-function mouseMove(e) {
+function mouseMove(e, canvas, render) {
     if (state.isPanning) {
         canvas.style.cursor = "grabbing";
 
@@ -645,171 +635,6 @@ function mouseUp(e) {
 
 
 //gneeric function to draw shape 
-function drawShape(shape, ctx) {
-    if (!shape) return;
-    switch (shape.type) {
-        case "rectangle":
-            if (shape.selectedStroke === "stroke1") {
-                drawRectangle(shape, ctx, 0)
-            } else if (shape.selectedStroke === "stroke2") {
-                drawRectangle(shape, ctx, 1.5)
-            } else if (shape.selectedStroke === "stroke3") {
-                drawRectangle(shape, ctx, 3)
-            }
-            break
-
-        case "ellipse":
-            if (shape.selectedStroke === "stroke1") {
-                drawEllipse(shape, ctx, 0)
-            } else if (shape.selectedStroke === "stroke2") {
-                drawEllipse(shape, ctx, 1.5)
-            } else if (shape.selectedStroke === "stroke3") {
-                drawEllipse(shape, ctx, 3)
-            }
-            break
-
-        case "line":
-            if (shape.selectedStroke === "stroke1") {
-                drawLine(shape, ctx, 0)
-            } else if (shape.selectedStroke === "stroke2") {
-                drawLine(shape, ctx, 1.5)
-            } else if (shape.selectedStroke === "stroke3") {
-                drawLine(shape, ctx, 3)
-            }
-            break
-
-        case "diamond":
-            if (shape.selectedStroke === "stroke1") {
-                drawDiamond(shape, ctx, 0)
-            } else if (shape.selectedStroke === "stroke2") {
-                drawDiamond(shape, ctx, 1.5)
-            } else if (shape.selectedStroke === "stroke3") {
-                drawDiamond(shape, ctx, 3)
-            }
-            break
-
-        case "triangle":
-            if (shape.selectedStroke === "stroke1") {
-                drawTriangle(shape, ctx, 0)
-            } else if (shape.selectedStroke === "stroke2") {
-                drawTriangle(shape, ctx, 1.5)
-            } else if (shape.selectedStroke === "stroke3") {
-                drawTriangle(shape, ctx, 3)
-            }
-            break
-
-        case "arrow":
-            if (shape.selectedStroke === "stroke1") {
-                drawArrow(shape, ctx, 0)
-            } else if (shape.selectedStroke === "stroke2") {
-                drawArrow(shape, ctx, 1.5)
-            } else if (shape.selectedStroke === "stroke3") {
-                drawArrow(shape, ctx, 3)
-            }
-            break
-
-        case "pencil":
-            if (shape.selectedStroke === "stroke1") {
-                drawPencil(shape, ctx, 0)
-            } else if (shape.selectedStroke === "stroke2") {
-                drawPencil(shape, ctx, 0)
-            } else if (shape.selectedStroke === "stroke3") {
-                drawPencil(shape, ctx, 0)
-            }
-            break
-
-
-        case "text":
-            if (!shape.editMode) {
-                drawText(shape, ctx)
-            }
-    }
-
-
-}
-
-
-
-
-function resizeShape(shape, handle, mouseX, mouseY) {
-    switch (handle) {
-        case "se":
-            shape.width = mouseX - shape.x;
-            shape.height = mouseY - shape.y
-            break
-
-        case "e":
-            shape.width = mouseX - shape.x
-            break
-
-        case "s":
-            shape.height = mouseY - shape.y
-            break
-
-        case "nw":
-            shape.width += shape.x - mouseX
-            shape.height += shape.y - mouseY
-
-            shape.x = mouseX
-            shape.y = mouseY
-            break
-
-        case "n":
-            shape.height += shape.y - mouseY
-            shape.y = mouseY
-            break
-
-        case "w":
-            shape.width += shape.x - mouseX
-            shape.x = mouseX
-            break
-
-        case "ne":
-            shape.width = mouseX - shape.x
-            shape.height += shape.y - mouseY
-            shape.y = mouseY
-            break
-
-        case "sw":
-            shape.width += shape.x - mouseX;
-            shape.x = mouseX;
-
-            shape.height = mouseY - shape.y;
-            break;
-    }
-
-
-    if (shape.width < 0) {
-        shape.x += shape.width;
-        shape.width = Math.abs(shape.width)
-
-        switch (state.resizeHandle) {
-            case "e": state.resizeHandle = "w"; break
-            case "w": state.resizeHandle = "e"; break
-            case "ne": state.resizeHandle = "nw"; break
-            case "nw": state.resizeHandle = "ne"; break
-            case "se": state.resizeHandle = "sw"; break
-            case "sw": state.resizeHandle = "se"; break
-        }
-    }
-
-    if (shape.height < 0) {
-        shape.y += shape.height
-        shape.height = Math.abs(shape.height)
-
-        switch (state.resizeHandle) {
-            case "n": state.resizeHandle = "s"; break
-            case "s": state.resizeHandle = "n"; break
-            case "ne": state.resizeHandle = "se"; break
-            case "se": state.resizeHandle = "ne"; break
-            case "nw": state.resizeHandle = "sw"; break
-            case "sw": state.resizeHandle = "nw"; break
-        }
-    }
-}
-
-
-
 
 
 function mouseDoubleClick(e) {

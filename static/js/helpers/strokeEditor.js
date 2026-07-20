@@ -1,5 +1,3 @@
-
-
 //HELPER FUNCTION 
 export function randomOffset(seed, amount) {
     const r = seededRandom(seed);

@@ -1,4 +1,4 @@
-import { drawHandle } from "./handle&selectionbox.js"
+import { drawHandle } from "../pointer/selection.js"
 
 export function distanceToLine(px, py, x1, y1, x2, y2) {
     const a = px - x1

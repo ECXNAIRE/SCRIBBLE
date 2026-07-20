@@ -1,4 +1,4 @@
-import { selectionBox } from "../helpers/handle&selectionbox.js";
+import { selectionBox } from "../pointer/selection.js";
 import { distanceToLine, lineSelectionBox } from "../helpers/lineTools.js";
 import { roughEllipse, roughLine, roughArc } from "../helpers/strokeEditor.js";
 import { drawHachure } from "../helpers/fillType.js";

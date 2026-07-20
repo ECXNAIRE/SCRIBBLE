@@ -1,6 +1,6 @@
 import { state } from "../state.js";
 import { saveState } from "../toolBarTop/history.js";
-import { getClickedShape, getClickedHandle } from "../helpers/hitTest.js";
+import { getClickedShape, getClickedHandle } from "../pointer/hitTest.js";
 import { scheduleRender } from "../helpers/scheduleRender.js";
 import { screenToWorld, camera } from "../canvas/cameraFunction.js";
 import { setLayerOption, updateToolBar } from "../leftToolBar/updateToolBar.js";

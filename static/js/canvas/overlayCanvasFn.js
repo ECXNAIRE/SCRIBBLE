@@ -1,7 +1,7 @@
 import { state } from "../state.js";
+import { overlayCanvas, overlayCtx } from "./canvas.js";
 
-export const overlayCanvas = document.getElementById("overlayCanvas")
-export const overlayCtx = overlayCanvas.getContext("2d")
+
 
 let cursorNeedsUpdate = false;
 let cursorVisible = false
