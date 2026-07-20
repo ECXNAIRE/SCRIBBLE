@@ -29,5 +29,6 @@ export const state = {
     selectedFont : "sans-serif", //done
     pressure : "false", //done
     strokeColor: null,
-    fillColor: null
+    fillColor: null,
+    activeTextEditor: null
 }

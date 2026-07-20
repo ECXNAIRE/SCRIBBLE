@@ -367,14 +367,14 @@ canvas.addEventListener("pointercancel", mouseUp);
 
 
 
-
-
 //gneeric function to draw shape 
 
 
 function mouseDoubleClick(e) {
     const mouse = screenToWorld(e.offsetX, e.offsetY, camera);
     const shape = getClickedShape(mouse.x, mouse.y)
+
+    if(shape.type !== "text") return
 
     state.objects.forEach(s => {
         s.selected = false

@@ -4,6 +4,11 @@ app = Flask(__name__)
 
 @app.route('/') 
 def mainPage():
+    return render_template("landingPage.html")
+
+
+@app.route('/main')
+def drawingPage():
     return render_template("mainPage.html")
 
 

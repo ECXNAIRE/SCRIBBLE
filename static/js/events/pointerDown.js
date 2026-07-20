@@ -4,8 +4,8 @@ import { getClickedShape, getClickedHandle } from "../pointer/hitTest.js";
 import { scheduleRender } from "../helpers/scheduleRender.js";
 import { screenToWorld, camera } from "../canvas/cameraFunction.js";
 import { setLayerOption, updateToolBar } from "../leftToolBar/updateToolBar.js";
-import { canvas } from "../canvas/canvas.js";
-
+import { canvas, ctx } from "../canvas/canvas.js";
+import { startTextEditing } from "../toolBarTop/shapes.js";
 
 
 
@@ -29,12 +29,7 @@ export function mouseDown(e, render) {
 
     if (state.tool === "pointer") {
 
-
-
-
-        state.selectedShape = state.objects.find(shape => shape.selected)
-
-        if (state.selectedShape?.editMode) {
+        if (state.selectedShape?.selected) {
             const handle = getClickedHandle(state.selectedShape, mouse.x, mouse.y)
             if (handle) {
                 saveState(state.objects)
@@ -51,12 +46,17 @@ export function mouseDown(e, render) {
 
         const clickedShape = getClickedShape(mouse.x, mouse.y)
 
+
+
         if (clickedShape && clickedShape.type === "text") {
+            state.objects.forEach(shape => {
+                shape.selected = false,
+                    shape.editMode = false
+            })
             if (!clickedShape.selected) {
                 clickedShape.selected = true;
                 state.selectedShape = clickedShape;
                 scheduleRender(render)
-                return;
             }
 
         }

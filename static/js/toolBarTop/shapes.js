@@ -5,7 +5,7 @@ import { drawHachure } from "../helpers/fillType.js";
 import { Path, drawPath } from "../helpers/pathArch.js";
 import { scheduleRender } from "../helpers/scheduleRender.js";
 import { state } from "../state.js";
-
+import { canvasArea } from "../canvas/canvas.js";
 
 
 
@@ -83,7 +83,7 @@ export function drawRectangle(shape, ctx, sloppiness) {
     drawPath(ctx, path, shape, sloppiness);
 
 
-    if (shape.selected && shape.editMode) {
+    if (shape.selected) {
         selectionBox(shape, ctx)
     }
 
@@ -171,7 +171,7 @@ export function drawEllipse(shape, ctx, sloppiness) {
         ctx.stroke()
     } else roughEllipse(ctx, shape, sloppiness)
 
-    if (shape.selected && shape.editMode) {
+    if (shape.selected) {
         selectionBox(shape, ctx)
     }
 
@@ -197,7 +197,7 @@ export function drawLine(shape, ctx, sloppiness) {
         sloppiness
     );
 
-    if (shape.selected && shape.editMode) {
+    if (shape.selected) {
         lineSelectionBox(shape, ctx)
     }
 
@@ -293,7 +293,7 @@ export function drawDiamond(shape, ctx, sloppiness) {
         sloppiness
     )
 
-    if (shape.selected && shape.editMode) {
+    if (shape.selected) {
         selectionBox(shape, ctx)
     }
 }
@@ -353,7 +353,7 @@ export function drawTriangle(shape, ctx, sloppiness) {
 
     drawPath(ctx, path, shape, sloppiness);
 
-    if (shape.selected && shape.editMode) {
+    if (shape.selected) {
         selectionBox(shape, ctx)
     }
 
@@ -410,7 +410,7 @@ export function drawArrow(shape, ctx, sloppiness) {
     );
 
 
-    if (shape.selected && shape.editMode) {
+    if (shape.selected) {
         lineSelectionBox(shape, ctx)
     }
 
@@ -495,7 +495,9 @@ export function drawText(shape, ctx) {
 
 export function startTextEditing(shape, camera, ctx, render) {
 
-    document.querySelectorAll("input.text-editor").forEach(i => i.remove());
+    if (state.activeTextEditor) {
+        state.activeTextEditor.blur();
+    }
 
     const screenX = (shape.x - camera.x) * camera.zoom;
     const screenY = (shape.y - camera.y) * camera.zoom;
@@ -525,6 +527,7 @@ export function startTextEditing(shape, camera, ctx, render) {
 
 
     canvasArea.appendChild(input)
+    state.activeTextEditor = input
 
     function updateWidth() {
         ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
@@ -533,11 +536,7 @@ export function startTextEditing(shape, camera, ctx, render) {
         input.style.width = `${Math.max(20, width + 8) * camera.zoom}px`;
     }
 
-    updateWidth()
-    setTimeout(() => {
-        input.focus();
-    }, 500);
-
+    requestAnimationFrame(() => input.focus());
 
     input.addEventListener('input', () => {
 
@@ -559,7 +558,8 @@ export function startTextEditing(shape, camera, ctx, render) {
         shape.editMode = false;
 
 
-        input.remove();
+        state.activeTextEditor = null
+        if(input.parentNode){input.remove()}
         scheduleRender(render);
     });
 
