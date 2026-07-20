@@ -30,5 +30,7 @@ export const state = {
     pressure : "false", //done
     strokeColor: null,
     fillColor: null,
-    activeTextEditor: null
+    activeTextEditor: null,
+    initialTextWidth: null,
+    initialTextFontSize: null
 }

@@ -10,6 +10,7 @@ import { startTextEditing } from "../toolBarTop/shapes.js";
 
 
 export function mouseDown(e, render) {
+
     if (state.tool === "hand") {
         state.isPanning = true;
 
@@ -33,6 +34,11 @@ export function mouseDown(e, render) {
             const handle = getClickedHandle(state.selectedShape, mouse.x, mouse.y)
             if (handle) {
                 saveState(state.objects)
+
+                if (state.selectedShape.type === "text") {
+                    state.initialTextWidth = state.selectedShape.width;
+                    state.initialTextFontSize = state.selectedShape.fontSize;
+                }
                 state.isResizing = true
 
                 state.resizeHandle = handle

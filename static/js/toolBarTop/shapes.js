@@ -536,7 +536,10 @@ export function startTextEditing(shape, camera, ctx, render) {
         input.style.width = `${Math.max(20, width + 8) * camera.zoom}px`;
     }
 
-    requestAnimationFrame(() => input.focus());
+    requestAnimationFrame(() => {
+        updateWidth()
+        input.focus()
+    });
 
     input.addEventListener('input', () => {
 

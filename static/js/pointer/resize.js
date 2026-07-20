@@ -1,8 +1,57 @@
 import { state } from "../state.js";
+import { ctx } from "../canvas/canvas.js";
 
 
 
 export function resizeShape(shape, handle, mouseX, mouseY) {
+
+    if (shape.type === "text") {
+        switch (handle) {
+            case "se":
+                shape.width = mouseX - shape.x;
+                break;
+
+            case "ne":
+                shape.width = mouseX - shape.x;
+                shape.y = mouseY;
+                break;
+
+            case "sw":
+                shape.width += shape.x - mouseX;
+                shape.x = mouseX;
+                break;
+
+            case "nw":
+                shape.width += shape.x - mouseX;
+                shape.x = mouseX;
+                shape.y = mouseY;
+                break;
+
+            default:
+                return;
+        }
+
+
+        const scale = shape.width / state.initialTextWidth
+
+
+        shape.fontSize = Math.max(8, state.initialTextFontSize * scale)
+
+
+        ctx.font = `${shape.fontSize}px ${shape.fontFamily}`
+
+        shape.width = ctx.measureText(shape.text || " ").width
+        shape.height = shape.fontSize
+
+        console.log({
+            width: shape.width,
+            initialWidth: state.initialTextWidth,
+            initialFont: state.initialTextFontSize,
+            scale
+        });
+
+        return
+    }
     switch (handle) {
         case "se":
             shape.width = mouseX - shape.x;
