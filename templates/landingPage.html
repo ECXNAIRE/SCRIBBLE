@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCIBBLE</title>
+    <style>
+        @font-face {
+            font-family: "handWriting";
+            src: url("../static/fonts/handWritingFont.ttf") format("truetype");
+            font-size: 100px;
+        }
+
+        * {
+            font-family: handWriting;
+        }
+
+        body {
+            background: #F8F8F4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #mainArea {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 40px 80px;
+            box-sizing: border-box;
+        }
+
+        #leftArea {
+            flex: 4;
+            gap: 10px
+        }
+
+        #rightArea {
+            flex: 6;
+        }
+
+        #topAreaLeft img {
+            width: 400px;
+            height: auto;
+            border: 2px solid black
+        }
+
+        #midAreaLeft {
+            font-size: 20px;
+            width: 380px;
+            text-align: center;
+            opacity: 0.7;
+            border: 2px solid black;
+        }
+
+        #bottomAreaLeft {
+            border: 2px solid black;
+            width:380px;
+            height:auto;
+            margin-top: 5px;
+            display: flex;
+        }
+
+        .leftButton {
+            flex: 1;
+            height: 50px;
+            font-size: 20px
+        }
+
+
+        #headerArea {
+            height: 80px;
+            border: 2px solid black;
+            width: 100%;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="headerArea">
+
+    </header>
+
+    <div id="mainArea">
+        <div id="leftArea">
+            <div id="topAreaLeft">
+                <img src="../static/assets/picleft.png">
+            </div>
+            <div id="midAreaLeft">
+                SCRIBBLE is a lightweight, intuitive drawing workspace for sketching diagrams and notes built for
+                creators, thinkers and doers
+            </div>
+            <div id="bottomAreaLeft">
+                <button id="startDrawing" class="leftButton">Start Drawing</button>
+                <button id="exploreFeatures" class="leftButton">Explore Features</button>
+            </div>
+        </div>
+
+        <div id="rightArea">
+        </div>
+    </div>
+
+    <div id="bottomArea">
+
+    </div>
+
+</body>
+
+</html>

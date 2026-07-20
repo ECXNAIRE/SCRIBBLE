@@ -11,7 +11,7 @@ import { setLayerOption } from "./leftToolBar/updateToolBar.js"
 import { undo, redo, saveState } from "./toolBarTop/history.js"
 import { scheduleRender } from "./helpers/scheduleRender.js"
 import { renderState } from "./helpers/renderstate.js"
-import { setupClipbaord } from "./keyboardFunctions/clipboard.js"
+import { setupClipbaord } from "./keyboard/clipboard.js"
 import { state } from "./state.js"
 import { getClickedShape, getClickedHandle } from "./pointer/hitTest.js"
 import { mouseDown } from "./events/pointerDown.js"
@@ -21,7 +21,7 @@ import { drawShape } from "./canvas/drawShapes.js"
 import { canvas, overlayCanvas, ctx, overlayCtx, cacheCanvas, cacheCtx, resizeCanvas } from "./canvas/canvas.js"
 import { renderCurrentShape } from "./canvas/renderCurrentShape.js"
 import { mouseMove } from "./events/pointerMove.js"
-
+import { mouseUp } from "./events/pointerUp.js"
 
 
 window.addEventListener("resize", () => resizeCanvas(render));
@@ -354,59 +354,11 @@ document.querySelectorAll(".toolBarTopBtn").forEach(button => {
 
 
 //MOUSE HANDLING HERE
-canvas.addEventListener("pointerdown", (e) => mouseDown(e, canvas, render))
-canvas.addEventListener("pointerup", mouseUp)
-canvas.addEventListener("pointermove", (e) => mouseMove(e, canvas, render))
+canvas.addEventListener("pointerdown", (e) => mouseDown(e, render))
+canvas.addEventListener("pointerup", (e) => mouseUp(e, render))
+canvas.addEventListener("pointermove", (e) => mouseMove(e, render))
 canvas.addEventListener("dblclick", mouseDoubleClick)
 canvas.addEventListener("pointercancel", mouseUp);
-
-
-
-function mouseUp(e) {
-    canvas.releasePointerCapture(e.pointerId);
-
-    if (state.isPanning) {
-        state.isPanning = false;
-        canvas.style.cursor = "grab";
-        return;
-    }
-
-    if (state.isResizing) {
-        state.isResizing = false;
-        state.resizeHandle = null;
-        canvas.style.cursor = "default";
-        return
-    }
-
-    if (state.isDragging) {
-        state.isDragging = false;
-        state.dragShape = null
-        return
-    }
-
-    if (state.isErasing) {
-        state.isErasing = false
-        return
-    }
-
-
-
-    if (!state.isDrawing) return
-
-    saveState(state.objects)
-
-    state.isDrawing = false
-
-    state.objects.push(state.currentShape)
-    cacheCtx.clearRect(
-        0, 0, cacheCanvas.width, cacheCanvas.height
-    )
-    state.currentShape = null
-
-    scheduleRender(render)
-}
-
-
 
 
 

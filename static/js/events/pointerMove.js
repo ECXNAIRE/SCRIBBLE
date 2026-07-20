@@ -6,13 +6,13 @@ import { getClickedShape, getClickedHandle } from "../pointer/hitTest.js";
 import { resizeShape } from "../pointer/resize.js";
 import { renderCurrentShape } from "../canvas/renderCurrentShape.js";
 import { camera } from "../canvas/cameraFunction.js";
+import { canvas } from "../canvas/canvas.js";
 
 
 
 
 
-
-export function mouseMove(e, canvas, render) {
+export function mouseMove(e, render) {
     if (state.isPanning) {
         canvas.style.cursor = "grabbing";
 
