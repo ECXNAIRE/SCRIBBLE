@@ -3,7 +3,7 @@ import { screenToWorld } from "../canvas/cameraFunction.js ";
 import { updateCursor } from "../canvas/overlayCanvasFn.js";
 import { scheduleRender } from "../helpers/scheduleRender.js";
 import { getClickedShape, getClickedHandle } from "../pointer/hitTest.js";
-import { resizeShape } from "../pointer/resize.js";
+import { resizeShape, resizeText } from "../pointer/resize.js";
 import { renderCurrentShape } from "../canvas/renderCurrentShape.js";
 import { camera } from "../canvas/cameraFunction.js";
 import { canvas } from "../canvas/canvas.js";
@@ -121,6 +121,7 @@ export function mouseMove(e, render) {
     }
 
     if (state.isResizing) {
+
         if (state.selectedShape.type === "line" || state.selectedShape.type === "arrow") {
             if (state.resizeHandle === "start") {
                 state.selectedShape.x1 = mouse.x;
@@ -131,6 +132,13 @@ export function mouseMove(e, render) {
                 state.selectedShape.x2 = mouse.x;
                 state.selectedShape.y2 = mouse.y;
             }
+        } else if (state.selectedShape.type === "text") {
+            resizeText(
+                state.selectedShape,
+                state.resizeHandle,
+                mouse.x,
+                mouse.y
+            );
         } else {
             resizeShape(state.selectedShape, state.resizeHandle, mouse.x, mouse.y);
         }
@@ -145,7 +153,7 @@ export function mouseMove(e, render) {
             const dx = mouse.x - state.dragOffsetX
             const dy = mouse.y - state.dragOffsetY
 
-           state.dragShape.x1 += dx
+            state.dragShape.x1 += dx
             state.dragShape.y1 += dy
             state.dragShape.x2 += dx
             state.dragShape.y2 += dy

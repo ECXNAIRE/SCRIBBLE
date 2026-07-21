@@ -5,53 +5,6 @@ import { ctx } from "../canvas/canvas.js";
 
 export function resizeShape(shape, handle, mouseX, mouseY) {
 
-    if (shape.type === "text") {
-        switch (handle) {
-            case "se":
-                shape.width = mouseX - shape.x;
-                break;
-
-            case "ne":
-                shape.width = mouseX - shape.x;
-                shape.y = mouseY;
-                break;
-
-            case "sw":
-                shape.width += shape.x - mouseX;
-                shape.x = mouseX;
-                break;
-
-            case "nw":
-                shape.width += shape.x - mouseX;
-                shape.x = mouseX;
-                shape.y = mouseY;
-                break;
-
-            default:
-                return;
-        }
-
-
-        const scale = shape.width / state.initialTextWidth
-
-
-        shape.fontSize = Math.max(8, state.initialTextFontSize * scale)
-
-
-        ctx.font = `${shape.fontSize}px ${shape.fontFamily}`
-
-        shape.width = ctx.measureText(shape.text || " ").width
-        shape.height = shape.fontSize
-
-        console.log({
-            width: shape.width,
-            initialWidth: state.initialTextWidth,
-            initialFont: state.initialTextFontSize,
-            scale
-        });
-
-        return
-    }
     switch (handle) {
         case "se":
             shape.width = mouseX - shape.x;
@@ -125,5 +78,62 @@ export function resizeShape(shape, handle, mouseX, mouseY) {
             case "nw": state.resizeHandle = "sw"; break
             case "sw": state.resizeHandle = "nw"; break
         }
+    }
+}
+
+
+
+
+
+export function resizeText(shape, handle, mouseX, mouseY) {
+    const t = state.textResize
+
+    let newWidth;
+
+    switch (t.handle) {
+
+        case "se":
+        case "ne":
+            newWidth = t.startWidth + (mouseX - t.startMouseX);
+            break;
+
+        case "sw":
+        case "nw":
+            newWidth = t.startWidth - (mouseX - t.startMouseX);
+            break;
+    }
+
+    newWidth = Math.max(1, newWidth);
+
+    const scale = newWidth / t.startWidth;
+
+    shape.fontSize = t.startFontSize * scale;
+
+    ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
+
+    shape.width = ctx.measureText(shape.text || " ").width;
+    shape.height = shape.fontSize;
+
+
+    switch (t.handle) {
+        case 'se':
+            shape.x = t.anchorX
+            shape.y = t.anchorY
+            break
+
+        case "sw":
+            shape.x = t.anchorX - shape.width
+            shape.y = t.anchorY
+            break
+
+        case "ne":
+            shape.x = t.anchorX
+            shape.y = t.anchorY - shape.height
+            break
+
+        case "nw":
+            shape.x = t.anchorX - shape.width
+            shape.y = t.anchorY - shape.height
+            break
     }
 }

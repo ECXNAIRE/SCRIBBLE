@@ -36,8 +36,44 @@ export function mouseDown(e, render) {
                 saveState(state.objects)
 
                 if (state.selectedShape.type === "text") {
-                    state.initialTextWidth = state.selectedShape.width;
-                    state.initialTextFontSize = state.selectedShape.fontSize;
+                    state.textResize = {
+                        startMouseX: mouse.x,
+                        startMouseY: mouse.y,
+
+                        startWidth: state.selectedShape.width,
+                        startHeight: state.selectedShape.height,
+
+                        startFontSize: state.selectedShape.fontSize,
+
+                        startX: state.selectedShape.x,
+                        startY: state.selectedShape.y,
+
+                        handle
+                    };
+
+                    switch (handle) {
+
+                        case "nw":
+                            state.textResize.anchorX = state.selectedShape.x + state.selectedShape.width;
+                            state.textResize.anchorY = state.selectedShape.y + state.selectedShape.height;
+                            break;
+
+                        case "ne":
+                            state.textResize.anchorX = state.selectedShape.x;
+                            state.textResize.anchorY = state.selectedShape.y + state.selectedShape.height;
+                            break;
+
+                        case "sw":
+                            state.textResize.anchorX = state.selectedShape.x + state.selectedShape.width;
+                            state.textResize.anchorY = state.selectedShape.y;
+                            break;
+
+                        case "se":
+                            state.textResize.anchorX = state.selectedShape.x;
+                            state.textResize.anchorY = state.selectedShape.y;
+                            break;
+
+                    }
                 }
                 state.isResizing = true
 
