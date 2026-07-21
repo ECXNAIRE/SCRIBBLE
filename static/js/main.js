@@ -182,6 +182,11 @@ strokePicker.addEventListener("input", () => {
     state.strokeColor = strokePicker.value
     strokePickerPreview.style.background = state.strokeColor;
 
+    if (state.selectedShape) {
+        state.selectedShape.fillColor = state.fillColor;
+        scheduleRender(render)
+    }
+
     document
         .querySelector(".strokeColorBtn.active")
         ?.classList.remove("active");

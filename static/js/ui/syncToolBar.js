@@ -13,6 +13,8 @@ export function syncToolBar(shape) {
             state.selectedFillType = shape.fillType
             state.fillColor = shape.fillColor
 
+            break
+
         case "triangle":
         case "ellipse":
         case "diamond":
@@ -22,7 +24,21 @@ export function syncToolBar(shape) {
             state.selectedFillType = shape.fillType
             state.fillColor = shape.fillColor
 
-            
+            break
+
+        case "line":
+        case "arrow":
+            state.selectedStrokeWidth = shape.strokeWidth
+            state.strokeColor = shape.strokeColor
+            state.selectedStroke = shape.selectedStroke
+            break
+
+
+        case "text":
+            state.strokeColor = shape.strokeColor
+            state.selectedFont = shape.fontFamily
+            break
+
     }
 
 
@@ -56,6 +72,49 @@ export function syncToolBar(shape) {
 
     document.querySelector(
         `.edgeStyleBtn[data-edgestyle="${shape.edgeStyle}"]`
+    )?.classList.add("active");
+
+
+    document.querySelector(".fontStyleBtn.active")
+        ?.classList.remove("active");
+
+    document.querySelector(
+        `.fontStyleBtn[data-fontstyle="${state.selectedFont}"]`
+    )?.classList.add("active");
+
+
+    const strokePicker = document.getElementById("strokeColorPicker")
+    const fillPicker = document.getElementById("fillColorPicker")
+    const strokePickerPreview = document.getElementById("strokePickerPreview")
+    const fillPickerPreview = document.getElementById("fillPickerPreview")
+
+
+
+    strokePicker.value = state.strokeColor
+    strokePickerPreview.style.background = state.strokeColor
+
+
+    if (state.fillColor === "transparent") {
+        fillPickerPreview.classList.add("transparentColor")
+        fillPickerPreview.style.removeProperty("background")
+    } else {
+        fillPicker.value = state.fillColor;
+        fillPickerPreview.classList.remove("transparentColor");
+        fillPickerPreview.style.background = state.fillColor;
+    }
+
+
+    document.querySelector(".strokeColorBtn.active")
+        ?.classList.remove("active")
+    document.querySelector(
+        `.strokeColorBtn[data-color="${state.strokeColor}"]`
+    )?.classList.add("active")
+
+
+    document.querySelector(".fillColorBtn.active")
+        ?.classList.remove("active");
+    document.querySelector(
+        `.fillColorBtn[data-color="${state.fillColor}"]`
     )?.classList.add("active");
 
 }
