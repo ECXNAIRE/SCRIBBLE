@@ -6,7 +6,7 @@ import { screenToWorld, camera } from "../canvas/cameraFunction.js";
 import { setLayerOption, updateToolBar } from "../leftToolBar/updateToolBar.js";
 import { canvas, ctx } from "../canvas/canvas.js";
 import { startTextEditing } from "../toolBarTop/shapes.js";
-
+import { syncToolBar } from "../ui/syncToolBar.js";
 
 
 export function mouseDown(e, render) {
@@ -123,6 +123,8 @@ export function mouseDown(e, render) {
         if (clickedShape) {
             setLayerOption(true)
             updateToolBar(clickedShape.type)
+
+            syncToolBar(clickedShape)
 
             if (clickedShape !== state.selectedShape) {
                 state.objects.forEach(shape => {

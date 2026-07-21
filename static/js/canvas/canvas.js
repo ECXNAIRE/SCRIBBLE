@@ -3,8 +3,6 @@ import { state } from "../state.js"
 
 
 
-state.dpr = window.devicePixelRatio || 1
-
 export const overlayCanvas = document.getElementById("overlayCanvas")
 export const overlayCtx = overlayCanvas.getContext("2d")
 export const canvas = document.getElementById("canvas")
@@ -15,8 +13,8 @@ export const cacheCtx = cacheCanvas.getContext("2d")
 
 
 export function resizeCanvas(render) {
-    canvas.width = canvasArea.clientWidth * state.dpr;
-    canvas.height = canvasArea.clientHeight * state.dpr;
+    canvas.width = canvasArea.clientWidth;
+    canvas.height = canvasArea.clientHeight
     overlayCanvas.width = canvas.width;
     overlayCanvas.height = canvas.height;
     cacheCanvas.width = canvas.width

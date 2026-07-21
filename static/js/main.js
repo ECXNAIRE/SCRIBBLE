@@ -254,35 +254,7 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 
 
 
-//RENDER FUNCTION FOR DRAWING 
-function render() {
-    ctx.setTransform(
-        state.dpr * camera.zoom,
-        0,
-        0,
-        state.dpr * camera.zoom,
-        -camera.x * camera.zoom * state.dpr,
-        -camera.y * camera.zoom * state.dpr
-    );
 
-    ctx.clearRect(
-        camera.x,
-        camera.y,
-        canvas.width,
-        canvas.height
-    );
-
-
-    state.objects.forEach(shape => {
-        drawShape(shape, ctx);
-    });
-
-    if (state.gridToggle) {
-        drawGrid(ctx, canvas, camera);
-    }
-
-    ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
-}
 
 // RESIXZING CANVAS
 
@@ -322,7 +294,10 @@ document.querySelectorAll(".strokeWidthBtn").forEach(button => {
 
 
 
-//BUTTON CLICK HANDLER
+
+
+
+
 document.querySelectorAll(".toolBarTopBtn").forEach(button => {
     button.addEventListener("click", () => {
 
@@ -352,8 +327,37 @@ document.querySelectorAll(".toolBarTopBtn").forEach(button => {
 })
 
 
+function render() {
+    ctx.setTransform(
+        camera.zoom,
+        0,
+        0,
+        camera.zoom,
+        -camera.x * camera.zoom,
+        -camera.y * camera.zoom
+    );
 
-//MOUSE HANDLING HERE
+    ctx.clearRect(
+        camera.x,
+        camera.y,
+        canvas.width / camera.zoom,
+        canvas.height / camera.zoom
+    );
+
+
+    state.objects.forEach(shape => {
+        drawShape(shape, ctx);
+    });
+
+    if (state.gridToggle) {
+        drawGrid(ctx, canvas, camera);
+    }
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+
+
 canvas.addEventListener("pointerdown", (e) => mouseDown(e, render))
 canvas.addEventListener("pointerup", (e) => mouseUp(e, render))
 canvas.addEventListener("pointermove", (e) => mouseMove(e, render))
@@ -361,13 +365,6 @@ canvas.addEventListener("dblclick", mouseDoubleClick)
 canvas.addEventListener("pointercancel", mouseUp);
 
 
-
-
-
-
-
-
-//gneeric function to draw shape 
 
 
 function mouseDoubleClick(e) {
@@ -442,10 +439,6 @@ function deleteSelectedShape() {
 
     scheduleRender(render)
 }
-
-
-//COPY PASTE SHAPE 
-
 
 
 window.addEventListener("keydown", (e) => {
