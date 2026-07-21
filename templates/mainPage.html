@@ -13,7 +13,13 @@
 
         @font-face {
             font-family: "handWriting";
-            src: url("../static/fonts/handWritingFont.ttf") format("truetype");
+            src: url("../static/fonts/GloriaHallelujah-Regular.ttf") format("truetype");
+            font-size: 100px;
+        }
+
+        @font-face {
+            font-family: "handWriting2";
+            src: url("../static/fonts/Excalifont-Regular.woff2") format("woff2");
             font-size: 100px;
         }
 
@@ -631,13 +637,16 @@
                     <div class="title">Fonts</div>
                     <div id="fontStyleArea">
                         <button class="fontStyleBtn active" data-fontstyle="sans-serif">
-                            <img src="../static/assets/minus.svg">
+                            <span style="font-family: sans-serif;">Aa</span>
                         </button>
                         <button class="fontStyleBtn" data-fontstyle="codingFont">
-                            <img src="../static/assets/minus.svg">
+                            <span style="font-family: codingFont;">Aa</span>
+                        </button>
+                        <button class="fontStyleBtn" data-fontstyle="handWriting2">
+                            <span style="font-family: handWriting2;">Aa</span>
                         </button>
                         <button class="fontStyleBtn" data-fontstyle="handWriting">
-                            <img src="../static/assets/minus.svg">
+                            <span style="font-family: handWriting;">Aa</span>
                         </button>
                     </div>
                 </div>

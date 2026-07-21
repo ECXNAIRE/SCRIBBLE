@@ -150,6 +150,8 @@ export function mouseDown(e, render) {
     }
 
 
+    saveState(state.objects);
+
 
 
     if (state.tool === "rectangle") {

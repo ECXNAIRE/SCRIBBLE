@@ -88,6 +88,9 @@ export function resizeShape(shape, handle, mouseX, mouseY) {
 export function resizeText(shape, handle, mouseX, mouseY) {
     const t = state.textResize
 
+    const MIN_FONT_SIZE = 8;
+    const MAX_FONT_SIZE = 300;
+
     let newWidth;
 
     switch (t.handle) {
@@ -108,7 +111,10 @@ export function resizeText(shape, handle, mouseX, mouseY) {
     const scale = newWidth / t.startWidth;
 
     shape.fontSize = t.startFontSize * scale;
-
+    shape.fontSize = Math.max(
+        MIN_FONT_SIZE,
+        Math.min(MAX_FONT_SIZE, shape.fontSize)
+    )
     ctx.font = `${shape.fontSize}px ${shape.fontFamily}`;
 
     shape.width = ctx.measureText(shape.text || " ").width;
