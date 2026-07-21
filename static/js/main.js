@@ -257,19 +257,19 @@ document.querySelectorAll(".fillColorBtn").forEach(button => {
 //RENDER FUNCTION FOR DRAWING 
 function render() {
     ctx.setTransform(
-        camera.zoom,
+        state.dpr * camera.zoom,
         0,
         0,
-        camera.zoom,
-        -camera.x * camera.zoom,
-        -camera.y * camera.zoom
+        state.dpr * camera.zoom,
+        -camera.x * camera.zoom * state.dpr,
+        -camera.y * camera.zoom * state.dpr
     );
 
     ctx.clearRect(
         camera.x,
         camera.y,
-        canvas.width / camera.zoom,
-        canvas.height / camera.zoom
+        canvas.width,
+        canvas.height
     );
 
 
@@ -281,7 +281,7 @@ function render() {
         drawGrid(ctx, canvas, camera);
     }
 
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
 }
 
 // RESIXZING CANVAS
@@ -374,7 +374,7 @@ function mouseDoubleClick(e) {
     const mouse = screenToWorld(e.offsetX, e.offsetY, camera);
     const shape = getClickedShape(mouse.x, mouse.y)
 
-    if(shape.type !== "text") return
+    if (shape.type !== "text") return
 
     state.objects.forEach(s => {
         s.selected = false

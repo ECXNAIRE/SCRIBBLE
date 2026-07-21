@@ -510,20 +510,20 @@ export function startTextEditing(shape, camera, ctx, render) {
 
     input.style.position = "absolute"
     input.style.left = `${screenX}px`;
-    input.style.top = `${screenY}px`;
+    input.style.top = `${screenY - 2.5}px`;
 
 
     input.style.fontSize = `${shape.fontSize * camera.zoom}px`
+    input.style.boxSizing = "border-box";
     input.style.fontFamily = shape.fontFamily
-    input.style.color = shape.strokeColor
-
-
-    input.style.border = "none"
-    input.style.outline = "none"
-    input.style.background = "transparent"
+    input.style.color = shape.strokeColor;
     input.style.padding = "0";
     input.style.margin = "0";
-    input.style.height = `${(shape.fontSize + 8) * camera.zoom}px`;
+    input.style.border = "none";
+    input.style.outline = "none";
+    input.style.background = "transparent";
+    input.style.lineHeight = "normal";
+
     input.style.width = "20px";
 
 
@@ -563,7 +563,7 @@ export function startTextEditing(shape, camera, ctx, render) {
 
 
         state.activeTextEditor = null
-        if(input.parentNode){input.remove()}
+        if (input.parentNode) { input.remove() }
         scheduleRender(render);
     });
 

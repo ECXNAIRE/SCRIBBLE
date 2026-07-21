@@ -1,6 +1,9 @@
 import { scheduleRender } from "../helpers/scheduleRender.js"
+import { state } from "../state.js"
 
 
+
+state.dpr = window.devicePixelRatio || 1
 
 export const overlayCanvas = document.getElementById("overlayCanvas")
 export const overlayCtx = overlayCanvas.getContext("2d")
@@ -12,8 +15,8 @@ export const cacheCtx = cacheCanvas.getContext("2d")
 
 
 export function resizeCanvas(render) {
-    canvas.width = canvasArea.clientWidth;
-    canvas.height = canvasArea.clientHeight;
+    canvas.width = canvasArea.clientWidth * state.dpr;
+    canvas.height = canvasArea.clientHeight * state.dpr;
     overlayCanvas.width = canvas.width;
     overlayCanvas.height = canvas.height;
     cacheCanvas.width = canvas.width
