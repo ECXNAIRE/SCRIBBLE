@@ -7,6 +7,8 @@ const strokeWidthSection = document.getElementById("strokeWidthSection")
 const fontSection = document.getElementById("fontSection")
 const strokeColorSection = document.getElementById("strokeColorSection")
 const pressureSelectionSection = document.getElementById("pressureSelectionSection")
+const toolBarLeft = document.getElementById("toolBarLeft")
+
 let layerOptionShow = false
 
 fillSection.style.display = "none"
@@ -18,6 +20,8 @@ strokeWidthSection.style.display = "none"
 fontSection.style.display = "none"
 strokeColorSection.style.display = "none"
 pressureSelectionSection.style.display = "none"
+
+updateLeftToolbar()
 
 export function setLayerOption(value) {
     layerOptionShow = value
@@ -34,6 +38,7 @@ export function updateToolBar(tool) {
     fontSection.style.display = "none"
     strokeColorSection.style.display = "none"
     pressureSelectionSection.style.display = "none"
+    updateLeftToolbar()
 
     switch (tool) {
         case "rectangle":
@@ -46,6 +51,8 @@ export function updateToolBar(tool) {
             }
             strokeWidthSection.style.display = "block"
             strokeColorSection.style.display = "block"
+
+            updateLeftToolbar()
 
 
             break
@@ -63,6 +70,7 @@ export function updateToolBar(tool) {
             strokeWidthSection.style.display = "block"
             strokeColorSection.style.display = "block"
 
+            updateLeftToolbar()
             break
 
 
@@ -75,7 +83,7 @@ export function updateToolBar(tool) {
             strokeWidthSection.style.display = "block"
             strokeColorSection.style.display = "block"
 
-
+            updateLeftToolbar()
 
             break
 
@@ -86,6 +94,9 @@ export function updateToolBar(tool) {
             if (layerOptionShow === true) {
                 layerSection.style.display = "block"
             }
+
+
+            updateLeftToolbar()
             break
 
         case "pencil":
@@ -93,7 +104,18 @@ export function updateToolBar(tool) {
             strokeWidthSection.style.display = "block"
             pressureSelectionSection.style.display = "block"
 
+            updateLeftToolbar()
+
             break
     }
 }
 
+
+
+export function updateLeftToolbar() {
+    const visibleSections = [...toolBarLeft.children].filter(
+        child => child.style.display !== "none"
+    );
+
+    toolBarLeft.style.display = visibleSections.length ? "flex" : "none";
+}

@@ -43,7 +43,6 @@
             height: 100%;
             margin: 0;
             overflow: hidden;
-
         }
 
         #toolBarTop,
@@ -56,43 +55,33 @@
 
         body {
             margin: 0;
-            background: #F5F9FC;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            height: 100vh;
             overflow: hidden;
+            background: #F5F9FC;
         }
 
         #toolBarTop {
-            width: 77%;
-            height: 55px;
+            width: 60%;
+            height: 40px;
             background: #FFFFFF;
-            margin-top: 20px;
-            border-radius: 10px;
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: space-evenly;
             flex-shrink: 0;
-            margin-right: 40px;
+            position: absolute;
+            top: 30px;
+            right: 250px;
+            border-radius: 12px;
         }
 
-        #mainArea {
-            flex: 1;
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            padding: 20px;
-            gap: 20px;
-            overflow: hidden;
+        .toolBarTopBtn img,
+        #gridToggleBtn img {
+            width: 20px;
+            height: 20px
         }
-
         #toolBarLeft {
-            width: 100%;
-            max-height: 100%;
-            min-height: 0;
+            width: 260px;
+            max-height: calc(100vh - 180px);
             background: #FFFFFF;
             border-radius: 12px;
             padding-left: 10px;
@@ -102,15 +91,17 @@
             padding-left: 10px;
             overflow-y: auto;
             overflow-x: hidden;
+            position: absolute;
+            top: 90px;
+            left: 20px;
         }
 
         #canvasArea {
-            flex: 1;
-            height: 100%;
-            border-radius: 10px;
+            position: fixed;
+            inset: 0;
             background: white;
-            position: relative;
-            overflow: hidden;
+            width: 100vw;
+            height: 100vh
         }
 
         #toolBarTop button {
@@ -344,32 +335,6 @@
             height: 100%
         }
 
-        #topBar {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        #logoArea img {
-            width: auto;
-            height: 55px;
-            object-fit: contain;
-            margin-left: 55px;
-            margin-top: 20px;
-        }
-
-
-        #logoArea {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #logoArea img:hover {
-            cursor: pointer;
-        }
-
         #toolBarLeft::-webkit-scrollbar {
             width: 5px;
         }
@@ -429,10 +394,15 @@
 </head>
 
 <body>
-    <div id="topBar">
-        <div id="logoArea">
-            <img src="../static/assets/scribble.png" alt="SCRIBBLE">
-        </div>
+
+
+
+    <div id="canvasArea">
+        <canvas id="canvas"></canvas>
+        <canvas id="cacheCanvas"></canvas>
+        <canvas id="overlayCanvas"></canvas>
+
+
         <div id="toolBarTop">
             <div class="toolGroup">
                 <button class="toolBarTopBtn active" data-tool="pointer">
@@ -499,210 +469,191 @@
                     <img src="../static/assets/settings.svg">
                 </button>
             </div>
+        </div>
+
+
+        <div id="toolBarLeft">
+
+            <div id="strokeColorSection">
+                <div class="title">Stroke</div>
+                <div class="styleGroup" id="strokeColorArea">
+
+                    <div class="strokePickerWrapper">
+                        <div id="strokePickerPreview" style="background: black;"></div>
+                        <input type="color" id="strokeColorPicker" value="#000000">
+                    </div>
+
+
+                    <div class="divider"></div>
+                    <button class="strokeColorBtn" data-color="#2563EB">
+                        <div style="background:#2563EB;"></div>
+                    </button>
+                    <button class="strokeColorBtn" data-color="#DC2626">
+                        <div style="background:#DC2626;"></div>
+                    </button>
+                    <button class="strokeColorBtn" data-color="#16A34A">
+                        <div style="background:#16A34A;"></div>
+                    </button>
+                    <button class="strokeColorBtn" data-color="#7C3AED">
+                        <div style="background:#7C3AED;"></div>
+                    </button>
+                    <button class="strokeColorBtn" data-color="#000000">
+                        <div style="background:#000000;"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div id="fillSection">
+                <div class="title">Fill</div>
+                <div class="styleGroup" if="fillColorArea">
+
+
+                    <div class="fillPickerWrapper">
+                        <div id="fillPickerPreview" style="background: #ffffff;"></div>
+                        <input type="color" id="fillColorPicker" value="#ffffff">
+                    </div>
+
+
+                    <div class="divider"></div>
+                    <button class="fillColorBtn" data-color="#FF6B6B">
+                        <div style="background:#FF6B6B;"></div>
+                    </button>
+                    <button class="fillColorBtn" data-color="#81C784">
+                        <div style="background:#81C784;"></div>
+                    </button>
+                    <button class="fillColorBtn" data-color="#F48FB1">
+                        <div style="background:#F48FB1;"></div>
+                    </button>
+                    <button class="fillColorBtn" data-color="#FACC15">
+                        <div style="background:#FDE68A;"></div>
+                    </button>
+                    <button class="fillColorBtn" data-color="transparent">
+                        <div class="transparentColor"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div id="strokeWidthSection">
+                <div class="title">Stroke Width</div>
+                <div id="strokeWidthArea">
+                    <button class="strokeWidthBtn active" data-strokewidth="2">
+                        <img src="../static/assets/strokeWidth3png.svg">
+                    </button>
+                    <button class="strokeWidthBtn" data-strokewidth="4">
+                        <img src="../static/assets/strokeWidth2png.svg">
+                    </button>
+                    <button class="strokeWidthBtn" data-strokewidth="6">
+                        <img src="../static/assets/strokeWidth1png.svg">
+                    </button>
+                </div>
+            </div>
+
+
+            <div id="sloppinessSection">
+                <div class="title">Sloppiness</div>
+                <div id="strokeArea">
+                    <button class="strokeBtn active" data-stroke="stroke1">
+                        <img src="../static/assets/smooth3.png">
+                    </button>
+                    <button class="strokeBtn" data-stroke="stroke2">
+                        <img src="../static/assets/medium.png">
+                    </button>
+                    <button class="strokeBtn" data-stroke="stroke3">
+                        <img src="../static/assets/high.png">
+                    </button>
+                </div>
+            </div>
+
+
+
+
+            <div id="fillTypeSection">
+                <div class="title">Fill Type</div>
+                <div id="fillTypeArea">
+                    <button class="fillTypeBtn active" data-filltype="solid">
+                        <img src="../static/assets/solid.svg">
+                    </button>
+                    <button class="fillTypeBtn" data-filltype="hachure">
+                        <img src="../static/assets/hachure.svg">
+                    </button>
+                </div>
+            </div>
+
+
+            <div id="edgeSection">
+                <div class="title">Edge Style</div>
+                <div id="edgeStyleArea">
+                    <button class="edgeStyleBtn active" data-edgestyle="0">
+                        <img src="../static/assets/minus.svg">
+                    </button>
+                    <button class="edgeStyleBtn" data-edgestyle="25">
+                        <img src="../static/assets/minus.svg">
+                    </button>
+                </div>
+            </div>
+
+            <div id="pressureSelectionSection">
+                <div class="title">Pressure</div>
+                <div id="pressureSelectionArea">
+                    <button class="pressureBtn active" data-pressure="false">
+                        <img src="../static/assets/normalPenType2.svg">
+                    </button>
+                    <button class="pressureBtn" data-pressure="true">
+                        <img src="../static/assets/pressurePenType2.svg">
+                    </button>
+                </div>
+            </div>
+
+            <div id="fontSection">
+                <div class="title">Fonts</div>
+                <div id="fontStyleArea">
+                    <button class="fontStyleBtn active" data-fontstyle="sans-serif">
+                        <span style="font-family: sans-serif;">Aa</span>
+                    </button>
+                    <button class="fontStyleBtn" data-fontstyle="codingFont">
+                        <span style="font-family: codingFont;">Aa</span>
+                    </button>
+                    <button class="fontStyleBtn" data-fontstyle="handWriting2">
+                        <span style="font-family: handWriting2;">Aa</span>
+                    </button>
+                    <button class="fontStyleBtn" data-fontstyle="handWriting">
+                        <span style="font-family: handWriting;">Aa</span>
+                    </button>
+                </div>
+            </div>
+
+
+            <div id="layerToggleSection">
+                <div class="title">Layer</div>
+                <div id="layerToggleArea">
+                    <button class="layerToggleBtn" data-function="top">
+                        <img src="../static/assets/arrow-up-to-line.svg">
+                    </button>
+                    <button class="layerToggleBtn" data-function="up">
+                        <img src="../static/assets/arrow-up.svg">
+                    </button>
+                    <button class="layerToggleBtn" data-function="down">
+                        <img src="../static/assets/arrow-down.svg">
+                    </button>
+                    <button class="layerToggleBtn" data-function="bottom">
+                        <img src="../static/assets/arrow-down-to-line.svg">
+                    </button>
+                </div>
+            </div>
+
 
 
         </div>
-    </div>
-    <div id="mainArea">
-        <div id="leftPanel">
-            <div id="toolBarLeft">
-
-                <div id="strokeColorSection">
-                    <div class="title">Stroke</div>
-                    <div class="styleGroup" id="strokeColorArea">
-
-                        <div class="strokePickerWrapper">
-                            <div id="strokePickerPreview" style="background: black;"></div>
-                            <input type="color" id="strokeColorPicker" value="#000000">
-                        </div>
 
 
-                        <div class="divider"></div>
-                        <button class="strokeColorBtn" data-color="#2563EB">
-                            <div style="background:#2563EB;"></div>
-                        </button>
-                        <button class="strokeColorBtn" data-color="#DC2626">
-                            <div style="background:#DC2626;"></div>
-                        </button>
-                        <button class="strokeColorBtn" data-color="#16A34A">
-                            <div style="background:#16A34A;"></div>
-                        </button>
-                        <button class="strokeColorBtn" data-color="#7C3AED">
-                            <div style="background:#7C3AED;"></div>
-                        </button>
-                        <button class="strokeColorBtn" data-color="#000000">
-                            <div style="background:#000000;"></div>
-                        </button>
-                    </div>
-                </div>
-
-                <div id="fillSection">
-                    <div class="title">Fill</div>
-                    <div class="styleGroup" if="fillColorArea">
-
-
-                        <div class="fillPickerWrapper">
-                            <div id="fillPickerPreview" style="background: #ffffff;"></div>
-                            <input type="color" id="fillColorPicker" value="#ffffff">
-                        </div>
-
-
-                        <div class="divider"></div>
-                        <button class="fillColorBtn" data-color="#FF6B6B">
-                            <div style="background:#FF6B6B;"></div>
-                        </button>
-                        <button class="fillColorBtn" data-color="#81C784">
-                            <div style="background:#81C784;"></div>
-                        </button>
-                        <button class="fillColorBtn" data-color="#F48FB1">
-                            <div style="background:#F48FB1;"></div>
-                        </button>
-                        <button class="fillColorBtn" data-color="#FACC15">
-                            <div style="background:#FDE68A;"></div>
-                        </button>
-                        <button class="fillColorBtn" data-color="transparent">
-                            <div class="transparentColor"></div>
-                        </button>
-                    </div>
-                </div>
-
-                <div id="strokeWidthSection">
-                    <div class="title">Stroke Width</div>
-                    <div id="strokeWidthArea">
-                        <button class="strokeWidthBtn active" data-strokewidth="2">
-                            <img src="../static/assets/strokeWidth3png.svg">
-                        </button>
-                        <button class="strokeWidthBtn" data-strokewidth="4">
-                            <img src="../static/assets/strokeWidth2png.svg">
-                        </button>
-                        <button class="strokeWidthBtn" data-strokewidth="6">
-                            <img src="../static/assets/strokeWidth1png.svg">
-                        </button>
-                    </div>
-                </div>
-
-
-                <div id="sloppinessSection">
-                    <div class="title">Sloppiness</div>
-                    <div id="strokeArea">
-                        <button class="strokeBtn active" data-stroke="stroke1">
-                            <img src="../static/assets/smooth3.png">
-                        </button>
-                        <button class="strokeBtn" data-stroke="stroke2">
-                            <img src="../static/assets/medium.png">
-                        </button>
-                        <button class="strokeBtn" data-stroke="stroke3">
-                            <img src="../static/assets/high.png">
-                        </button>
-                    </div>
-                </div>
-
-
-
-
-                <div id="fillTypeSection">
-                    <div class="title">Fill Type</div>
-                    <div id="fillTypeArea">
-                        <button class="fillTypeBtn active" data-filltype="solid">
-                            <img src="../static/assets/solid.svg">
-                        </button>
-                        <button class="fillTypeBtn" data-filltype="hachure">
-                            <img src="../static/assets/hachure.svg">
-                        </button>
-                    </div>
-                </div>
-
-
-                <div id="edgeSection">
-                    <div class="title">Edge Style</div>
-                    <div id="edgeStyleArea">
-                        <button class="edgeStyleBtn active" data-edgestyle="0">
-                            <img src="../static/assets/minus.svg">
-                        </button>
-                        <button class="edgeStyleBtn" data-edgestyle="25">
-                            <img src="../static/assets/minus.svg">
-                        </button>
-                    </div>
-                </div>
-
-                <div id="pressureSelectionSection">
-                    <div class="title">Pressure</div>
-                    <div id="pressureSelectionArea">
-                        <button class="pressureBtn active" data-pressure="false">
-                            <img src="../static/assets/normalPenType2.svg">
-                        </button>
-                        <button class="pressureBtn" data-pressure="true">
-                            <img src="../static/assets/pressurePenType2.svg">
-                        </button>
-                    </div>
-                </div>
-
-                <div id="fontSection">
-                    <div class="title">Fonts</div>
-                    <div id="fontStyleArea">
-                        <button class="fontStyleBtn active" data-fontstyle="sans-serif">
-                            <span style="font-family: sans-serif;">Aa</span>
-                        </button>
-                        <button class="fontStyleBtn" data-fontstyle="codingFont">
-                            <span style="font-family: codingFont;">Aa</span>
-                        </button>
-                        <button class="fontStyleBtn" data-fontstyle="handWriting2">
-                            <span style="font-family: handWriting2;">Aa</span>
-                        </button>
-                        <button class="fontStyleBtn" data-fontstyle="handWriting">
-                            <span style="font-family: handWriting;">Aa</span>
-                        </button>
-                    </div>
-                </div>
-
-
-                <div id="layerToggleSection">
-                    <div class="title">Layer</div>
-                    <div id="layerToggleArea">
-                        <button class="layerToggleBtn" data-function="top">
-                            <img src="../static/assets/arrow-up-to-line.svg">
-                        </button>
-                        <button class="layerToggleBtn" data-function="up">
-                            <img src="../static/assets/arrow-up.svg">
-                        </button>
-                        <button class="layerToggleBtn" data-function="down">
-                            <img src="../static/assets/arrow-down.svg">
-                        </button>
-                        <button class="layerToggleBtn" data-function="bottom">
-                            <img src="../static/assets/arrow-down-to-line.svg">
-                        </button>
-                    </div>
-                </div>
-
-
-
-            </div>
-
-            <div id="bottomPanel">
-                 <button id="keyboardToggle" class="active">
-                    <img src="../static/assets/keyboard.svg">
-                </button>
-
-            </div>
-        </div>
-        <div id="canvasArea">
-            <canvas id="canvas">
-            </canvas>
-            <canvas id="cacheCanvas">
-            </canvas>
-            <canvas id="overlayCanvas">
-            </canvas>
-
-
-            <div id="zoomDisplay">
-                <button id="zoomOutBtn">
-                    <img src="../static/assets/minus.svg">
-                </button>
-                <span id="zoomValue">100%</span>
-                <button id="zoomInBtn">
-                    <img src="../static/assets/plus.svg">
-                </button>
-            </div>
+        <div id="zoomDisplay">
+            <button id="zoomOutBtn">
+                <img src="../static/assets/minus.svg">
+            </button>
+            <span id="zoomValue">100%</span>
+            <button id="zoomInBtn">
+                <img src="../static/assets/plus.svg">
+            </button>
         </div>
     </div>
 
