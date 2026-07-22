@@ -1,6 +1,6 @@
 # SCRIBBLE
 
-A lightweight, browser based whiteboard built from scratch using HTML5 Canvas and vanilla JavaScript. It is desgined for quickly scketching ideas, creating diagrams, taking notes, and visualizing concepts without requiring an account or installation. The goal for making this project was to learn how modern drawing applications works internally. I also havent used any external libraries which also gives me a more of low level knowledge behind these drawing applications.
+A lightweight, browser based whiteboard built from scratch using HTML5 Canvas and vanilla JavaScript. It is desgined for quickly scketching ideas, creating diagrams, taking notes, and visualizing concepts without requiring an account or installation. The goal for making this project was to learn how modern drawing applications works internally. I also havent used any external libraries which also gives me a more of a deeper understanding of these drawing applications.
 
 I will be adding more features but for version 1.0.0 and as a project for #beest this would be it.
 
@@ -17,6 +17,7 @@ I will be adding more features but for version 1.0.0 and as a project for #beest
 - Object selection, resize, move
 - Undo / Redo
 - Copy / Paste (```ctrl+c and ctrl+v```)
+- Delete shapes using `BACKSPACE` or `DELETE`
 - Layering order
 - Zoom controls
 - Infinite canvas

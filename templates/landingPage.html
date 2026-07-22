@@ -4,12 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCRIBBLE</title>
+    <title>SCIBBLE</title>
     <style>
         @font-face {
             font-family: "handWriting";
             src: url("../static/fonts/handWritingFont.ttf") format("truetype");
             font-size: 100px;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
         }
 
         * {
@@ -24,6 +30,7 @@
         }
 
         body {
+            min-height: 100vh;
             background: #F2F5FC;
             display: flex;
             flex-direction: column;
@@ -32,12 +39,13 @@
         }
 
         #mainArea {
+            flex: 1;
+            align-items: stretch;
             width: 100%;
             display: flex;
-            align-items: center;
             justify-content: space-between;
             gap: 40px;
-            padding: 40px 80px;
+            padding: 20px 80px;
             box-sizing: border-box;
         }
 
@@ -48,6 +56,12 @@
 
         #rightArea {
             flex: 6;
+            border: 1px solid #d8d8d8;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .12);
+            border-radius: 20px;
+            height: 380px;
+            border-radius: 12px;
+            background-color: white;
         }
 
         #topAreaLeft img {
@@ -189,7 +203,7 @@
 
         #bottomArea {
             width: 100%;
-            height: 150px;
+            padding: 25px 0;
             border: 2px solid rgba(0, 0, 0, 0);
             display: flex;
             align-items: center;
@@ -236,6 +250,13 @@
             opacity: 0.7;
             line-height: 1.3;
         }
+
+        #rightArea img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
     </style>
 </head>
 
@@ -249,7 +270,7 @@
         </div>
 
         <div id="buttonArea">
-            <button id="github">
+            <button id="github" onclick="window.open('https://github.com/ECXNAIRE/SCRIBBLE', '_blank')">
                 <img src="../static/assets/github.png">
             </button>
             <button id="launchBtn" onclick="window.location.href='/main'"><span>Launch App</span><span>↗</span></button>
@@ -271,12 +292,14 @@
                 creators, thinkers and doers
             </div>
             <div id="bottomAreaLeft">
-                <button id="startDrawing" class="leftButton" onclick="window.location.href='/main'"><span>Start Drawing</span><span>➝</span></button>
-                <button id="exploreFeatures" class="leftButton">Explore Features</button>
+                <button id="startDrawing" class="leftButton" onclick="window.location.href='/main'"><span>Start
+                        Drawing</span><span>➝</span></button>
+                <button id="exploreFeatures" class="leftButton" onclick="window.open('https://github.com/ECXNAIRE/SCRIBBLE/blob/main/README.md', '_blank')">Explore Features</button>
             </div>
         </div>
 
         <div id="rightArea">
+            <img src="../static/assets/preview.png">
         </div>
     </div>
 

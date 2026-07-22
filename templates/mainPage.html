@@ -79,8 +79,9 @@
             width: 20px;
             height: 20px
         }
+
         #toolBarLeft {
-            width: 260px;
+            width: 240px;
             max-height: calc(100vh - 180px);
             background: #FFFFFF;
             border-radius: 12px;
@@ -130,7 +131,7 @@
         #fontStyleArea,
         #pressureSelectionArea {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 14px;
         }
 
@@ -186,7 +187,8 @@
 
         .pressureBtn img,
         .strokeWidthBtn img,
-        .fillTypeBtn img {
+        .fillTypeBtn img,
+        .edgeStyleBtn img {
             width: 24px;
             height: 24px
         }
@@ -391,6 +393,16 @@
             opacity: 0;
             cursor: pointer;
         }
+
+        .disabledBtn {
+            opacity: 0.4;
+            cursor: not-allowed !important;
+            filter: grayscale(100%);
+        }
+
+        .disabledBtn:hover {
+            background: transparent !important;
+        }
     </style>
 </head>
 
@@ -448,7 +460,7 @@
                 <button class="toolBarTopBtn" data-tool="text">
                     <img src="../static/assets/type.svg">
                 </button>
-                <button class="toolBarTopBtn" data-tool="image">
+                <button class="toolBarTopBtn disabledBtn" data-tool="image">
                     <img src="../static/assets/image.svg">
                 </button>
             </div>
@@ -463,10 +475,10 @@
             </div>
             <div class="divider"></div>
             <div class="toolGroup">
-                <button class="toolBarTopBtn" data-tool="download">
+                <button class="toolBarTopBtn disabledBtn" data-tool="download">
                     <img src="../static/assets/arrow-down-to-line.svg">
                 </button>
-                <button class="toolBarTopBtn" data-tool="settings">
+                <button class="toolBarTopBtn disabledBtn" data-tool="settings">
                     <img src="../static/assets/settings.svg">
                 </button>
             </div>
@@ -572,10 +584,10 @@
                 <div class="title">Fill Type</div>
                 <div id="fillTypeArea">
                     <button class="fillTypeBtn active" data-filltype="solid">
-                        <img src="../static/assets/solid.svg">
+                        <img src="../static/assets/fillStyleSolid.png">
                     </button>
                     <button class="fillTypeBtn" data-filltype="hachure">
-                        <img src="../static/assets/hachure.svg">
+                        <img src="../static/assets/fillStyleHachure.png">
                     </button>
                 </div>
             </div>
@@ -585,10 +597,10 @@
                 <div class="title">Edge Style</div>
                 <div id="edgeStyleArea">
                     <button class="edgeStyleBtn active" data-edgestyle="0">
-                        <img src="../static/assets/minus.svg">
+                        <img src="../static/assets/edgeStyle4.png">
                     </button>
                     <button class="edgeStyleBtn" data-edgestyle="25">
-                        <img src="../static/assets/minus.svg">
+                        <img src="../static/assets/edgeStyle5.png">
                     </button>
                 </div>
             </div>
