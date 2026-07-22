@@ -61,6 +61,11 @@ document.querySelectorAll(".fontStyleBtn").forEach(button => {
             .querySelector(".fontStyleBtn.active")
             ?.classList.remove("active")
 
+
+        if(state.selectedShape && state.selectedShape === "text"){
+            state.selectedShape.fontFamily = state.selectedFont
+        }
+
         button.classList.add("active")
 
     })

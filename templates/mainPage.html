@@ -184,6 +184,12 @@
         .pressureBtn.active {
             background: #bedaff;
             border: 1.5px solid #3B82F6;
+
+        }
+
+        #keyboardToggle.active {
+            border: 1.5px solid #3B82F6;
+            background: #bedaff;
         }
 
         .pressureBtn img,
@@ -419,8 +425,6 @@
             opacity: 0;
             cursor: pointer;
         }
-
-
     </style>
 </head>
 
@@ -509,7 +513,7 @@
 
                         <div class="strokePickerWrapper">
                             <div id="strokePickerPreview" style="background: black;"></div>
-                        <input type="color" id="strokeColorPicker" value="#000000">
+                            <input type="color" id="strokeColorPicker" value="#000000">
                         </div>
 
 
@@ -675,6 +679,9 @@
             </div>
 
             <div id="bottomPanel">
+                 <button id="keyboardToggle" class="active">
+                    <img src="../static/assets/keyboard.svg">
+                </button>
 
             </div>
         </div>
