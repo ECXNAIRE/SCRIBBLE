@@ -3,13 +3,20 @@ import { saveState } from "../toolBarTop/history.js";
 import { getClickedShape, getClickedHandle } from "../pointer/hitTest.js";
 import { scheduleRender } from "../helpers/scheduleRender.js";
 import { screenToWorld, camera } from "../canvas/cameraFunction.js";
-import { setLayerOption, updateToolBar } from "../leftToolBar/updateToolBar.js";
+import { updateLeftToolbar, updateToolBar } from "../leftToolBar/updateToolBar.js";
 import { canvas, ctx } from "../canvas/canvas.js";
 import { startTextEditing } from "../toolBarTop/shapes.js";
 import { syncToolBar } from "../ui/syncToolBar.js";
+import { setLayerOption } from "../leftToolBar/updateToolBar.js";
+import { removeSections } from "../leftToolBar/updateToolBar.js";
 
 
 export function mouseDown(e, render) {
+
+    if (state.tool === "pointer") { 
+        removeSections()
+        updateLeftToolbar()
+     }
 
     if (state.tool === "hand") {
         state.isPanning = true;
@@ -88,8 +95,6 @@ export function mouseDown(e, render) {
 
         const clickedShape = getClickedShape(mouse.x, mouse.y)
 
-
-
         if (clickedShape && clickedShape.type === "text") {
             state.objects.forEach(shape => {
                 shape.selected = false,
@@ -121,9 +126,8 @@ export function mouseDown(e, render) {
 
 
         if (clickedShape) {
-            setLayerOption(true)
             updateToolBar(clickedShape.type)
-
+            setLayerOption(true)
             syncToolBar(clickedShape)
 
             if (clickedShape !== state.selectedShape) {

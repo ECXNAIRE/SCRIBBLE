@@ -11,16 +11,19 @@ const toolBarLeft = document.getElementById("toolBarLeft")
 
 let layerOptionShow = false
 
-fillSection.style.display = "none"
-fillTypeSection.style.display = "none"
-edgeSection.style.display = "none"
-sloppinessSection.style.display = "none"
-layerSection.style.display = "none"
-strokeWidthSection.style.display = "none"
-fontSection.style.display = "none"
-strokeColorSection.style.display = "none"
-pressureSelectionSection.style.display = "none"
+export function removeSections(){
+    fillSection.style.display = "none"
+    fillTypeSection.style.display = "none"
+    edgeSection.style.display = "none"
+    sloppinessSection.style.display = "none"
+    layerSection.style.display = "none"
+    strokeWidthSection.style.display = "none"
+    fontSection.style.display = "none"
+    strokeColorSection.style.display = "none"
+    pressureSelectionSection.style.display = "none"
+}
 
+removeSections()
 updateLeftToolbar()
 
 export function setLayerOption(value) {

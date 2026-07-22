@@ -31,5 +31,5 @@ export const state = {
     strokeColor: null,
     fillColor: null,
     activeTextEditor: null,
-    textResize: null
+    textResize: null,
 }

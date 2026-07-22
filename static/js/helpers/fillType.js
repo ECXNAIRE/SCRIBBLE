@@ -2,7 +2,7 @@ import { roughLine, randomOffset } from "./strokeEditor.js";
 
 
 export function drawHachure(ctx, pathFunction, bounds, shape, sloppiness) {
-    const spacing = 20
+    const spacing = 15
 
     ctx.save()
 
@@ -36,7 +36,7 @@ export function drawHachure(ctx, pathFunction, bounds, shape, sloppiness) {
                 ...shape,
                 seed: lineSeed,
                 strokeColor: shape.fillColor,
-                strokeWidth: shape.strokeWidth - (( shape.strokeWidth * 50) / 100)
+                strokeWidth: Math.max(0.5, shape.strokeWidth * 0.4)
             },
             sloppiness
         );

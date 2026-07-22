@@ -7,7 +7,6 @@ import { drawBrushCursor, updateCursor, setCursorVisible } from "./canvas/overla
 import { screenToWorld } from "./canvas/cameraFunction.js"
 import { startTextEditing } from "./toolBarTop/shapes.js"
 import { updateToolBar } from "./leftToolBar/updateToolBar.js"
-import { setLayerOption } from "./leftToolBar/updateToolBar.js"
 import { undo, redo, saveState } from "./toolBarTop/history.js"
 import { scheduleRender } from "./helpers/scheduleRender.js"
 import { renderState } from "./helpers/renderstate.js"
@@ -62,8 +61,12 @@ document.querySelectorAll(".fontStyleBtn").forEach(button => {
             ?.classList.remove("active")
 
 
-        if(state.selectedShape && state.selectedShape === "text"){
+        if (state.selectedShape.type === "text") {
             state.selectedShape.fontFamily = state.selectedFont
+
+            console.log(state.selectedFont);
+            console.log(state.selectedShape.fontFamily);
+            console.log(state.activeTextEditor);
         }
 
         button.classList.add("active")
@@ -188,7 +191,7 @@ strokePicker.addEventListener("input", () => {
     strokePickerPreview.style.background = state.strokeColor;
 
     if (state.selectedShape) {
-        state.selectedShape.fillColor = state.fillColor;
+        state.selectedShape.strokeColor = state.strokeColor;
         scheduleRender(render)
     }
 
